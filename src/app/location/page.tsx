@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import { AreaMap } from '@/components/map/AreaMap';
 import { CtaBand } from '@/components/sections/CtaBand';
 import { PageHero } from '@/components/sections/PageHero';
 import { Button } from '@/components/ui/Button';
@@ -29,7 +30,11 @@ export default function LocationPage() {
 
       <section className="section">
         <div className="container split">
-          <iframe className="map reveal" title="Map showing Hotel Manakamana Airport View" loading="lazy" referrerPolicy="no-referrer-when-downgrade" src={HOTEL.mapEmbed} />
+          <div className="split__media">
+            <div className="reveal-img">
+              <Image src={IMG.ramechhapAirportAerial} alt="Manthali town beside Ramechhap Airport runway and the Tamakoshi River" sizes="(max-width: 680px) 100vw, 560px" placeholder="blur" />
+            </div>
+          </div>
           <div data-stagger="">
             <Eyebrow>Address</Eyebrow>
             <SplitHeading>Find us in <em className="accent">Manthali</em></SplitHeading>
@@ -44,7 +49,20 @@ export default function LocationPage() {
         </div>
       </section>
 
-      <section className="section section--sand">
+      <section className="section section--sand" id="map">
+        <div className="container">
+          <div className="section__head">
+            <div>
+              <Eyebrow>Explore the map</Eyebrow>
+              <SplitHeading>Manthali <em className="accent">in 3D</em></SplitHeading>
+              <p className="reveal">The walk to the airport, the drive from Kathmandu and the flight to Lukla, over the real terrain. Tap a place for details.</p>
+            </div>
+          </div>
+          <AreaMap />
+        </div>
+      </section>
+
+      <section className="section">
         <div className="container">
           <div className="section__head">
             <div>
@@ -60,7 +78,7 @@ export default function LocationPage() {
         </div>
       </section>
 
-      <section className="section" id="flights">
+      <section className="section section--sand" id="flights">
         <div className="container split split--reverse">
           <div className="split__media split__media--wide">
             <div className="reveal-img">
@@ -89,7 +107,7 @@ export default function LocationPage() {
         </div>
       </section>
 
-      <section className="section section--sand">
+      <section className="section">
         <div className="container container--narrow">
           <Eyebrow>Explore nearby</Eyebrow>
           <SplitHeading>Places worth <em className="accent">the drive</em></SplitHeading>

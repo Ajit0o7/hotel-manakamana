@@ -58,6 +58,20 @@ export function GuideBody({ blocks }: { blocks: Block[] }) {
                 </tbody>
               </table>
             );
+          case 'table':
+            return (
+              <table key={i} className="guide-table">
+                <caption className="visually-hidden">{b.caption}</caption>
+                <thead>
+                  <tr>{b.head.map((h) => <th scope="col" key={h}>{h}</th>)}</tr>
+                </thead>
+                <tbody>
+                  {b.rows.map((row, j) => (
+                    <tr key={j}>{row.map((cell, k) => <td key={k}><RichText text={cell} /></td>)}</tr>
+                  ))}
+                </tbody>
+              </table>
+            );
           case 'weather':
             return <div key={i} className="guide-weather"><ManthaliNow tone="light" /></div>;
           case 'map':

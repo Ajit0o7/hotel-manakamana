@@ -17,6 +17,7 @@ export type Block =
   | { type: 'weather' }
   | { type: 'map'; title: string; src: string }
   | { type: 'figure'; photo: Photo; caption: string; credit?: Credit }
+  | { type: 'table'; caption: string; head: string[]; rows: string[][] } // cells support inline formatting
   | { type: 'cta'; title: string; text: string };
 
 /** Attribution for photos we don't own (CC BY / CC BY-SA require it). */
@@ -166,11 +167,11 @@ export const GUIDES: Guide[] = [
     heading: ['Lukla flight', 'cancelled?'],
     eyebrow: 'When the weather turns',
     description:
-      'Why Lukla flights get delayed or cancelled, what to do at Ramechhap Airport, your options if the weather will not clear, and where to stay near the airport in Manthali tonight.',
+      'Why Lukla flights get delayed or cancelled, what to do at Ramechhap Airport, your options if the weather will not clear, how to spend a delay day in Manthali, and where to stay near the airport tonight.',
     hero: { src: IMG.viewValleyClouds, alt: 'Low cloud over the valley around Manthali' },
     published: '2026-09-30',
     updated: '2026-09-30',
-    readMins: 4,
+    readMins: 6,
     facts: [
       ['Why', 'Cloud, wind or poor visibility at Lukla or on the route'],
       ['First step', 'Talk to your airline or agency about rebooking'],
@@ -194,6 +195,28 @@ export const GUIDES: Guide[] = [
         '**Wait for the next flight:** usually the cheapest option.',
         '**Helicopter:** charter or shared seats cost more. Ask your agency, and check whether your travel insurance covers it.',
         '**Another route:** some agencies can arrange road transport into the Solukhumbu region instead. Ask yours.',
+      ] },
+      { type: 'h2', id: 'delay-day', text: 'Making the most of a delay day' },
+      { type: 'p', text: 'Rebooked onto a later flight, or told there are no more flights today? Then the day is yours. If you are still on standby, keep your phone charged and switched on and stay within easy reach of the terminal: the airline may call you back at short notice when the weather clears. Here is an easy plan for a free day, all on foot from the hotel:' },
+      { type: 'table', caption: 'A delay-day plan in Manthali', head: ['Time', 'What to do'], rows: [
+        ['06:00–08:00', 'Walk into Manthali bazaar for a hot milk tea, and take out cash while you are there. The banks are about 1 km from the hotel: see them on our [area map](/location#map).'],
+        ['08:30–09:30', 'Watch the airstrip from our rooftop, or ask us the way to **Selfie Danda**, a small hill near the runway with a view over the airport and the valley.'],
+        ['10:00–13:00', 'Walk down past the runway to the wide bed of the **Tamakoshi River**, about 15 minutes away, and watch valley life along the water.'],
+        ['13:30–15:00', 'Lunch in the bazaar, or dal bhat on our rooftop.'],
+        ['16:00–18:30', 'Walk up the ridge behind the airport for sunset over the valley, and head back before the evening chill.'],
+      ] },
+      { type: 'p', text: '**Grounded for the whole day?** [Khandadevi Temple](/location#map), a hilltop temple and viewpoint, is about 1 hr 15 min away by hired jeep. Only go once your airline has confirmed there are no more flights today.' },
+      { type: 'callout', title: 'Bring cash from Kathmandu', text: 'ATMs in Manthali can run out of cash in the busy trekking seasons, so carry enough rupees for your stay and for your trek.' },
+      { type: 'h2', id: 'phrases', text: 'Useful Nepali phrases for the bazaar' },
+      { type: 'p', text: 'Shopkeepers are used to trekkers, and a few words of Nepali go a long way:' },
+      { type: 'table', caption: 'Useful Nepali phrases', head: ['English', 'Nepali', 'When to use it'], rows: [
+        ['Hello', '**Namaste**', 'A greeting for anyone, at any time of day'],
+        ['How much is this?', '**Yasko kati ho?**', 'Asking the price in a shop'],
+        ['Where is the ATM?', '**ATM kaha cha?**', 'Finding a cash point'],
+        ['Where is the pharmacy?', '**Medical kaha cha?**', 'Pharmacies are usually called “medical” in Nepal'],
+        ['Is there water?', '**Paani cha?**', 'Buying bottled drinking water'],
+        ['Thank you', '**Dhanyabaad**', 'Showing appreciation'],
+        ['That’s very expensive!', '**Ekdam mahango bhayo!**', 'Friendly bargaining, with a smile'],
       ] },
       { type: 'cta', title: 'Need a room tonight?', text: 'Stay 500 m from the terminal: air-conditioned rooms, hot showers, free Wi-Fi to follow flight updates, a rooftop restaurant and luggage storage. Call or WhatsApp us to check what is free tonight.' },
       { type: 'h2', id: 'plan-ahead', text: 'Plan ahead for next time' },

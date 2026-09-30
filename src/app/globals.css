@@ -415,6 +415,46 @@ em.accent { font-style: italic; color: var(--gold-dark); }
 /* ---------- location ---------- */
 .map { width: 100%; border: 0; border-radius: var(--radius); aspect-ratio: 4 / 3; background: var(--sand); filter: grayscale(.55) contrast(1.05); transition: filter .8s var(--ease); }
 .map:hover { filter: none; }
+
+/* ---------- interactive area map (/location) ---------- */
+.area-map__views { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.area-map__views button { padding: 9px 18px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); font: inherit; font-size: .8rem; font-weight: 600; color: var(--pine); cursor: pointer; transition: background .3s, color .3s, border-color .3s; }
+.area-map__views button:hover { border-color: var(--gold); }
+.area-map__views button[aria-pressed="true"] { background: var(--pine); border-color: var(--pine); color: var(--white); }
+.area-map__frame { position: relative; aspect-ratio: 16 / 9; min-height: 380px; border-radius: var(--radius); overflow: hidden; background: var(--sand); box-shadow: var(--shadow); }
+.area-map__frame .area-map__canvas { position: absolute; inset: 0; } /* beats maplibre-gl.css's .maplibregl-map { position: relative } */
+.area-map__status { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; font-size: .9rem; color: var(--muted); pointer-events: none; }
+.area-map__status a { pointer-events: auto; color: var(--pine); }
+.area-map__legend { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0 28px; margin: 18px 0 0; padding: 0; }
+.area-map__legend button { display: flex; gap: 12px; align-items: flex-start; width: 100%; padding: 12px 0; border: 0; border-bottom: 1px solid var(--line); background: none; font: inherit; text-align: left; color: inherit; cursor: pointer; }
+.area-map__legend button:disabled { cursor: default; }
+.area-map__legend button:not(:disabled):hover strong { color: var(--gold-dark); }
+.area-map__legend strong { display: block; font-size: .92rem; color: var(--pine); transition: color .3s; }
+.area-map__legend small { display: block; font-size: .8rem; line-height: 1.5; color: var(--muted); }
+.area-map__dot { flex: none; width: 12px; height: 12px; margin-top: 5px; border-radius: 50%; border: 2px solid var(--pine); background: var(--white); }
+.area-map__dot--hotel { border-color: var(--gold); background: var(--gold); }
+.area-map__foot { margin: 14px 0 0; font-size: .8rem; color: var(--muted); }
+.area-map__foot a { color: var(--pine); font-weight: 600; }
+.map-pin { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--pine); background: var(--white); color: var(--pine); box-shadow: 0 8px 18px -8px rgba(21, 48, 42, .7); cursor: pointer; }
+.map-pin svg { width: 18px; height: 18px; }
+/* Hotel: a circle with a pointer. The marker is anchored at its bottom edge, so `translate` lifts it by the
+   pointer's height to put the tip on the spot (it composes with the transform MapLibre sets inline). */
+.map-pin--hotel { z-index: 2; width: 42px; height: 42px; border-color: var(--white); background: var(--gold); color: var(--white); translate: 0 -9px; }
+.map-pin--hotel::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 8px solid transparent; border-bottom: 0; border-top: 10px solid var(--gold); }
+.map-pin--hotel svg { width: 20px; height: 20px; }
+.map-pin--hotel .map-pin__label { top: 50%; left: calc(100% + 8px); transform: translateY(-50%); }
+.map-pin__label { position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); padding: 3px 9px; border-radius: 3px; background: var(--pine); color: var(--white); font-size: .7rem; font-weight: 600; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.map-pin:hover .map-pin__label, .map-pin:focus-visible .map-pin__label, .map-pin--labelled .map-pin__label { opacity: 1; }
+.map-pin--airport .map-pin__label { top: auto; bottom: calc(100% + 6px); } /* above: the walk line runs below it */
+.map-tag { padding: 4px 11px; border-radius: 999px; background: rgba(21, 48, 42, .88); color: var(--white); font-size: .72rem; font-weight: 600; white-space: nowrap; pointer-events: none; }
+.map-pin.is-hidden, .map-tag.is-hidden { display: none; }
+.area-map .maplibregl-popup-content { padding: 14px 16px; border-radius: var(--radius); box-shadow: var(--shadow); font-family: var(--font-body); }
+.map-popup strong { display: block; font-family: var(--font-head); font-size: 1.15rem; line-height: 1.2; color: var(--pine); }
+.map-popup p { margin: 4px 0 0; font-size: .82rem; line-height: 1.5; color: #3b4541; }
+@media (max-width: 680px) {
+  .area-map__frame { aspect-ratio: 4 / 5; min-height: 0; }
+  .area-map__views button { flex: 1 1 auto; padding: 8px 12px; }
+}
 .info { display: grid; grid-template-columns: auto 1fr; gap: 14px 28px; margin: 28px 0 36px; padding: 24px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .info dt { font-weight: 700; color: var(--pine); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; padding-top: 2px; }
 .info dd { margin: 0; color: var(--muted); }
@@ -682,6 +722,15 @@ html.lenis, html.lenis body { height: auto; }
 .now__foot .now__label { display: inline; margin-right: 6px; }
 .now time { font-variant-numeric: tabular-nums; }
 .now__note { margin: 10px 0 0; font-size: .76rem; opacity: .75; }
+.now__hours { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, .12); }
+.now--light .now__hours { border-top-color: var(--line); }
+.now__hours ol { list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin: 6px 0 0; padding: 0; }
+.now__hours li { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 9px 4px; border-radius: var(--radius); background: rgba(255, 255, 255, .06); font-size: .7rem; line-height: 1.35; text-align: center; }
+.now--light .now__hours li { background: var(--cream); }
+.now__hours time { font-weight: 700; font-size: .8rem; }
+.now__hours svg { width: 22px; height: 22px; margin: 3px 0; color: var(--gold-light); }
+.now--light .now__hours svg { color: var(--gold-dark); }
+.now__hours li span:not(.visually-hidden) { opacity: .85; }
 
 /* ---------- "your stay, step by step" ---------- */
 .story { position: relative; background: radial-gradient(900px 500px at 10% 0%, rgba(231, 201, 146, .1), transparent 60%), var(--pine-3); color: #dfe8e3; }
@@ -882,11 +931,12 @@ a.card__media { display: block; }
 .guide-compare h3 { font-size: 1.45rem; margin: 0 0 12px; }
 .guide-compare .is-good h3::after { content: "Recommended"; display: inline-block; margin-left: 10px; padding: 3px 8px; vertical-align: middle; font-family: var(--font-body); font-size: .56rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pine); background: var(--gold-light); border-radius: 2px; }
 .guide-compare ul { margin: 0; padding-left: 1.1em; font-size: .92rem; }
-.guide-airlines { width: 100%; border-collapse: collapse; margin: 18px 0 30px; font-size: .9rem; }
-.guide-airlines th { text-align: left; padding: 10px 12px; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-dark); border-bottom: 1px solid var(--line); }
-.guide-airlines td { padding: 14px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
-.guide-airlines td:first-child { font-family: var(--font-head); font-size: 1.25rem; font-weight: 600; color: var(--pine); }
+.guide-airlines, .guide-table { width: 100%; border-collapse: collapse; margin: 18px 0 30px; font-size: .9rem; }
+.guide-airlines th, .guide-table th { text-align: left; padding: 10px 12px; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-dark); border-bottom: 1px solid var(--line); }
+.guide-airlines td, .guide-table td { padding: 14px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.guide-airlines td:first-child, .guide-table td:first-child { font-family: var(--font-head); font-size: 1.25rem; font-weight: 600; color: var(--pine); }
 .guide-airlines a { white-space: nowrap; }
+.guide-table td:first-child { font-size: 1.1rem; white-space: nowrap; }
 .guide-map { display: block; width: 100%; aspect-ratio: 16 / 10; border: 0; border-radius: var(--radius); margin: 8px 0 28px; background: var(--sand); filter: grayscale(.3); }
 .guide-weather .now { margin: 8px 0 28px; max-width: none; }
 .guide-figure { margin: 30px 0 36px; }
@@ -925,7 +975,7 @@ a.card__media { display: block; }
   .guide-facts, .guide-compare { grid-template-columns: 1fr; }
   .guide-facts div:nth-child(odd) { border-right: 0; }
   .guide-facts div:nth-last-child(2):nth-child(odd) { border-bottom: 1px solid var(--line); }
-  .guide-airlines thead { display: none; }
-  .guide-airlines tr { display: grid; gap: 4px; padding: 14px 0; border-bottom: 1px solid var(--line); }
-  .guide-airlines td { padding: 0; border: 0; }
+  .guide-airlines thead, .guide-table thead { display: none; }
+  .guide-airlines tr, .guide-table tr { display: grid; gap: 4px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .guide-airlines td, .guide-table td { padding: 0; border: 0; }
 }
