@@ -1,6 +1,7 @@
 /* Hotel facts — one source of truth for every page.
    Sources: Google Hotels listing, the hotel's eBooking Nepal listing (checked 29 Sep 2026)
-   and the hotel's own logo. Items marked TODO still need the owner's confirmation. */
+   and the hotel's own logo. Room count, languages, payment, check-in/out and the profile links
+   were confirmed by the owner on 30 Sep 2026. Items marked TODO still need the owner's confirmation. */
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.hotelmanthali.com'; // domain shown on the hotel's own flyer
 
@@ -27,6 +28,21 @@ export const HOTEL = {
   },
   distances: { airport: '500 m', busPark: '300 m', kathmandu: 'About 4½ hours by road' },
   priceFrom: 2000,
+  roomCount: 10,
+  languages: [
+    { name: 'English', code: 'en' },
+    { name: 'Hindi', code: 'hi' },
+    { name: 'Nepali', code: 'ne' },
+  ],
+  payment: ['Cash', 'Card'],
+  /* The hotel's listings elsewhere (used for schema.org sameAs and the footer) */
+  profiles: {
+    google: 'https://share.google/l2kmadcr3xYDrXExC',
+    facebook: 'https://www.facebook.com/p/Hotel-Manakamana-Airport-View-100039384645150/',
+    tripadvisor: 'https://www.tripadvisor.com/Hotel_Review-g21224011-d21222024-Reviews-Hotel_Manakamana_Airport-Manthali_Bagmati_Zone_Central_Region.html',
+    ebookingNepal: 'https://ebookingnepal.com/property/hotel-manakamana-airport-view',
+    yandex: 'https://yandex.com/maps/org/hotel_manakamana_airport_view_near_from_manthali_airport_/244415183919/',
+  },
 } as const;
 
 export const WHATSAPP_URL = `https://wa.me/${HOTEL.whatsapp}`;
@@ -46,10 +62,13 @@ export const formatNPR = (n: number) => `NPR ${n.toLocaleString('en-US')}`;
 
 /* House rules and policies from the listing */
 export const POLICIES = [
-  { term: 'Check-in', detail: 'Tell us your arrival time when you book' },
+  { term: 'Check-in', detail: 'Any time, day or night. Tell us your arrival time when you book' },
+  { term: 'Check-out', detail: 'Any time, to suit your flight or onward journey' },
   { term: 'Early flights', detail: "Tell us your flight time and we'll help you plan the morning" },
   { term: 'ID', detail: 'A valid ID is required at check-in' },
   { term: 'Rates', detail: 'Room only. Meals are available at our restaurant' },
+  { term: 'Payment', detail: 'Cash or card' },
+  { term: 'Languages', detail: 'We speak English, Hindi and Nepali' },
   { term: 'Cancellation', detail: "Depends on the room type. We'll confirm it when you book" },
   { term: 'Pets', detail: 'Not allowed' },
   { term: 'Smoking', detail: 'Non-smoking rooms, with a designated smoking area' },
@@ -85,6 +104,8 @@ export const FAQS = [
   { q: 'How do I book a room?', a: `Use the booking form to send us your dates on WhatsApp, or call ${HOTEL.phoneDisplay}. We'll confirm availability and today's rate.` },
   { q: 'How close are you to Manthali (Ramechhap) Airport?', a: 'About 500 m, an easy walk or a very short ride, and Manthali Bus Park is about 300 m away. Many guests stay with us the night before their Lukla flight.' },
   { q: 'How much are the rooms?', a: 'The Deluxe Double Room is from NPR 2,500 and the Double Room from NPR 2,000 per night, room only. Prices can change, so please confirm when you book.' },
+  { q: 'What time is check-in and check-out?', a: 'Any time, day or night. Just tell us your arrival time when you book, and your flight time so we can help you plan the morning.' },
+  { q: 'Can I pay by card?', a: 'Yes. We accept cash and card.' },
   { q: 'Is breakfast included?', a: 'Our rates are room only. Breakfast and other meals are available at our rooftop restaurant, and room service is available too.' },
   { q: 'How long is the drive from Kathmandu?', a: 'Around 4½ hours by road, depending on traffic and road conditions.' },
   { q: 'Do you have Wi-Fi and parking?', a: 'Yes. Free Wi-Fi and parking are available, and we can store your luggage.' },

@@ -13,9 +13,10 @@ import { Icon, type IconName } from '@/components/ui/Icon';
 import { SplitHeading } from '@/components/ui/SplitHeading';
 import { TLink } from '@/components/ui/TLink';
 import { ManthaliNow } from '@/components/weather/ManthaliNow';
-import { AMENITIES, HOTEL, SITE_URL, formatNPR } from '@/content/hotel';
+import { HOTEL, formatNPR } from '@/content/hotel';
 import { IMG } from '@/content/images';
 import { ROOMS } from '@/content/rooms';
+import { hotelLd, websiteLd } from '@/content/schema';
 
 export const metadata = { alternates: { canonical: '/' } };
 
@@ -36,27 +37,12 @@ const STORY: StoryStep[] = [
 
 const MARQUEE = ['Rest well', 'Fly early', 'Dal bhat power', 'Rooftop evenings', 'Manthali', 'Ramechhap'];
 
-const hotelLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Hotel',
-  name: HOTEL.name,
-  url: SITE_URL,
-  description: 'Family-run hotel 500 m from Manthali (Ramechhap) Airport with air-conditioned rooms, balconies, free Wi-Fi and a rooftop restaurant.',
-  telephone: HOTEL.phoneDisplay,
-  image: `${SITE_URL}/opengraph-image.jpg`,
-  address: { '@type': 'PostalAddress', streetAddress: HOTEL.street, addressLocality: HOTEL.locality, addressRegion: HOTEL.region, postalCode: HOTEL.postalCode, addressCountry: 'NP' },
-  geo: { '@type': 'GeoCoordinates', latitude: HOTEL.geo.lat, longitude: HOTEL.geo.lng },
-  priceRange: 'NPR 2,000–2,500',
-  petsAllowed: false,
-  amenityFeature: AMENITIES.map((a) => ({ '@type': 'LocationFeatureSpecification', name: a.label, value: true })),
-};
-
 export default function HomePage() {
   const marquee = (run: string) =>
     MARQUEE.flatMap((w) => [<span key={`${run}-${w}`}>{w}</span>, <span key={`${run}-${w}-sep`} className="sep">✦</span>]);
   return (
     <>
-      <JsonLd data={hotelLd} />
+      <JsonLd data={[websiteLd, hotelLd]} />
 
       {/* ===== HERO ===== */}
       <HeroSlideshow slides={SLIDES}>

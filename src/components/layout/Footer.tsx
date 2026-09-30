@@ -42,6 +42,13 @@ export function Footer() {
             <br />
             <a href={HOTEL.mapsUrl} target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
           </p>
+          <p style={{ marginTop: 14 }}>
+            <a href={HOTEL.profiles.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>
+            {' · '}
+            <a href={HOTEL.profiles.tripadvisor} target="_blank" rel="noopener noreferrer">Tripadvisor</a>
+            {' · '}
+            <a href={HOTEL.profiles.google} target="_blank" rel="noopener noreferrer">Google reviews</a>
+          </p>
         </div>
       </div>
       <div className="footer__wordmark" aria-hidden="true">Manakamana</div>

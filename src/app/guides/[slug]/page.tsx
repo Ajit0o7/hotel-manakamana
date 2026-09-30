@@ -10,6 +10,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow';
 import { SplitHeading } from '@/components/ui/SplitHeading';
 import { GUIDES, getGuide } from '@/content/guides';
 import { HOTEL, SITE_URL } from '@/content/hotel';
+import { HOTEL_ID } from '@/content/schema';
 import { formatDateLong } from '@/lib/dates';
 
 export function generateStaticParams() {
@@ -48,8 +49,8 @@ export default async function GuidePage({ params }: PageProps<'/guides/[slug]'>)
     image: [`${SITE_URL}${g.hero.src.src}`],
     datePublished: g.published,
     dateModified: g.updated,
-    author: { '@type': 'Organization', name: HOTEL.name, url: SITE_URL },
-    publisher: { '@type': 'Organization', name: HOTEL.name, logo: { '@type': 'ImageObject', url: `${SITE_URL}/icons/icon-512.png` } },
+    author: { '@type': 'Organization', '@id': HOTEL_ID, name: HOTEL.name, url: SITE_URL },
+    publisher: { '@type': 'Organization', '@id': HOTEL_ID, name: HOTEL.name, logo: { '@type': 'ImageObject', url: `${SITE_URL}/icons/icon-512.png` } },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
   };
   const breadcrumbLd = {

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { SplitHeading } from '@/components/ui/SplitHeading';
-import { AMENITIES, POLICIES, formatNPR } from '@/content/hotel';
+import { AMENITIES, HOTEL, POLICIES, formatNPR } from '@/content/hotel';
 import { IMG } from '@/content/images';
 import { ROOMS } from '@/content/rooms';
 
@@ -24,7 +24,7 @@ export default function RoomsPage() {
         photo={{ src: IMG.ebnRoomMural, alt: 'Room with a Himalayan mountain mural' }}
         eyebrow="Stay"
         title={<>Rooms &amp; <em className="accent">amenities</em></>}
-        text="Air-conditioned rooms with private balconies, flat-screen TVs and free Wi-Fi, 500 m from Manthali Airport."
+        text={`${HOTEL.roomCount} air-conditioned rooms with private balconies, flat-screen TVs and free Wi-Fi, 500 m from Manthali Airport.`}
         crumbs={[{ label: 'Rooms' }]}
       />
 

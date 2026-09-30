@@ -10,8 +10,9 @@ import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Icon } from '@/components/ui/Icon';
 import { SplitHeading } from '@/components/ui/SplitHeading';
 import { TLink } from '@/components/ui/TLink';
-import { HOTEL, POLICIES, SITE_URL, formatNPR } from '@/content/hotel';
+import { POLICIES, formatNPR } from '@/content/hotel';
 import { ROOMS, getRoom } from '@/content/rooms';
+import { roomLd } from '@/content/schema';
 
 export function generateStaticParams() {
   return ROOMS.map((r) => ({ slug: r.slug }));
@@ -34,22 +35,9 @@ export default async function RoomPage({ params }: PageProps<'/rooms/[slug]'>) {
   if (!room) notFound();
   const other = ROOMS.find((r) => r.slug !== room.slug)!;
 
-  const ld = {
-    '@context': 'https://schema.org',
-    '@type': 'HotelRoom',
-    name: room.name,
-    description: room.description,
-    url: `${SITE_URL}/rooms/${room.slug}`,
-    occupancy: { '@type': 'QuantitativeValue', maxValue: room.maxGuests },
-    bed: { '@type': 'BedDetails', numberOfBeds: 1, typeOfBed: 'Double' },
-    amenityFeature: room.features.map((f) => ({ '@type': 'LocationFeatureSpecification', name: f, value: true })),
-    containedInPlace: { '@type': 'Hotel', name: HOTEL.name, telephone: HOTEL.phoneDisplay },
-    offers: { '@type': 'Offer', price: room.price, priceCurrency: 'NPR', description: 'Per room per night, room only' },
-  };
-
   return (
     <>
-      <JsonLd data={ld} />
+      <JsonLd data={roomLd(room)} />
       <PageHero
         photo={room.image}
         eyebrow={room.tag}
