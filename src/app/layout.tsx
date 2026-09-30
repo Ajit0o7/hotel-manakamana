@@ -57,7 +57,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <head>
         <script dangerouslySetInnerHTML={{ __html: BOOT }} />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <a className="skip-link" href="#main">Skip to content</a>
         <CurtainProvider emblem={<Emblem idPrefix="curtain" />}>
           <div className="progress" aria-hidden="true" />

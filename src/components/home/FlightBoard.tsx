@@ -1,65 +1,90 @@
-import { Eyebrow } from '@/components/ui/Eyebrow';
-import { SplitHeading } from '@/components/ui/SplitHeading';
-import { Icon } from '@/components/ui/Icon';
+import { Icon, type IconName } from '@/components/ui/Icon';
+import { LocalClock } from '@/components/weather/LocalClock';
+import { AIRLINES, FLIGHT_WINDOW } from '@/content/airlines';
+import { SplitFlap } from './SplitFlap';
 
+const TIPS: { icon: IconName; title: string; text: string }[] = [
+  {
+    icon: 'calendar',
+    title: 'Confirm the evening before',
+    text: 'Lukla schedules move with the mountain weather. Check your flight time with your airline or agency the evening before, and again in the morning.',
+  },
+  {
+    icon: 'bag',
+    title: 'Pack light, leave the rest',
+    text: 'Lukla flights have strict baggage limits, so check yours with the airline. Leave extra bags with us while you trek.',
+  },
+  {
+    icon: 'plane',
+    title: '500 m to the terminal',
+    text: 'Wake up close to Manthali Airport: an easy walk or a very short ride, with no pre-dawn drive from Kathmandu.',
+  },
+];
+
+/* Airport departures board for Manthali (Ramechhap) → Lukla. Overlaps the bottom of the Lukla banner
+   the same way the booking card overlaps the hero. */
 export function FlightBoard() {
-  const airlines = [
-    {
-      name: 'Tara Air',
-      website: 'www.taraair.com',
-      url: 'https://www.taraair.com',
-      phone: '+977 1-4110828',
-      aircraft: 'Twin Otter (DHC-6) & Dornier 228',
-      desc: 'One of the largest operators for the Lukla route, flying rugged STOL aircraft perfectly designed for mountain airstrips.'
-    },
-    {
-      name: 'Summit Air',
-      website: 'summitair.com.np',
-      url: 'https://summitair.com.np',
-      phone: '+977 1-4488340',
-      aircraft: 'Let L-410 Turbolet',
-      desc: 'Operates a fleet of specialized Let L-410 twin-engine turboprops, highly suited for the short and steep Lukla runway.'
-    },
-    {
-      name: 'Sita Air',
-      website: 'www.sitaair.com.np',
-      url: 'http://www.sitaair.com.np',
-      phone: '+977 1-4467026',
-      aircraft: 'Dornier 228',
-      desc: 'Provides daily morning flights using highly reliable Dornier 228 twin-turboprop STOL aircraft.'
-    }
-  ];
-
   return (
-    <section className="section section--pine" id="flight-info-section">
+    <section className="flights" aria-labelledby="flights-title">
       <div className="container">
-        <div className="section__head center" style={{ maxWidth: '700px', margin: '0 auto 60px' }}>
-          <Eyebrow>Airlines & Flight Information</Eyebrow>
-          <SplitHeading>Manthali to Lukla Flights</SplitHeading>
-          <p className="reveal">
-            Flights to Lukla typically operate between <strong>6:00 AM and 10:00 AM</strong>. 
-            Because schedules are highly dependent on mountain weather, we strongly recommend contacting your airline directly for the most accurate and up-to-date departure times.
+        <div className="board reveal">
+          <header className="board__head">
+            <div className="board__title">
+              <span className="board__icon"><Icon name="plane" /></span>
+              <div>
+                <p className="board__kicker">Departures · Manthali (Ramechhap) Airport</p>
+                <h2 id="flights-title" className="board__h">
+                  <span className="board__h-text">Flights to</span> <SplitFlap text="Lukla" delay={150} />
+                </h2>
+              </div>
+            </div>
+            <dl className="board__meta">
+              <div><dt>Local time</dt><dd><LocalClock /></dd></div>
+              <div><dt>Usual window</dt><dd>{FLIGHT_WINDOW}</dd></div>
+              <div><dt>From the hotel</dt><dd>500 m</dd></div>
+            </dl>
+          </header>
+
+          <div className="board__cols" aria-hidden="true">
+            <span>Airline</span><span>Aircraft</span><span>Status</span><span>Contact the airline</span>
+          </div>
+          <ul className="board__rows">
+            {AIRLINES.map((a, i) => (
+              <li className="board__row" key={a.name}>
+                <div className="board__airline">
+                  <h3><SplitFlap text={a.name} delay={450 + i * 260} /></h3>
+                  <p>{a.about}</p>
+                </div>
+                <div className="board__cell" data-label="Aircraft">
+                  <Icon name="plane" /> {a.aircraft}
+                </div>
+                <div className="board__cell" data-label="Status">
+                  <span className="board__status"><i aria-hidden="true" /> Weather permitting</span>
+                </div>
+                <div className="board__actions">
+                  <a className="board__btn" href={`tel:${a.phoneTel}`} aria-label={`Call ${a.name} on ${a.phoneDisplay}`}>
+                    <Icon name="phone" /> {a.phoneDisplay}
+                  </a>
+                  <a className="board__btn" href={a.url} target="_blank" rel="noopener noreferrer" aria-label={`${a.name} website (opens in a new tab)`}>
+                    {a.site} <Icon name="arrowRight" className="board__arrow" />
+                  </a>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p className="board__note">
+            Flights usually leave early in the morning and move with the weather. Tickets are booked with the airline or
+            your trekking agency, so always confirm your departure time with them.
           </p>
         </div>
 
-        <div className="grid grid--3">
-          {airlines.map((airline, i) => (
-            <div key={i} className="flight-card reveal" style={{ transitionDelay: `${i * 0.15}s` }}>
-              <div className="flight-card__logo">{airline.name.charAt(0)}</div>
-              <h3>{airline.name}</h3>
-              <p>{airline.desc}</p>
-              <div style={{ backgroundColor: 'rgba(255,255,255,0.04)', padding: '10px 14px', borderRadius: '8px', fontSize: '0.85rem', color: '#c3d1ca', margin: '0 0 12px 0', width: '100%', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <Icon name="plane" className="aircraft-icon" />
-                <strong>Aircraft:</strong> {airline.aircraft}
-              </div>
-              <div className="flight-card__links">
-                <a href={airline.url} target="_blank" rel="noopener noreferrer" className="flight-link">
-                  <Icon name="arrowRight" /> {airline.website}
-                </a>
-                <a href={`tel:${airline.phone.replace(/[\s-]/g, '')}`} className="flight-link">
-                  <Icon name="phone" /> {airline.phone}
-                </a>
-              </div>
+        <div className="grid grid--3 flight-tips" data-stagger="">
+          {TIPS.map((t, i) => (
+            <div className="feature reveal" key={t.title}>
+              <span className="feature__num">0{i + 1}</span>
+              <div className="feature__icon"><Icon name={t.icon} /></div>
+              <h3>{t.title}</h3>
+              <p>{t.text}</p>
             </div>
           ))}
         </div>

@@ -763,13 +763,75 @@ a.card__media { display: block; }
   .card--row .card__media { aspect-ratio: 5 / 4; min-height: 0; }
 }
 
-/* ---------- flight info cards ---------- */
-.flight-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius); padding: 32px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; }
-.flight-card__logo { width: 48px; height: 48px; border-radius: 50%; background: var(--gold); display: grid; place-items: center; font-size: 1.2rem; font-weight: 700; color: var(--pine); margin-bottom: 8px; }
-.flight-card h3 { font-family: var(--font-cormorant); font-size: 1.8rem; font-weight: 600; color: var(--white); margin: 0; }
-.flight-card p { font-size: 0.95rem; color: #8fa39a; margin: 0 0 16px 0; line-height: 1.5; }
-.flight-card__links { display: flex; flex-direction: column; gap: 12px; width: 100%; margin-top: auto; }
-.flight-link { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 99px; color: var(--white); font-weight: 600; font-size: 0.9rem; transition: background 0.3s; text-decoration: none; }
-.flight-link:hover { background: rgba(255,255,255,0.1); }
-.flight-link svg { width: 16px; height: 16px; color: var(--gold); }
-.aircraft-icon { display: inline-block; vertical-align: middle; margin-right: 6px; width: 14px; height: 14px; color: var(--gold); }
+/* ---------- departures board (home): Manthali → Lukla ---------- */
+.flights { position: relative; z-index: 2; background: var(--sand); padding: 0 0 var(--space); display: flow-root; }
+/* overlaps the bottom of the Lukla banner, like the booking card over the hero */
+.board { position: relative; margin-top: calc(-1 * clamp(70px, 9vw, 130px)); padding: clamp(22px, 3vw, 40px) clamp(20px, 3vw, 44px) clamp(20px, 2.5vw, 30px);
+  background: radial-gradient(700px 300px at 100% 0%, rgba(231, 201, 146, .08), transparent 60%), var(--pine-3); color: #dfe8e3;
+  border: 1px solid rgba(231, 201, 146, .18); border-top: 2px solid var(--gold); border-radius: var(--radius); box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .65); }
+.board__head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 22px 40px; padding-bottom: 24px; border-bottom: 1px solid rgba(255, 255, 255, .08); }
+.board__title { display: flex; align-items: center; gap: 18px; }
+.board__icon { flex-shrink: 0; width: 56px; height: 56px; border-radius: 50%; border: 1px solid rgba(231, 201, 146, .5); display: grid; place-items: center; color: var(--gold-light); }
+.board__icon svg { width: 26px; height: 26px; }
+.board__kicker { margin: 0 0 8px; font-size: .64rem; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--gold-light); }
+.board__h { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin: 0; color: var(--white); font-size: clamp(2rem, 3.6vw, 3rem); }
+.board__h .flaps { font-size: clamp(1.25rem, 2.3vw, 1.8rem); }
+.board__meta { display: flex; flex-wrap: wrap; gap: 12px 34px; margin: 0; }
+.board__meta dt { font-size: .6rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: rgba(231, 201, 146, .8); }
+.board__meta dd { margin: 5px 0 0; font-weight: 700; font-size: 1.15rem; letter-spacing: .04em; color: var(--white); font-variant-numeric: tabular-nums; }
+.board__cols, .board__row { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) minmax(0, .9fr) minmax(0, 1.1fr); gap: 24px; align-items: center; }
+.board__cols { padding: 18px 0 10px; font-size: .6rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: rgba(255, 255, 255, .45); }
+.board__rows { list-style: none; margin: 0; padding: 0; }
+.board__row { padding: 22px 0; border-top: 1px solid rgba(255, 255, 255, .07); transition: background .5s var(--ease); }
+.board__row:hover { background: linear-gradient(90deg, transparent, rgba(231, 201, 146, .05) 30%, transparent); }
+.board__airline h3 { margin: 0 0 10px; font-size: 1rem; line-height: 1; }
+.board__airline p { margin: 0; max-width: 430px; font-size: .86rem; line-height: 1.55; color: #9fb2a9; }
+.board__cell { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; font-size: .9rem; }
+.board__cell svg { flex-shrink: 0; width: 16px; height: 16px; color: var(--gold-light); }
+.board__status { display: inline-flex; align-items: center; gap: 9px; padding: 7px 12px; border: 1px solid rgba(231, 201, 146, .35); border-radius: 2px; font-size: .66rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-light); white-space: nowrap; }
+.board__status i { width: 7px; height: 7px; border-radius: 50%; background: var(--gold-light); animation: statusPulse 2.4s ease-out infinite; }
+@keyframes statusPulse { 0% { box-shadow: 0 0 0 0 rgba(231, 201, 146, .55); } 70%, 100% { box-shadow: 0 0 0 8px rgba(231, 201, 146, 0); } }
+.board__actions { display: flex; flex-direction: column; gap: 8px; }
+.board__btn { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 10px 14px; border: 1px solid rgba(255, 255, 255, .14); border-radius: 2px; color: var(--white); text-decoration: none; font-size: .8rem; font-weight: 600; letter-spacing: .03em; transition: color .35s var(--ease), border-color .35s; }
+.board__btn::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--gold-light); transform: translateY(101%); transition: transform .5s var(--ease); }
+.board__btn:hover, .board__btn:focus-visible { color: var(--pine); border-color: var(--gold-light); }
+.board__btn:hover::before, .board__btn:focus-visible::before { transform: none; }
+.board__btn svg { flex-shrink: 0; width: 15px; height: 15px; color: var(--gold-light); transition: color .35s, transform .45s var(--ease); }
+.board__btn:hover svg, .board__btn:focus-visible svg { color: var(--pine); }
+.board__arrow { margin-left: auto; }
+.board__btn:hover .board__arrow { transform: translateX(3px); }
+.board__note { margin: 18px 0 0; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, .08); font-size: .8rem; color: rgba(255, 255, 255, .62); }
+.flight-tips { margin-top: clamp(40px, 6vw, 72px); }
+
+/* split-flap tiles */
+.flaps { display: inline-flex; gap: 3px; perspective: 400px; vertical-align: middle; }
+.flap { position: relative; display: inline-grid; place-items: center; width: 1.06em; height: 1.42em; border-radius: 3px; background: linear-gradient(#173129 0 50%, #10251f 50% 100%); color: var(--gold-light); font-family: var(--font-body); font-weight: 700; line-height: 1; letter-spacing: 0; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05), 0 2px 5px rgba(0, 0, 0, .45); }
+.flap::after { content: ""; position: absolute; left: 0; right: 0; top: calc(50% - .5px); height: 1px; background: rgba(0, 0, 0, .6); }
+.flap--gap { width: .45em; background: none; box-shadow: none; }
+.flap--gap::after { display: none; }
+.flap.is-flip { animation: flapTick .11s linear; }
+@keyframes flapTick { 50% { transform: rotateX(-75deg); } }
+.board__airline .flaps { font-size: 1.05rem; }
+
+@media (max-width: 1080px) {
+  .board__cols { display: none; }
+  .board__row { grid-template-columns: 1fr 1fr; row-gap: 16px; align-items: start; }
+  .board__airline, .board__actions { grid-column: 1 / -1; }
+  .board__actions { flex-direction: row; flex-wrap: wrap; }
+  .board__actions .board__btn { flex: 1 1 200px; }
+  .board__cell::before { content: attr(data-label); flex-basis: 100%; font-size: .58rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: rgba(255, 255, 255, .45); }
+}
+@media (max-width: 680px) {
+  .board { padding: 22px 18px 18px; }
+  .board__title { gap: 14px; }
+  .board__icon { width: 46px; height: 46px; }
+  .board__meta { gap: 10px 22px; }
+  .board__meta dd { font-size: 1rem; }
+  .board__airline .flaps { font-size: .9rem; }
+  /* one detail per line, label inline on the left */
+  .board__row { grid-template-columns: 1fr; row-gap: 12px; }
+  .board__cell { flex-wrap: nowrap; }
+  .board__cell::before { flex: 0 0 74px; }
+  .board__actions { flex-direction: column; }
+  .board__actions .board__btn { flex-basis: auto; }
+}
