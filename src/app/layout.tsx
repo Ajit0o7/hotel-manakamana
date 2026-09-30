@@ -34,7 +34,14 @@ export const metadata: Metadata = {
   applicationName: HOTEL.shortName,
   openGraph: { siteName: HOTEL.name, type: 'website', locale: 'en_US' },
   twitter: { card: 'summary_large_image' },
-  icons: { apple: '/icons/apple-touch-icon.png' },
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: '/icons/apple-touch-icon.png',
+  },
 };
 
 export const viewport: Viewport = { themeColor: '#15302a' };
