@@ -2,22 +2,31 @@ import { Icon, type IconName } from '@/components/ui/Icon';
 import { HOTEL } from '@/content/hotel';
 import { LocalClock } from './LocalClock';
 
-/* Live conditions in Manthali from Open-Meteo (free, no API key), cached on the server for 30 minutes.
-   If the service can't be reached the card simply isn't shown. */
+/* Live conditions in Manthali and at Lukla (Tenzing-Hillary Airport) from Open-Meteo (free, no API key),
+   in one request, cached on the server for 30 minutes. Lukla's weather is what usually decides the flights.
+   If the service can't be reached the card simply isn't shown. This is weather, not flight status. */
 
-type Current = { temperature_2m: number; apparent_temperature: number; weather_code: number; cloud_cover: number; wind_speed_10m: number; is_day: number };
+type Current = { temperature_2m: number; weather_code: number; cloud_cover: number; wind_speed_10m: number; is_day: number; visibility?: number };
+type Place = { current: Current; sunrise?: string; sunset?: string };
 
-async function getWeather(): Promise<{ current: Current; sunrise?: string; sunset?: string } | null> {
+const LUKLA = { lat: 27.6869, lng: 86.7297 };
+
+async function getWeather(): Promise<{ manthali: Place; lukla: Place } | null> {
   const url =
-    `https://api.open-meteo.com/v1/forecast?latitude=${HOTEL.geo.lat}&longitude=${HOTEL.geo.lng}` +
-    '&current=temperature_2m,apparent_temperature,weather_code,cloud_cover,wind_speed_10m,is_day' +
+    `https://api.open-meteo.com/v1/forecast?latitude=${HOTEL.geo.lat},${LUKLA.lat}&longitude=${HOTEL.geo.lng},${LUKLA.lng}` +
+    '&current=temperature_2m,weather_code,cloud_cover,wind_speed_10m,is_day,visibility' +
     '&daily=sunrise,sunset&timezone=Asia%2FKathmandu&forecast_days=1';
   try {
-    const res = await fetch(url, { next: { revalidate: 1800 }, signal: AbortSignal.timeout(4000) });
+    const res = await fetch(url, { next: { revalidate: 1800 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) return null;
     const json = await res.json();
-    if (!json?.current) return null;
-    return { current: json.current as Current, sunrise: json.daily?.sunrise?.[0], sunset: json.daily?.sunset?.[0] };
+    if (!Array.isArray(json) || json.length < 2 || !json[0]?.current || !json[1]?.current) return null;
+    const place = (p: { current: Current; daily?: { sunrise?: string[]; sunset?: string[] } }): Place => ({
+      current: p.current,
+      sunrise: p.daily?.sunrise?.[0],
+      sunset: p.daily?.sunset?.[0],
+    });
+    return { manthali: place(json[0]), lukla: place(json[1]) };
   } catch {
     return null;
   }
@@ -37,38 +46,47 @@ function describe(code: number, isDay: boolean): { label: string; icon: IconName
 }
 
 const hhmm = (iso?: string) => (iso ? iso.slice(11, 16) : '');
+const km = (m?: number) => (m == null ? null : m >= 10_000 ? '10+ km' : `${(m / 1000).toFixed(1)} km`);
+
+function PlaceCard({ name, sub, p }: { name: string; sub: string; p: Place }) {
+  const c = p.current;
+  const sky = describe(c.weather_code, c.is_day === 1);
+  const vis = km(c.visibility);
+  return (
+    <div className="now__place">
+      <span className="now__label">{name} <span className="now__sub">· {sub}</span></span>
+      <div className="now__main">
+        <span className="now__icon"><Icon name={sky.icon} /></span>
+        <span className="now__temp">{Math.round(c.temperature_2m)}°C</span>
+      </div>
+      <p className="now__line">
+        {sky.label} · {Math.round(c.cloud_cover)}% cloud · wind {Math.round(c.wind_speed_10m)} km/h
+        {vis && <> · visibility {vis}</>}
+      </p>
+    </div>
+  );
+}
 
 export async function ManthaliNow({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
   const data = await getWeather();
   if (!data) return null;
-  const { current: c } = data;
-  const sky = describe(c.weather_code, c.is_day === 1);
+  const { manthali, lukla } = data;
   return (
-    <div className={`now now--${tone} reveal`} role="group" aria-label="Weather in Manthali now">
-      <span className="now__icon"><Icon name={sky.icon} /></span>
-      <div>
-        <span className="now__label">Now in Manthali</span>
-        <span className="now__temp">{Math.round(c.temperature_2m)}°C</span>
+    <div className={`now now--${tone} reveal`} role="group" aria-label="Weather now in Manthali and Lukla">
+      <div className="now__places">
+        <PlaceCard name="Manthali" sub="Ramechhap Airport" p={manthali} />
+        <PlaceCard name="Lukla" sub="about 2,850 m" p={lukla} />
       </div>
-      <div>
-        <span className="now__label">Sky</span>
-        {sky.label} · {Math.round(c.cloud_cover)}% cloud
+      <div className="now__foot">
+        <span><span className="now__label">Local time</span> <LocalClock /></span>
+        {manthali.sunrise && manthali.sunset && (
+          <span><span className="now__label">Sun</span> ↑ {hhmm(manthali.sunrise)} · ↓ {hhmm(manthali.sunset)}</span>
+        )}
       </div>
-      <div>
-        <span className="now__label">Wind</span>
-        {Math.round(c.wind_speed_10m)} km/h
-      </div>
-      <div>
-        <span className="now__label">Local time</span>
-        <LocalClock />
-      </div>
-      {data.sunrise && data.sunset && (
-        <div>
-          <span className="now__label">Sun</span>
-          ↑ {hhmm(data.sunrise)} · ↓ {hhmm(data.sunset)}
-        </div>
-      )}
-      <p className="now__note">Mountain flights depend on the weather. Always confirm your flight time with your airline.</p>
+      <p className="now__note">
+        This is weather, not flight status. Lukla flights depend on conditions at Lukla and along the route, so always
+        confirm your flight time with your airline.
+      </p>
     </div>
   );
 }

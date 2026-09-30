@@ -26,7 +26,7 @@ export const ROOMS: Room[] = [
     price: 2500,
     maxGuests: 2,
     beds: '1 double bed',
-    image: { src: IMG.ebnRoomSofa, alt: 'Deluxe Double Room with a double bed, sofa and coffee table' },
+    image: { src: IMG.ebnRoomSofa, alt: 'Deluxe Double Room at Hotel Manakamana Airport View, Manthali, with a double bed and sofa' },
     summary: 'Double bed, seating space, air conditioning, flat-screen TV and a private balcony. Sleeps 2.',
     description:
       'Our best room, with a comfortable double bed and its own seating area for relaxing after a long drive. It has air conditioning, a flat-screen TV, a private balcony and a private bathroom with hot shower. There is even a socket by the bed for charging up before an early flight.',
@@ -48,7 +48,7 @@ export const ROOMS: Room[] = [
     price: 2000,
     maxGuests: 2,
     beds: '1 double bed',
-    image: { src: IMG.ebnRoomLeaf, alt: 'Double Room with a double bed and an armchair' },
+    image: { src: IMG.ebnRoomLeaf, alt: 'Double Room at Hotel Manakamana Airport View, Manthali, with a double bed and armchair' },
     summary: 'A comfortable double bed, air conditioning, flat-screen TV, seating space and balcony. Sleeps 2.',
     description:
       'Everything you need for a good night before an early flight: a comfortable double bed, air conditioning, a flat-screen TV, a seating space and your own balcony, plus a private bathroom with hot shower.',

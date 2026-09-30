@@ -81,7 +81,10 @@ export default function LocationPage() {
             </ul>
             <ManthaliNow tone="light" />
             <p className="muted reveal" style={{ marginTop: 20 }}>Always check your flight time and departure airport with your airline or trekking agency.</p>
-            <Button href="/contact#enquiry" label="Book your night before" variant="dark" arrow className="reveal" />
+            <div className="hero__ctas reveal" style={{ marginTop: 0 }}>
+              <Button href="/contact#enquiry" label="Book your night before" variant="dark" arrow />
+              <Button href="/guides/manthali-to-lukla-flights" label="Read the flight guide" variant="outline" />
+            </div>
           </div>
         </div>
       </section>

@@ -1,6 +1,11 @@
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { LocalClock } from '@/components/weather/LocalClock';
+import { GuideCard } from '@/components/guides/GuideCard';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { SplitHeading } from '@/components/ui/SplitHeading';
+import { TLink } from '@/components/ui/TLink';
 import { AIRLINES, FLIGHT_WINDOW } from '@/content/airlines';
+import { GUIDES } from '@/content/guides';
 import { SplitFlap } from './SplitFlap';
 
 const TIPS: { icon: IconName; title: string; text: string }[] = [
@@ -74,7 +79,8 @@ export function FlightBoard() {
           </ul>
           <p className="board__note">
             Flights usually leave early in the morning and move with the weather. Tickets are booked with the airline or
-            your trekking agency, so always confirm your departure time with them.
+            your trekking agency, so always confirm your departure time with them.{' '}
+            <TLink href="/guides/manthali-to-lukla-flights">Read our Manthali to Lukla flight guide →</TLink>
           </p>
         </div>
 
@@ -87,6 +93,19 @@ export function FlightBoard() {
               <p>{t.text}</p>
             </div>
           ))}
+        </div>
+
+        <div className="guides-strip">
+          <div className="section__head">
+            <div>
+              <Eyebrow>Travel guides</Eyebrow>
+              <SplitHeading>Plan your <em className="accent">flight day</em></SplitHeading>
+            </div>
+            <TLink href="/guides" className="link reveal">All guides →</TLink>
+          </div>
+          <div className="grid grid--3" data-stagger="">
+            {GUIDES.map((g) => <GuideCard key={g.slug} guide={g} />)}
+          </div>
         </div>
       </div>
     </section>

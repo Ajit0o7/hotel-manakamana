@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: `%s | ${HOTEL.name}`,
   },
   description:
-    'Family-run hotel 500 m from Manthali (Ramechhap) Airport. Air-conditioned rooms with balconies, free Wi-Fi and a rooftop restaurant. Rooms from NPR 2,000.',
+    'Family-run hotel in Manthali, 500 m from Ramechhap Airport for Lukla flights. Air-conditioned rooms with balconies, free Wi-Fi and a rooftop restaurant. From NPR 2,000.',
   applicationName: HOTEL.shortName,
   openGraph: { siteName: HOTEL.name, type: 'website', locale: 'en_US' },
   twitter: { card: 'summary_large_image' },

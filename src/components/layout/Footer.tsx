@@ -29,7 +29,8 @@ export function Footer() {
           <h4>Stay</h4>
           {ROOMS.map((r) => <TLink key={r.slug} href={`/rooms/${r.slug}`}>{r.name}</TLink>)}
           <TLink href="/dining">Rooftop Restaurant</TLink>
-          <TLink href="/location#flights">Lukla flights</TLink>
+          <TLink href="/guides/manthali-to-lukla-flights">Lukla flight guide</TLink>
+          <TLink href="/guides/lukla-flight-cancelled">Flight cancelled?</TLink>
         </div>
         <div>
           <h4>Contact</h4>
