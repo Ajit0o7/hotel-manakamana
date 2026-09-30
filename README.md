@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hotel Manakamana Airport View — website (Next.js)
 
-## Getting Started
+Next.js 16 (App Router, TypeScript, React 19) version of the static site in the parent folder, with the same
+design, plus room pages, a price calculator, live Manthali weather, SEO and more.
 
-First, run the development server:
+## Run it
+
+Needs **Node.js 20.9 or newer** (tested on Node 25).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # production build
+npm run start      # serve the production build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| What | File |
+|---|---|
+| Hotel facts, phone, address, amenities, policies, FAQs, nearby places | `src/content/hotel.ts` |
+| Rooms, prices, room photos | `src/content/rooms.ts` |
+| Gallery photos and filters | `src/content/gallery.ts` |
+| All photos (static imports → automatic blur placeholders) | `src/assets/images/`, `src/content/images.ts` |
+| Global styles (ported 1:1 from the static site) | `src/app/globals.css` |
+| Emblem (loading screen) and pagoda mark | `src/components/brand/` |
+| Page-transition curtain | `src/components/layout/CurtainProvider.tsx` |
+| Scroll reveals, parallax, counters, magnetic buttons, smooth scroll | `src/components/layout/Motion.tsx` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To change a price, a phone number or an amenity, edit the file in `src/content/` and every page updates.
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+- Emblem loading screen (draws itself on the first visit) and curtain transitions between pages (`<TLink>`).
+- Home hero slideshow, word-by-word headings, image wipes, parallax, count-ups, marquee, label-roll buttons.
+- **Room pages** (`/rooms/deluxe-double-room`, `/rooms/double-room`) with photo gallery and a live price calculator.
+- **Booking enquiry** with nights × rooms × price estimate, validation and WhatsApp hand-off; dates carry over from the home booking bar and room pages.
+- **Live Manthali weather and local time** (Open-Meteo, cached 30 minutes; hidden if unavailable).
+- "Your stay, step by step" pinned sideways-scroll section.
+- `next/image` (AVIF/WebP, responsive sizes, blur-up) and `next/font` (self-hosted Cormorant Garamond + Manrope).
+- SEO: per-page titles/descriptions, canonical URLs, generated share image (`/opengraph-image`), `sitemap.xml`, `robots.txt`, JSON-LD (Hotel, HotelRoom + Offer, FAQPage).
+- Installable app manifest and icons, branded 404 page, skip link, reduced-motion and no-JavaScript fallbacks.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Settings
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `NEXT_PUBLIC_SITE_URL` — the live domain, used for the sitemap, canonical URLs and share links.
+  Defaults to `https://www.hotelmanthali.com` (shown on the hotel's own flyer); set it if the site goes live elsewhere.
 
-## Deploy on Vercel
+## Before going live — please confirm with the owner
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Room prices (from the eBooking Nepal listing, September 2026) and which photos show which room type.
+- That `+977 984-4228627` is on WhatsApp.
+- Permission to use the photos (some come from Google / Facebook / eBooking Nepal).
+- Address wording: Google lists "Manthali Bus Stand"; the hotel's logo says "Traffic Chowk, Manthali".
