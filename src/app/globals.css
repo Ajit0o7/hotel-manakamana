@@ -24,7 +24,7 @@
   --radius: 4px;
   --max: 1240px;
   --gutter: clamp(16px, 4vw, 48px);
-  --space: clamp(80px, 11vw, 150px);
+  --space: clamp(56px, 7.5vw, 100px);
   --header-h: 84px;
   --shadow: 0 30px 60px -30px rgba(21, 48, 42, .45);
   --ease: cubic-bezier(.22, 1, .36, 1);
