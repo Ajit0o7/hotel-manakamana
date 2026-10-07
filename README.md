@@ -54,7 +54,23 @@ To change a price, a phone number or an amenity, edit the file in `src/content/`
 - Permission to use the photos (some come from Google / Facebook / eBooking Nepal).
 - Address wording: Google lists "Manthali Bus Stand"; the hotel's logo says "Traffic Chowk, Manthali".
 
-## CMS backend
+## CMS and admin dashboard
 
-`cms/` holds a separate Go API (Supabase Postgres, Auth and Storage) for managing pages, posts, SEO
-metadata and the media library. See [`cms/README.md`](cms/README.md). The website does not use it yet.
+- **Admin dashboard:** `/admin` (e.g. https://manakamana-next.vercel.app/admin). Sign in with a Supabase account that has
+  the CMS admin role, then manage pages, posts (with Yoast-style SEO checks) and the media library. The code is in
+  `src/app/admin` and `src/components/admin`; the public site's pages live in `src/app/(site)`.
+- **CMS API:** `cms/` is a separate Go server (Supabase Postgres, Auth and Storage) that stores everything. See
+  [`cms/README.md`](cms/README.md).
+
+The public pages do not read from the CMS yet; they still use the files in `src/content/`.
+
+The admin finds its services through these settings. The defaults point at this project, so nothing needs setting:
+
+| Variable | Default |
+|---|---|
+| `NEXT_PUBLIC_CMS_API_URL` | `https://hotel-manakamana.onrender.com` |
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://rtusjzvbkuwktjxammda.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | this project's publishable key |
+
+The CMS server only accepts browser requests from origins listed in its `CORS_ALLOWED_ORIGINS`, so add any new domain
+(for example a custom domain) there too.
