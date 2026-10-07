@@ -46,6 +46,19 @@ function toInput(e: Entry): EntryInput {
   };
 }
 
+/** The sections a new page starts with: a header, a text and the call-to-action band. */
+const STARTER_SECTIONS = ['page_hero', 'text', 'cta_band'];
+
+function starterFields(ct: ContentType | undefined): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const f of ct?.fields ?? []) {
+    if (f.type !== 'flexible') continue;
+    const names = new Set(f.layouts?.map((l) => l.name));
+    out[f.name] = STARTER_SECTIONS.filter((n) => names.has(n)).map((layout) => ({ layout }));
+  }
+  return out;
+}
+
 /** Public path of an entry, mirroring the CMS permalink rules. */
 function publicPath(ct: ContentType, path: string, parentId: string | null): string {
   if (ct.name === 'page' && !parentId && path === 'home') return '/';
@@ -81,8 +94,8 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
   // New entries start with the type's first template when it has no "default" one (posts start as guides).
   const firstTemplate = ct?.templates?.length && !ct.templates.includes('default') ? ct.templates[0] : '';
   const baseline = useMemo(
-    () => (entry ? toInput(entry) : id ? null : { ...BLANK, template: firstTemplate }),
-    [entry, id, firstTemplate],
+    () => (entry ? toInput(entry) : id ? null : { ...BLANK, template: firstTemplate, fields: starterFields(ct) }),
+    [entry, id, firstTemplate, ct],
   );
   const value = form ?? baseline;
   const dirty = form !== null && JSON.stringify(form) !== JSON.stringify(baseline);
@@ -105,6 +118,8 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
   const update = (patch: Partial<EntryInput>) => setForm({ ...value, ...patch });
   const fields = fieldsFor(ct, value.template);
   const ordered = ct.hierarchical || !!ct.sortable;
+  // Pages built from sections: the body text only matters when there are no sections.
+  const built = fields.some((f) => f.type === 'flexible');
   const err = (k: string) => errors[k];
 
   async function save(status: Status) {
@@ -184,12 +199,19 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
               </span>
               {err('slug') && <span className="cms-error">{err('slug')}</span>}
             </label>
-            <div className="cms-label">
-              <span>Content</span>
-              <RichTextEditor label="Content" value={value.content} onChange={(content) => update({ content })} />
-              {err('content') && <span className="cms-error">{err('content')}</span>}
-              {ct.name === 'post' && <ShortcodeHelp />}
-            </div>
+            {built ? (
+              <details className="cms-label cms-body-details">
+                <summary>Body text <span className="cms-muted">— only shown when the page has no sections; use a Text section instead</span></summary>
+                <RichTextEditor label="Content" value={value.content} onChange={(content) => update({ content })} />
+              </details>
+            ) : (
+              <div className="cms-label">
+                <span>Content</span>
+                <RichTextEditor label="Content" value={value.content} onChange={(content) => update({ content })} />
+                {err('content') && <span className="cms-error">{err('content')}</span>}
+                {ct.name === 'post' && <ShortcodeHelp />}
+              </div>
+            )}
             <label className="cms-label">
               Excerpt <span className="cms-muted">— a short summary for listings; also used when the meta description is empty</span>
               <textarea className="cms-input" rows={3} value={value.excerpt} onChange={(e) => update({ excerpt: e.target.value })} />
@@ -199,7 +221,7 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
 
           {fields.length > 0 && (
             <section className="cms-card">
-              <h2 className="cms-h2">{ct.label} details</h2>
+              {!built && <h2 className="cms-h2">{ct.label} details</h2>}
               {fields.map((f) => (
                 <FieldInput
                   key={f.name}
@@ -222,6 +244,9 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
             excerpt={value.excerpt}
             hasFeaturedImage={!!value.featured_media_id}
             url={url}
+            type={ct.name}
+            template={value.template}
+            fields={value.fields}
           />
         </div>
 

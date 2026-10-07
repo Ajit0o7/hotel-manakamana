@@ -2,12 +2,12 @@
 
 export type FieldType =
   | 'text' | 'textarea' | 'richtext' | 'number' | 'integer' | 'boolean' | 'date'
-  | 'datetime' | 'url' | 'email' | 'media' | 'select' | 'list' | 'gallery' | 'table';
+  | 'datetime' | 'url' | 'email' | 'media' | 'select' | 'list' | 'gallery' | 'table' | 'flexible';
 
 export interface Column {
   name: string;
   label: string;
-  type?: 'text' | 'textarea' | 'url' | 'media' | 'select' | 'number';
+  type?: 'text' | 'textarea' | 'url' | 'media' | 'select' | 'number' | 'boolean';
   options?: string[];
 }
 
@@ -19,7 +19,20 @@ export interface Field {
   help?: string;
   options?: string[];
   columns?: Column[];
+  /** The kinds of section a flexible field holds. */
+  layouts?: Layout[];
 }
+
+/** One kind of section of a flexible field (ACF "flexible content"). */
+export interface Layout {
+  name: string;
+  label: string;
+  help?: string;
+  fields: Field[];
+}
+
+/** A section of a flexible field: its layout's name plus that layout's values. */
+export type SectionValue = { layout: string } & Record<string, unknown>;
 
 export interface ContentType {
   name: string;

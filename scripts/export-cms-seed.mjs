@@ -36,8 +36,8 @@ export async function load(url, ctx, next) {
 
 const { HOTEL, POLICIES, AMENITIES, NEARBY, FAQS } = await import(pathToFileURL(join(src, 'content/hotel.ts')).href);
 const { ROOMS } = await import(pathToFileURL(join(src, 'content/rooms.ts')).href);
-const { GALLERY } = await import(pathToFileURL(join(src, 'content/gallery.ts')).href);
 const { GUIDES } = await import(pathToFileURL(join(src, 'content/guides.ts')).href);
+const { PAGE_SECTIONS } = await import(pathToFileURL(join(src, 'content/pages.ts')).href);
 
 // ---- Media -------------------------------------------------------------------
 const media = new Map(); // file name -> { key, file, alt, title }
@@ -48,6 +48,16 @@ function mediaKey(photo, alt) {
   const m = media.get(file);
   if (!m.alt && (alt ?? photo.alt)) m.alt = alt ?? photo.alt;
   return `media:${m.key}`;
+}
+
+/** A page's sections with every photo replaced by its "media:<key>" reference. */
+function sectionsToSeed(v) {
+  if (Array.isArray(v)) return v.map(sectionsToSeed);
+  if (v && typeof v === 'object') {
+    if (v.src && typeof v.src === 'object' && 'src' in v.src && 'alt' in v) return mediaKey(v);
+    return Object.fromEntries(Object.entries(v).filter(([, x]) => x !== undefined).map(([k, x]) => [k, sectionsToSeed(x)]));
+  }
+  return v;
 }
 
 // ---- Inline text and guide blocks -> HTML ----------------------------------------
@@ -217,8 +227,7 @@ const pages = [
   { slug: 'dining', template: 'dining', title: 'Rooftop Restaurant',
     description: 'Nepali thali, dal bhat, breakfasts and tea on our rooftop terrace in Manthali, Ramechhap. Room service available.' },
   { slug: 'gallery', template: 'gallery', title: 'Photo Gallery',
-    description: 'Photos of our rooms, rooftop restaurant, food and views in Manthali, Ramechhap.',
-    fields: { photos: GALLERY.map((p) => ({ photo: mediaKey(p), category: p.cat, caption: p.alt })) } },
+    description: 'Photos of our rooms, rooftop restaurant, food and views in Manthali, Ramechhap.' },
   { slug: 'location', template: 'location', title: 'Location & Getting Here',
     description: '500 m from Manthali (Ramechhap) Airport and 300 m from Manthali Bus Park: an easy base for Lukla flights.' },
   { slug: 'guides', template: 'guides', title: 'Travel Guides: Manthali, Ramechhap Airport & Lukla Flights',
@@ -236,7 +245,7 @@ pages.forEach((p, i) => {
     status: 'published',
     published_at: published,
     menu_order: i,
-    fields: p.fields ?? {},
+    fields: { sections: sectionsToSeed(PAGE_SECTIONS[p.slug]) },
     seo: { meta_title: p.meta_title ?? '', meta_description: p.description, focus_keyword: p.keyword ?? '' },
   });
 });
@@ -245,7 +254,16 @@ pages.forEach((p, i) => {
 rmSync(out, { recursive: true, force: true });
 mkdirSync(join(out, 'images'), { recursive: true });
 for (const m of media.values()) copyFileSync(join(src, 'assets/images', m.file), join(out, 'images', m.file));
-const bundle = { version: 1, media: [...media.values()], entries };
+// Pages imported before they had sections get them added (only where they have none yet).
+// The gallery's photos were in a "photos" field before; they move into its gallery section.
+const patches = pages.map((p) => ({
+  key: `page:${p.slug}:sections`,
+  type: 'page',
+  path: p.slug,
+  fields: { sections: sectionsToSeed(PAGE_SECTIONS[p.slug]) },
+  ...(p.slug === 'gallery' ? { carry: { photos: 'sections.gallery.photos' } } : {}),
+}));
+const bundle = { version: 2, media: [...media.values()], entries, patches };
 writeFileSync(join(out, 'content.json'), JSON.stringify(bundle, null, 2) + '\n');
-console.log(`Wrote ${entries.length} entries and ${media.size} photos to ${out}`);
+console.log(`Wrote ${entries.length} entries, ${patches.length} patches and ${media.size} photos to ${out}`);
 console.log(entries.map((e) => `  ${e.key}`).join('\n'));

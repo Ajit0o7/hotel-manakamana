@@ -11,11 +11,12 @@
 import type { Metadata } from 'next';
 import type { StaticImageData } from 'next/image';
 import { cache } from 'react';
-import { GALLERY, GALLERY_FILTERS, type GalleryItem } from '@/content/gallery';
 import { GUIDES, type Guide } from '@/content/guides';
-import { AMENITIES, FAQS, HOTEL, NEARBY, POLICIES } from '@/content/hotel';
+import { AMENITIES, FAQS, HOTEL, NEARBY, POLICIES, formatNPR } from '@/content/hotel';
 import type { Photo } from '@/content/images';
+import { BUILT_IN_PAGES, PAGE_SECTIONS } from '@/content/pages';
 import { ROOMS, type Room } from '@/content/rooms';
+import type { Section } from '@/content/sections';
 import { CMS_API_URL } from './config';
 
 /** Seconds between background refreshes of a page's CMS content. */
@@ -115,8 +116,11 @@ function image(m: MediaRef | null | undefined): StaticImageData | undefined {
   const large = m.sizes?.large;
   const src = large ?? (m.width && m.height ? { url: m.url, width: m.width, height: m.height } : undefined);
   if (!src) return undefined;
-  return { src: src.url, width: src.width, height: src.height, blurDataURL: m.blur_data_url || undefined };
+  return { src: src.url, width: src.width, height: src.height, blurDataURL: m.blur_data_url || NO_BLUR };
 }
+
+/** A plain sand-coloured placeholder, for photos uploaded before the CMS made blurred previews. */
+const NO_BLUR = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect width='1' height='1' fill='%23e9e1d3'/%3E%3C/svg%3E";
 
 function photo(m: MediaRef | null | undefined, alt?: string): Photo | undefined {
   const src = image(m);
@@ -299,21 +303,63 @@ export async function getPriceFrom(): Promise<number> {
   return Math.min(...rooms.map((r) => r.price).filter((p) => p > 0));
 }
 
-// ---- Gallery ------------------------------------------------------------------------------------
+// ---- Page sections ------------------------------------------------------------------------------
 
-const CATEGORIES = new Set(GALLERY_FILTERS.map((f) => f.key));
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** The gallery page's photos, from the CMS "Gallery" page. */
-export const getGallery = cache(async (): Promise<GalleryItem[]> => {
-  const page = await getPage('gallery');
-  const items = rows(page?.fields.photos)
-    .map((r) => {
-      const p = photo(page!.media[r.photo], r.caption);
-      const cat = CATEGORIES.has(r.category as never) ? (r.category as GalleryItem['cat']) : 'hotel';
-      return p ? { ...p, cat } : null;
-    })
-    .filter((x): x is GalleryItem => !!x);
-  return items.length ? items : GALLERY;
+/** Replaces the media IDs inside a CMS section with photos (missing photos become undefined). */
+function withPhotos(v: unknown, media: Record<string, MediaRef>): unknown {
+  if (typeof v === 'string') return UUID.test(v) ? photo(media[v]) : v;
+  if (Array.isArray(v)) return v.map((x) => withPhotos(x, media)).filter((x) => x !== undefined);
+  if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, withPhotos(x, media)]));
+  return v;
+}
+
+/** A CMS page's sections, or null if the page has none (an entry from before pages had sections). */
+export function sectionsOf(page: CmsEntry | null): Section[] | null {
+  const raw = page?.fields.sections;
+  if (!page || !Array.isArray(raw)) return null;
+  return raw.filter((x) => x && typeof x === 'object' && 'layout' in x).map((x) => withPhotos(x, page.media) as Section);
+}
+
+/** The sections of one of the built-in pages: from the CMS, or the built-in ones. */
+export async function getSections(slug: string): Promise<Section[]> {
+  return sectionsOf(await getPage(slug)) ?? PAGE_SECTIONS[slug] ?? [];
+}
+
+/** The values of the {placeholders} editors can use in section texts. */
+export function placeholders(hotel: Hotel, priceFrom: number): Record<string, string> {
+  return {
+    hotel_name: hotel.name,
+    phone: hotel.phoneDisplay,
+    phone_tel: hotel.phoneTel,
+    whatsapp_url: hotel.whatsappUrl,
+    email: hotel.email,
+    address: hotel.address,
+    maps_url: hotel.mapsUrl,
+    price_from: formatNPR(priceFrom),
+    rating: String(hotel.rating.value),
+    reviews: String(hotel.rating.count),
+    room_count: String(hotel.roomCount),
+    distance_airport: hotel.distances.airport,
+    distance_bus_park: hotel.distances.busPark,
+    distance_kathmandu: hotel.distances.kathmandu,
+  };
+}
+
+/** An entry's featured image as a photo. */
+export const featuredPhoto = (e: CmsEntry): Photo | undefined => photo(e.featured_media);
+
+/** A page made in the CMS, by its path (e.g. "about-us/team"). It is looked up in the (cached) list of pages,
+    so unknown addresses get their 404 at once instead of each asking the CMS, which may be asleep. */
+export async function getCmsPage(path: string): Promise<CmsEntry | null> {
+  return (await getCmsPages()).find((p) => p.path === path) ?? null;
+}
+
+/** Pages made in the CMS (not one of the built-in pages), for the sitemap and static generation. */
+export const getCmsPages = cache(async (): Promise<CmsEntry[]> => {
+  const pages = await list('page', 'menu');
+  return pages.filter((p) => !BUILT_IN_PAGES.has(p.path));
 });
 
 // ---- Guides --------------------------------------------------------------------------------------

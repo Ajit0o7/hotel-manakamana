@@ -97,8 +97,19 @@ func TestImportBundle(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if rows, _ := gallery.Fields["photos"].([]any); len(rows) != 26 {
+	sections, _ := gallery.Fields["sections"].([]any)
+	if len(sections) != 3 {
+		t.Fatalf("gallery sections = %v", sections)
+	}
+	if rows, _ := sections[1].(map[string]any)["photos"].([]any); len(rows) != 26 {
 		t.Errorf("gallery rows = %d", len(rows))
+	}
+	home, err := contentSvc.GetLiveByPath(ctx, "page", "home")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if hp, err := contentSvc.Present(ctx, home); err != nil || len(hp[0].Media) < 10 {
+		t.Errorf("home page photos = %d, %v", len(hp[0].Media), err)
 	}
 	settings, err := contentSvc.GetLiveByPath(ctx, "settings", "hotel")
 	if err != nil || settings.Fields["phone"] != "+977 984-4228627" {
@@ -145,5 +156,77 @@ func TestImportKeepsEditorEntries(t *testing.T) {
 	got, err := contentSvc.Get(ctx, "page", mine.ID)
 	if err != nil || got.Title != "Our restaurant" {
 		t.Errorf("editor's page changed: %+v, %v", got, err)
+	}
+}
+
+// A CMS that imported the first bundle (pages without sections, the gallery
+// photos in an old "photos" field) gets sections added, without touching
+// pages an editor has already built.
+func TestPatchesAddSectionsToOlderPages(t *testing.T) {
+	pool := testdb.New(t)
+	ctx := context.Background()
+	store := &memStore{objects: map[string]int{}}
+	mediaSvc := media.NewService(media.Deps{Repo: mediapg.New(pool), Store: store, Images: imaging.NewProcessor(), MaxBytes: 20 << 20})
+	types := content.NewRegistry()
+	app.RegisterContentTypes(types)
+	contentSvc := content.NewService(content.Deps{
+		Repo: contentpg.New(pool), Types: types, Media: app.MediaResolver{Media: mediaSvc},
+		Sanitizer: sanitize.New(), Analyzer: seo.NewAnalyzer(""), SiteURL: "https://example.com",
+	})
+	bundle, images, _ := seed.Load()
+	im := &seed.Importer{Pool: pool, Media: mediaSvc, Content: contentSvc, Log: slog.New(slog.DiscardHandler)}
+	if err := im.Run(ctx, bundle, images); err != nil {
+		t.Fatal(err)
+	}
+
+	// The gallery's photos, which an editor has cut down to the first two.
+	gallery, _ := contentSvc.GetLiveByPath(ctx, "page", "gallery")
+	first := gallery.Fields["sections"].([]any)[1].(map[string]any)["photos"].([]any)[:2]
+
+	// Turn the pages back into what the first version imported, and forget the patches.
+	exec := func(sql string, args ...any) {
+		if _, err := pool.Exec(ctx, sql, args...); err != nil {
+			t.Fatal(err)
+		}
+	}
+	exec(`update cms.entries set fields = '{}' where type = 'page'`)
+	exec(`update cms.entries set fields = jsonb_build_object('photos', $1::jsonb) where id = $2`, first, gallery.ID)
+	exec(`delete from cms.seed_items where key like 'page:%:sections'`)
+	// An editor has rebuilt the Dining page meanwhile.
+	dining, _ := contentSvc.GetLiveByPath(ctx, "page", "dining")
+	mine := []any{map[string]any{"layout": "text", "heading": "Our *kitchen*"}}
+	exec(`update cms.entries set fields = jsonb_build_object('sections', $1::jsonb) where id = $2`, mine, dining.ID)
+	// And deleted the Location page.
+	location, _ := contentSvc.GetLiveByPath(ctx, "page", "location")
+	if err := contentSvc.Delete(ctx, "page", location.ID); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := im.Run(ctx, bundle, images); err != nil {
+		t.Fatal(err)
+	}
+	sectionsOf := func(path string) []any {
+		e, err := contentSvc.GetLiveByPath(ctx, "page", path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		s, _ := e.Fields["sections"].([]any)
+		return s
+	}
+	if n := len(sectionsOf("home")); n != 15 {
+		t.Errorf("home has %d sections, want 15", n)
+	}
+	gallery, _ = contentSvc.GetLiveByPath(ctx, "page", "gallery")
+	if _, old := gallery.Fields["photos"]; old || len(sectionsOf("gallery")) != 3 {
+		t.Errorf("gallery fields = %v", gallery.Fields)
+	}
+	if rows := sectionsOf("gallery")[1].(map[string]any)["photos"].([]any); len(rows) != 2 {
+		t.Errorf("the editor's %d gallery photos were not kept: %d", len(first), len(rows))
+	}
+	if s := sectionsOf("dining"); len(s) != 1 || s[0].(map[string]any)["heading"] != "Our *kitchen*" {
+		t.Errorf("editor's dining page changed: %v", s)
+	}
+	if _, err := contentSvc.GetLiveByPath(ctx, "page", "location"); err == nil {
+		t.Error("deleted page came back")
 	}
 }

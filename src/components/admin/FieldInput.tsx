@@ -5,17 +5,20 @@ import type { Field } from '@/lib/cms/types';
 import { cleanRows, GalleryField, TableField } from './CollectionFields';
 import { MediaField } from './MediaPicker';
 import { RichTextEditor } from './RichTextEditor';
+import { cleanSections, SectionsField } from './SectionsField';
 
 /** The right input for one custom field of a content type. */
-export function FieldInput(props: { field: Field; value: unknown; onChange: (v: unknown) => void; error?: string }) {
+export function FieldInput(props: { field: Field; value: unknown; onChange: (v: unknown) => void; error?: string; idPrefix?: string }) {
   const { field: f, value, onChange } = props;
   const str = typeof value === 'string' ? value : value == null ? '' : String(value);
-  const id = `field-${f.name}`;
+  const id = `field-${props.idPrefix ?? ''}${f.name}`;
 
   let input: React.ReactNode;
   switch (f.type) {
+    case 'flexible':
+      return <SectionsField field={f} value={value} onChange={onChange} error={props.error} />;
     case 'textarea':
-      input = <textarea id={id} className="cms-input" rows={4} value={str} onChange={(e) => onChange(e.target.value)} />;
+      input = <textarea id={id} className="cms-input" rows={f.name === 'heading' ? 2 : 4} value={str} onChange={(e) => onChange(e.target.value)} />;
       break;
     case 'richtext':
       input = <RichTextEditor label={f.label} value={str} onChange={onChange} minimal />;
@@ -118,6 +121,8 @@ export function cleanFields(values: Record<string, unknown>, fields: Field[]): R
       if (items.length) out[f.name] = items;
     } else if (f.type === 'gallery') {
       if (Array.isArray(v) && v.length) out[f.name] = v;
+    } else if (f.type === 'flexible') {
+      out[f.name] = cleanSections(v, f, cleanFields); // an empty list is kept: the page has no sections
     } else {
       out[f.name] = v;
     }

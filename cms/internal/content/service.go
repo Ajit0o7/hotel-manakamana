@@ -208,14 +208,18 @@ func (s *Service) Analyze(ctx context.Context, typ string, id uuid.UUID) (seo.Re
 	if err != nil {
 		return seo.Report{}, err
 	}
-	return s.Analyzer.Analyze(analysisInput(e)), nil
+	ct, err := s.Type(typ)
+	if err != nil {
+		return seo.Report{}, err
+	}
+	return s.Analyzer.Analyze(analysisInput(ct, e)), nil
 }
 
-func analysisInput(e *Entry) seo.Input {
+func analysisInput(ct ContentType, e *Entry) seo.Input {
 	return seo.Input{
 		Title:            e.Title,
 		Slug:             e.Slug,
-		Content:          e.Content,
+		Content:          e.Content + ct.SectionsHTML(e.Template, e.Fields),
 		Excerpt:          e.Excerpt,
 		HasFeaturedImage: e.FeaturedMediaID != nil,
 		Meta:             e.SEO,
@@ -347,6 +351,7 @@ func (s *Service) apply(ctx context.Context, ct ContentType, e *Entry, in Input)
 		if v, ok := fields[f.Name].(string); ok && f.Type == FieldRichText {
 			fields[f.Name] = s.Sanitizer.HTML(v)
 		}
+		f.SanitizeRichText(fields[f.Name], s.Sanitizer.HTML)
 	}
 
 	e.Title = title
@@ -362,7 +367,7 @@ func (s *Service) apply(ctx context.Context, ct ContentType, e *Entry, in Input)
 	e.PublishedAt = publishedAt
 	e.SEO = meta
 
-	rep := s.Analyzer.Analyze(analysisInput(e))
+	rep := s.Analyzer.Analyze(analysisInput(ct, e))
 	e.SEO.SEOScore, e.SEO.ReadabilityScore = &rep.SEOScore, &rep.ReadabilityScore
 	if rep.ReadabilityRating == "na" {
 		e.SEO.ReadabilityScore = nil

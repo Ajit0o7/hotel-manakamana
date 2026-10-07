@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "media": [
     {
       "key": "ebn-room-sofa",
@@ -112,26 +112,80 @@
     {
       "key": "hero-valley-view",
       "file": "hero-valley-view.jpg",
-      "alt": "Valley view from the terrace",
+      "alt": "Green hills and Manthali valley seen from the hotel terrace",
       "title": "Hero valley view"
-    },
-    {
-      "key": "fb-hotel-exterior",
-      "file": "fb-hotel-exterior.jpg",
-      "alt": "Hotel lit up at night",
-      "title": "Hotel exterior"
     },
     {
       "key": "fb-airport-runway",
       "file": "fb-airport-runway.jpg",
-      "alt": "Airport runway at night",
+      "alt": "Manthali (Ramechhap) Airport runway lights at night",
       "title": "Airport runway"
     },
     {
       "key": "ebn-rooftop-terrace",
       "file": "ebn-rooftop-terrace.jpg",
-      "alt": "Rooftop terrace by day",
+      "alt": "Rooftop terrace with tables and a view of the hills",
       "title": "Rooftop terrace"
+    },
+    {
+      "key": "fb-hotel-exterior",
+      "file": "fb-hotel-exterior.jpg",
+      "alt": "Hotel Manakamana Airport View lit up at night",
+      "title": "Hotel exterior"
+    },
+    {
+      "key": "ebn-exterior-day",
+      "file": "ebn-exterior-day.jpg",
+      "alt": "Hotel Manakamana Airport View by day",
+      "title": "Exterior day"
+    },
+    {
+      "key": "food-thali",
+      "file": "food-thali.jpg",
+      "alt": "Nepali thali set",
+      "title": "Food thali"
+    },
+    {
+      "key": "rooftop-dining",
+      "file": "rooftop-dining.jpg",
+      "alt": "Guests dining together on the rooftop terrace with hill views",
+      "title": "Rooftop dining"
+    },
+    {
+      "key": "view-manthali-town",
+      "file": "view-manthali-town.jpg",
+      "alt": "View over Manthali town and green hills",
+      "title": "View manthali town"
+    },
+    {
+      "key": "fb-rooftop-dining",
+      "file": "fb-rooftop-dining.jpg",
+      "alt": "Guests at dinner on the rooftop at night",
+      "title": "Rooftop dining"
+    },
+    {
+      "key": "food-dal-bhat",
+      "file": "food-dal-bhat.jpg",
+      "alt": "Dal bhat set with rice, curry and pickles",
+      "title": "Food dal bhat"
+    },
+    {
+      "key": "fb-rooftop-terrace",
+      "file": "fb-rooftop-terrace.jpg",
+      "alt": "Trekking group at dinner on the rooftop at night",
+      "title": "Rooftop terrace"
+    },
+    {
+      "key": "food-breakfast",
+      "file": "food-breakfast.jpg",
+      "alt": "Breakfast plate",
+      "title": "Food breakfast"
+    },
+    {
+      "key": "food-sandwich",
+      "file": "food-sandwich.jpg",
+      "alt": "Sandwich with fries",
+      "title": "Food sandwich"
     },
     {
       "key": "exterior",
@@ -140,70 +194,16 @@
       "title": "Exterior"
     },
     {
-      "key": "food-thali",
-      "file": "food-thali.jpg",
-      "alt": "Nepali thali",
-      "title": "Food thali"
-    },
-    {
-      "key": "rooftop-dining",
-      "file": "rooftop-dining.jpg",
-      "alt": "Rooftop dining",
-      "title": "Rooftop dining"
-    },
-    {
-      "key": "fb-rooftop-dining",
-      "file": "fb-rooftop-dining.jpg",
-      "alt": "Dinner on the rooftop",
-      "title": "Rooftop dining"
-    },
-    {
-      "key": "view-manthali-town",
-      "file": "view-manthali-town.jpg",
-      "alt": "Manthali town",
-      "title": "View manthali town"
-    },
-    {
-      "key": "food-dal-bhat",
-      "file": "food-dal-bhat.jpg",
-      "alt": "Dal bhat",
-      "title": "Food dal bhat"
-    },
-    {
-      "key": "ebn-exterior-day",
-      "file": "ebn-exterior-day.jpg",
-      "alt": "Hotel by day",
-      "title": "Exterior day"
-    },
-    {
       "key": "rooftop-evening",
       "file": "rooftop-evening.jpg",
       "alt": "Evening on the rooftop",
       "title": "Rooftop evening"
     },
     {
-      "key": "food-breakfast",
-      "file": "food-breakfast.jpg",
-      "alt": "Breakfast",
-      "title": "Food breakfast"
-    },
-    {
       "key": "fb-room-double-single",
       "file": "fb-room-double-single.jpg",
       "alt": "Room interior",
       "title": "Room double single"
-    },
-    {
-      "key": "fb-rooftop-terrace",
-      "file": "fb-rooftop-terrace.jpg",
-      "alt": "Rooftop at night",
-      "title": "Rooftop terrace"
-    },
-    {
-      "key": "food-sandwich",
-      "file": "food-sandwich.jpg",
-      "alt": "Sandwich & fries",
-      "title": "Food sandwich"
     }
   ],
   "entries": [
@@ -681,7 +681,310 @@
       "status": "published",
       "published_at": "2026-09-30T06:00:00Z",
       "menu_order": 0,
-      "fields": {},
+      "fields": {
+        "sections": [
+          {
+            "layout": "hero_slideshow",
+            "eyebrow": "Manthali · Ramechhap · Nepal",
+            "heading": "Rest well, \n*fly early.*",
+            "text": "A warm, family-run hotel just 500 m from Manthali (Ramechhap) Airport, with air-conditioned rooms, private balconies, free Wi-Fi and a rooftop restaurant looking over the valley.",
+            "buttons": [
+              {
+                "label": "Check availability",
+                "link": "/contact",
+                "style": "gold",
+                "icon": "arrow"
+              },
+              {
+                "label": "Explore rooms",
+                "link": "/rooms",
+                "style": "light"
+              }
+            ],
+            "show_rating": true,
+            "slides": [
+              {
+                "photo": "media:hero-valley-view",
+                "caption": "The valley from our terrace"
+              },
+              {
+                "photo": "media:fb-airport-runway",
+                "caption": "Manthali Airport runway at night"
+              },
+              {
+                "photo": "media:ebn-rooftop-terrace",
+                "caption": "Our rooftop terrace"
+              },
+              {
+                "photo": "media:fb-hotel-exterior",
+                "caption": "Our hotel, lit up at night",
+                "tall": true
+              }
+            ]
+          },
+          {
+            "layout": "booking_bar"
+          },
+          {
+            "layout": "facts",
+            "items": [
+              {
+                "value": "{rating}",
+                "suffix": "★",
+                "label": "Google rating"
+              },
+              {
+                "value": "{reviews}",
+                "label": "Guest reviews"
+              },
+              {
+                "value": "4.5",
+                "suffix": "hrs",
+                "label": "From Kathmandu by road"
+              },
+              {
+                "value": "500",
+                "suffix": "m",
+                "label": "To Manthali Airport"
+              }
+            ]
+          },
+          {
+            "layout": "marquee",
+            "words": [
+              "Rest well",
+              "Fly early",
+              "Dal bhat power",
+              "Rooftop evenings",
+              "Manthali",
+              "Ramechhap"
+            ]
+          },
+          {
+            "layout": "split",
+            "number": "01",
+            "eyebrow": "Welcome",
+            "heading": "A warm Nepali welcome, *minutes* from your flight",
+            "photo": "media:fb-hotel-exterior",
+            "badge_value": "{rating}★",
+            "badge_text": "Rated \"Very good\" by {reviews} guests on Google",
+            "lead": "Hotel Manakamana Airport View is a friendly, family-run hotel in Manthali, Ramechhap: 500 m from the airport and 300 m from the bus park.",
+            "text": "Many trekkers stay here before flying from Manthali to Lukla. Others stop on the Lamosangu–Ramechhap highway on the way through. Either way, you get a clean, air-conditioned room with its own balcony, a hot shower, a good plate of dal bhat and tea on the rooftop.",
+            "checks": [
+              "Private balconies over the runway and green hills",
+              "Air conditioning, flat-screen TV and free Wi-Fi",
+              "Private bathrooms with plenty of hot water",
+              "Rooftop restaurant, room service and kind, helpful hosts"
+            ],
+            "buttons": [
+              {
+                "label": "Explore our rooms",
+                "link": "/rooms",
+                "style": "outline",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "features",
+            "background": "pine",
+            "number": "02",
+            "eyebrow": "Why guests choose us",
+            "heading": "Everything you need, *nothing* you don't",
+            "items": [
+              {
+                "icon": "plane",
+                "title": "Close to the airport",
+                "text": "Just 500 m from Manthali Airport, so an early Lukla flight is easy."
+              },
+              {
+                "icon": "shower",
+                "title": "Clean & comfortable",
+                "text": "Air-conditioned rooms with a balcony, flat-screen TV and a proper hot shower after a long road."
+              },
+              {
+                "icon": "food",
+                "title": "Home-cooked food",
+                "text": "Nepali thali, dal bhat, breakfasts, snacks and hot tea, all made fresh."
+              },
+              {
+                "icon": "heart",
+                "title": "Friendly service",
+                "text": "Guests keep telling us they felt at home. We'll mind your luggage and help with travel plans."
+              }
+            ]
+          },
+          {
+            "layout": "stay_story",
+            "number": "03",
+            "eyebrow": "Your stay",
+            "heading": "From the road to *the runway*",
+            "text": "One easy night between Kathmandu and the mountains. Scroll to follow your stay, step by step.",
+            "steps": [
+              {
+                "step": "01 · Arrive",
+                "title": "Drop your bags",
+                "text": "After the drive from Kathmandu (about 4½ hours), check in at Manthali. We can store your luggage.",
+                "photo": "media:ebn-exterior-day"
+              },
+              {
+                "step": "02 · Unwind",
+                "title": "Your own balcony",
+                "text": "An air-conditioned room with a flat-screen TV, free Wi-Fi, a hot shower and a balcony over the hills.",
+                "photo": "media:ebn-room-sofa"
+              },
+              {
+                "step": "03 · Dine",
+                "title": "Dal bhat on the roof",
+                "text": "Home-cooked Nepali thali on the rooftop terrace, or room service if you would rather stay in.",
+                "photo": "media:food-thali"
+              },
+              {
+                "step": "04 · Rest",
+                "title": "Runway lights",
+                "text": "An early night, with Manthali Airport’s runway just beyond the rooftops.",
+                "photo": "media:fb-airport-runway"
+              },
+              {
+                "step": "05 · Fly",
+                "title": "500 m to the terminal",
+                "text": "Wake up close to the airport and start your Everest journey rested.",
+                "photo": "media:hero-valley-view"
+              }
+            ]
+          },
+          {
+            "layout": "rooms_preview",
+            "number": "04",
+            "eyebrow": "Stay",
+            "heading": "Our rooms",
+            "text": "Air-conditioned rooms with private balconies and free Wi-Fi. Rates are room only and can change, so call or WhatsApp to confirm.",
+            "link_label": "All rooms & amenities →"
+          },
+          {
+            "layout": "split",
+            "background": "sand",
+            "photo_side": "right",
+            "photo": "media:rooftop-dining",
+            "number": "05",
+            "eyebrow": "Rooftop restaurant",
+            "heading": "Dal bhat *with a view*",
+            "text": "Our rooftop terrace is where guests meet. Trekking groups share stories there over a Nepali thali, and the hills turn golden in the evening.",
+            "checks": [
+              "Traditional Nepali thali & dal bhat",
+              "Breakfast, sandwiches & snacks",
+              "Tea and coffee all day"
+            ],
+            "buttons": [
+              {
+                "label": "See the menu",
+                "link": "/dining",
+                "style": "outline",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "banner",
+            "photo": "media:fb-airport-runway",
+            "number": "06",
+            "eyebrow": "Flying to Lukla?",
+            "heading": "Start your Everest journey *rested*",
+            "text": "In peak trekking season, many Lukla flights leave from Manthali (Ramechhap) Airport. Drive in from Kathmandu the day before and stay with us. Then it's a short trip to the airport in the morning.",
+            "buttons": [
+              {
+                "label": "Getting here",
+                "link": "/location#flights",
+                "style": "gold",
+                "icon": "arrow"
+              },
+              {
+                "label": "Book your night",
+                "link": "/contact",
+                "style": "light"
+              }
+            ],
+            "show_weather": true
+          },
+          {
+            "layout": "flight_board",
+            "note": "Flights usually leave early in the morning and move with the weather. Tickets are booked with the airline or your trekking agency, so always confirm your departure time with them. [Read our Manthali to Lukla flight guide →](/guides/manthali-to-lukla-flights)",
+            "tips": [
+              {
+                "icon": "calendar",
+                "title": "Confirm the evening before",
+                "text": "Lukla schedules move with the mountain weather. Check your flight time with your airline or agency the evening before, and again in the morning."
+              },
+              {
+                "icon": "bag",
+                "title": "Pack light, leave the rest",
+                "text": "Lukla flights have strict baggage limits, so check yours with the airline. Leave extra bags with us while you trek."
+              },
+              {
+                "icon": "plane",
+                "title": "500 m to the terminal",
+                "text": "Wake up close to Manthali Airport: an easy walk or a very short ride, with no pre-dawn drive from Kathmandu."
+              }
+            ],
+            "guides_eyebrow": "Travel guides",
+            "guides_heading": "Plan your *flight day*"
+          },
+          {
+            "layout": "review"
+          },
+          {
+            "layout": "photo_mosaic",
+            "background": "sand",
+            "number": "07",
+            "eyebrow": "Gallery",
+            "heading": "A glimpse of *your stay*",
+            "link_label": "View all photos →",
+            "link": "/gallery",
+            "photos": [
+              "media:view-manthali-town",
+              "media:food-thali",
+              "media:fb-rooftop-dining",
+              "media:fb-room-two-beds"
+            ]
+          },
+          {
+            "layout": "split",
+            "media": "map",
+            "number": "08",
+            "eyebrow": "Find us",
+            "heading": "500 m from Manthali *Airport*",
+            "text": "{address}",
+            "details": [
+              {
+                "term": "Airport",
+                "detail": "Manthali (Ramechhap) Airport, 500 m"
+              },
+              {
+                "term": "Bus park",
+                "detail": "Manthali Bus Park, 300 m"
+              },
+              {
+                "term": "Kathmandu",
+                "detail": "{distance_kathmandu}"
+              }
+            ],
+            "buttons": [
+              {
+                "label": "Directions & nearby",
+                "link": "/location",
+                "style": "outline",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
+          }
+        ]
+      },
       "seo": {
         "meta_title": "Hotel Manakamana Airport View | 500 m from Manthali (Ramechhap) Airport",
         "meta_description": "Family-run hotel in Manthali, 500 m from Ramechhap Airport for Lukla flights. Air-conditioned rooms with balconies, free Wi-Fi and a rooftop restaurant. From NPR 2,000.",
@@ -697,7 +1000,49 @@
       "status": "published",
       "published_at": "2026-09-30T06:00:00Z",
       "menu_order": 1,
-      "fields": {},
+      "fields": {
+        "sections": [
+          {
+            "layout": "page_hero",
+            "photo": "media:ebn-room-mural",
+            "eyebrow": "Stay",
+            "heading": "Rooms & *amenities*",
+            "text": "{room_count} air-conditioned rooms with private balconies, flat-screen TVs and free Wi-Fi, 500 m from Manthali Airport.",
+            "crumb": "Rooms"
+          },
+          {
+            "layout": "rooms_list",
+            "note": "Prices are per room per night, room only, as listed in September 2026. They can change, so please confirm when you book."
+          },
+          {
+            "layout": "amenities",
+            "background": "sand",
+            "eyebrow": "Amenities",
+            "heading": "At the *hotel*"
+          },
+          {
+            "layout": "split",
+            "photo": "media:bathroom",
+            "eyebrow": "Good to know",
+            "heading": "Before you *arrive*",
+            "show_policies": true,
+            "buttons": [
+              {
+                "label": "Send an enquiry",
+                "link": "/contact#enquiry",
+                "style": "dark",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
+          }
+        ]
+      },
       "seo": {
         "meta_title": "",
         "meta_description": "Deluxe Double and Double rooms with air conditioning, balcony, flat-screen TV and free Wi-Fi, 500 m from Manthali (Ramechhap) Airport. From NPR 2,000 a night.",
@@ -713,7 +1058,87 @@
       "status": "published",
       "published_at": "2026-09-30T06:00:00Z",
       "menu_order": 2,
-      "fields": {},
+      "fields": {
+        "sections": [
+          {
+            "layout": "page_hero",
+            "photo": "media:ebn-rooftop-terrace",
+            "eyebrow": "Dining",
+            "heading": "Rooftop *restaurant*",
+            "text": "Home-cooked Nepali food, hearty breakfasts and hot tea, served with views of the hills.",
+            "crumb": "Dining"
+          },
+          {
+            "layout": "split",
+            "photo": "media:food-dal-bhat",
+            "eyebrow": "Our kitchen",
+            "heading": "Cooked fresh, *Nepali* style",
+            "lead": "\"Dal bhat power, 24 hour!\" There's no better fuel before the mountains.",
+            "text": "We cook everything fresh for our guests. You can have a full Nepali thali with rice, dal, seasonal greens and pickles, or a quick breakfast before the airport. Groups are welcome and we're happy to cater for vegetarians. Prefer to eat in? Room service is available.",
+            "buttons": [
+              {
+                "label": "Book a table or group meal",
+                "link": "/contact#enquiry",
+                "style": "outline",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "banner",
+            "photo": "media:fb-rooftop-terrace",
+            "eyebrow": "The rooftop",
+            "heading": "Where travellers *meet*",
+            "text": "Pull up a chair, order a pot of tea and watch the hills. Trekking groups love our rooftop for dinner the night before they fly.",
+            "buttons": [
+              {
+                "label": "Plan a group dinner",
+                "link": "/contact#enquiry",
+                "style": "gold",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "menu_cards",
+            "background": "sand",
+            "eyebrow": "Menu highlights",
+            "heading": "What we *serve*",
+            "items": [
+              {
+                "photo": "media:food-thali",
+                "tag": "Signature",
+                "title": "Nepali thali",
+                "text": "Rice, dal, vegetable curry, saag, pickles, papad and curd, served the traditional way."
+              },
+              {
+                "photo": "media:food-dal-bhat",
+                "tag": "Everyday favourite",
+                "title": "Dal bhat",
+                "text": "The classic trekker's meal. It's filling and wholesome, and refills are always welcome."
+              },
+              {
+                "photo": "media:food-breakfast",
+                "tag": "Morning",
+                "title": "Breakfast",
+                "text": "Eggs, potatoes and local sides, so you set off well fed."
+              },
+              {
+                "photo": "media:food-sandwich",
+                "tag": "Light bites",
+                "title": "Sandwiches & snacks",
+                "text": "Toasted sandwiches, fries and snacks when you arrive hungry."
+              }
+            ]
+          },
+          {
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
+          }
+        ]
+      },
       "seo": {
         "meta_title": "",
         "meta_description": "Nepali thali, dal bhat, breakfasts and tea on our rooftop terrace in Manthali, Ramechhap. Room service available.",
@@ -730,136 +1155,155 @@
       "published_at": "2026-09-30T06:00:00Z",
       "menu_order": 3,
       "fields": {
-        "photos": [
+        "sections": [
           {
-            "photo": "media:hero-valley-view",
-            "category": "views",
-            "caption": "Valley view from the terrace"
-          },
-          {
-            "photo": "media:fb-hotel-exterior",
-            "category": "hotel",
-            "caption": "Hotel lit up at night"
-          },
-          {
-            "photo": "media:fb-airport-runway",
-            "category": "views",
-            "caption": "Airport runway at night"
-          },
-          {
-            "photo": "media:ebn-rooftop-terrace",
-            "category": "rooftop",
-            "caption": "Rooftop terrace by day"
-          },
-          {
-            "photo": "media:ebn-room-sofa",
-            "category": "rooms",
-            "caption": "Deluxe Double Room"
-          },
-          {
-            "photo": "media:exterior",
-            "category": "hotel",
-            "caption": "Hotel building"
-          },
-          {
-            "photo": "media:room-deluxe",
-            "category": "rooms",
-            "caption": "Room with sofa seating"
-          },
-          {
-            "photo": "media:food-thali",
-            "category": "food",
-            "caption": "Nepali thali"
-          },
-          {
-            "photo": "media:rooftop-dining",
-            "category": "rooftop",
-            "caption": "Rooftop dining"
-          },
-          {
-            "photo": "media:fb-room-two-beds",
-            "category": "rooms",
-            "caption": "Room with two beds"
-          },
-          {
-            "photo": "media:ebn-room-leaf",
-            "category": "rooms",
-            "caption": "Double Room"
-          },
-          {
-            "photo": "media:fb-rooftop-dining",
-            "category": "rooftop",
-            "caption": "Dinner on the rooftop"
-          },
-          {
-            "photo": "media:room-standard",
-            "category": "rooms",
-            "caption": "Room with peacock mural"
-          },
-          {
-            "photo": "media:ebn-room-mural",
-            "category": "rooms",
-            "caption": "Room with mountain mural"
-          },
-          {
+            "layout": "page_hero",
             "photo": "media:view-manthali-town",
-            "category": "views",
-            "caption": "Manthali town"
+            "eyebrow": "Gallery",
+            "heading": "Photo *gallery*",
+            "text": "Our rooms, our rooftop, our food and the green hills of Ramechhap.",
+            "crumb": "Gallery"
           },
           {
-            "photo": "media:food-dal-bhat",
-            "category": "food",
-            "caption": "Dal bhat"
+            "layout": "gallery",
+            "photos": [
+              {
+                "photo": "media:hero-valley-view",
+                "category": "views",
+                "caption": "Valley view from the terrace"
+              },
+              {
+                "photo": "media:fb-hotel-exterior",
+                "category": "hotel",
+                "caption": "Hotel lit up at night"
+              },
+              {
+                "photo": "media:fb-airport-runway",
+                "category": "views",
+                "caption": "Airport runway at night"
+              },
+              {
+                "photo": "media:ebn-rooftop-terrace",
+                "category": "rooftop",
+                "caption": "Rooftop terrace by day"
+              },
+              {
+                "photo": "media:ebn-room-sofa",
+                "category": "rooms",
+                "caption": "Deluxe Double Room"
+              },
+              {
+                "photo": "media:exterior",
+                "category": "hotel",
+                "caption": "Hotel building"
+              },
+              {
+                "photo": "media:room-deluxe",
+                "category": "rooms",
+                "caption": "Room with sofa seating"
+              },
+              {
+                "photo": "media:food-thali",
+                "category": "food",
+                "caption": "Nepali thali"
+              },
+              {
+                "photo": "media:rooftop-dining",
+                "category": "rooftop",
+                "caption": "Rooftop dining"
+              },
+              {
+                "photo": "media:fb-room-two-beds",
+                "category": "rooms",
+                "caption": "Room with two beds"
+              },
+              {
+                "photo": "media:ebn-room-leaf",
+                "category": "rooms",
+                "caption": "Double Room"
+              },
+              {
+                "photo": "media:fb-rooftop-dining",
+                "category": "rooftop",
+                "caption": "Dinner on the rooftop"
+              },
+              {
+                "photo": "media:room-standard",
+                "category": "rooms",
+                "caption": "Room with peacock mural"
+              },
+              {
+                "photo": "media:ebn-room-mural",
+                "category": "rooms",
+                "caption": "Room with mountain mural"
+              },
+              {
+                "photo": "media:view-manthali-town",
+                "category": "views",
+                "caption": "Manthali town"
+              },
+              {
+                "photo": "media:food-dal-bhat",
+                "category": "food",
+                "caption": "Dal bhat"
+              },
+              {
+                "photo": "media:bathroom",
+                "category": "rooms",
+                "caption": "Private bathroom"
+              },
+              {
+                "photo": "media:ebn-room-teal",
+                "category": "rooms",
+                "caption": "Air-conditioned room"
+              },
+              {
+                "photo": "media:ebn-exterior-day",
+                "category": "hotel",
+                "caption": "Hotel by day"
+              },
+              {
+                "photo": "media:rooftop-evening",
+                "category": "rooftop",
+                "caption": "Evening on the rooftop"
+              },
+              {
+                "photo": "media:food-breakfast",
+                "category": "food",
+                "caption": "Breakfast"
+              },
+              {
+                "photo": "media:fb-room-double-single",
+                "category": "rooms",
+                "caption": "Room interior"
+              },
+              {
+                "photo": "media:ebn-room-bath",
+                "category": "rooms",
+                "caption": "Room with private bathroom"
+              },
+              {
+                "photo": "media:fb-rooftop-terrace",
+                "category": "rooftop",
+                "caption": "Rooftop at night"
+              },
+              {
+                "photo": "media:view-valley-clouds",
+                "category": "views",
+                "caption": "Clouds over the valley"
+              },
+              {
+                "photo": "media:food-sandwich",
+                "category": "food",
+                "caption": "Sandwich & fries"
+              }
+            ]
           },
           {
-            "photo": "media:bathroom",
-            "category": "rooms",
-            "caption": "Private bathroom"
-          },
-          {
-            "photo": "media:ebn-room-teal",
-            "category": "rooms",
-            "caption": "Air-conditioned room"
-          },
-          {
-            "photo": "media:ebn-exterior-day",
-            "category": "hotel",
-            "caption": "Hotel by day"
-          },
-          {
-            "photo": "media:rooftop-evening",
-            "category": "rooftop",
-            "caption": "Evening on the rooftop"
-          },
-          {
-            "photo": "media:food-breakfast",
-            "category": "food",
-            "caption": "Breakfast"
-          },
-          {
-            "photo": "media:fb-room-double-single",
-            "category": "rooms",
-            "caption": "Room interior"
-          },
-          {
-            "photo": "media:ebn-room-bath",
-            "category": "rooms",
-            "caption": "Room with private bathroom"
-          },
-          {
-            "photo": "media:fb-rooftop-terrace",
-            "category": "rooftop",
-            "caption": "Rooftop at night"
-          },
-          {
-            "photo": "media:view-valley-clouds",
-            "category": "views",
-            "caption": "Clouds over the valley"
-          },
-          {
-            "photo": "media:food-sandwich",
-            "category": "food",
-            "caption": "Sandwich & fries"
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
           }
         ]
       },
@@ -878,7 +1322,119 @@
       "status": "published",
       "published_at": "2026-09-30T06:00:00Z",
       "menu_order": 4,
-      "fields": {},
+      "fields": {
+        "sections": [
+          {
+            "layout": "page_hero",
+            "photo": "media:view-valley-clouds",
+            "eyebrow": "Location",
+            "heading": "Getting *here*",
+            "text": "500 m from Manthali (Ramechhap) Airport and 300 m from the bus park, on the Lamosangu–Ramechhap Highway.",
+            "crumb": "Location"
+          },
+          {
+            "layout": "split",
+            "photo": "media:ramechhap-airport-aerial",
+            "eyebrow": "Address",
+            "heading": "Find us in *Manthali*",
+            "text": "{address}",
+            "details": [
+              {
+                "term": "Phone",
+                "detail": "[{phone}](tel:{phone_tel})"
+              },
+              {
+                "term": "Airport",
+                "detail": "Manthali (Ramechhap) Airport, 500 m"
+              },
+              {
+                "term": "Bus park",
+                "detail": "Manthali Bus Park, 300 m"
+              }
+            ],
+            "buttons": [
+              {
+                "label": "Open in Google Maps",
+                "link": "{maps_url}",
+                "style": "dark",
+                "icon": "pin"
+              }
+            ]
+          },
+          {
+            "layout": "area_map",
+            "background": "sand",
+            "anchor": "map",
+            "eyebrow": "Explore the map",
+            "heading": "Manthali *in 3D*",
+            "text": "The walk to the airport, the drive from Kathmandu and the flight to Lukla, over the real terrain. Tap a place for details."
+          },
+          {
+            "layout": "routes",
+            "eyebrow": "Travel times",
+            "heading": "How to *reach us*",
+            "items": [
+              {
+                "time": "~4½ hrs",
+                "title": "From Kathmandu",
+                "text": "By road via the BP Highway and Lamosangu–Ramechhap Highway. Tourist jeeps and buses run daily."
+              },
+              {
+                "time": "500 m",
+                "title": "From the airport",
+                "text": "Manthali (Ramechhap) Airport is about 500 m away, an easy walk or a very short ride. Ask us about getting to your early flight."
+              },
+              {
+                "time": "300 m",
+                "title": "From the bus park",
+                "text": "Manthali Bus Park is about 300 m away, a short walk with your bags."
+              }
+            ]
+          },
+          {
+            "layout": "split",
+            "background": "sand",
+            "anchor": "flights",
+            "photo_side": "right",
+            "photo": "media:fb-airport-runway",
+            "eyebrow": "Lukla flights",
+            "heading": "Flying to Lukla from *Ramechhap*",
+            "text": "During the busy trekking seasons, many Lukla flights for the Everest region leave from Manthali (Ramechhap) Airport rather than Kathmandu. Flights usually go early in the morning, when the weather is clearest.",
+            "checks": [
+              "Drive from Kathmandu the day before",
+              "Stay the night with us, 500 m from the airport",
+              "Eat an early breakfast, then head to the terminal"
+            ],
+            "show_weather": true,
+            "note": "Always check your flight time and departure airport with your airline or trekking agency.",
+            "buttons": [
+              {
+                "label": "Book your night before",
+                "link": "/contact#enquiry",
+                "style": "dark",
+                "icon": "arrow"
+              },
+              {
+                "label": "Read the flight guide",
+                "link": "/guides/manthali-to-lukla-flights",
+                "style": "outline"
+              }
+            ]
+          },
+          {
+            "layout": "nearby",
+            "eyebrow": "Explore nearby",
+            "heading": "Places worth *the drive*",
+            "note": "Distances and driving times are approximate."
+          },
+          {
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
+          }
+        ]
+      },
       "seo": {
         "meta_title": "",
         "meta_description": "500 m from Manthali (Ramechhap) Airport and 300 m from Manthali Bus Park: an easy base for Lukla flights.",
@@ -894,7 +1450,27 @@
       "status": "published",
       "published_at": "2026-09-30T06:00:00Z",
       "menu_order": 5,
-      "fields": {},
+      "fields": {
+        "sections": [
+          {
+            "layout": "page_hero",
+            "photo": "media:ramechhap-airport-aerial",
+            "eyebrow": "Travel guides",
+            "heading": "Plan your *flight*",
+            "text": "Practical guides for trekkers flying from Manthali (Ramechhap) to Lukla, written by the hotel 500 m from the airport.",
+            "crumb": "Guides"
+          },
+          {
+            "layout": "guides_grid"
+          },
+          {
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
+          }
+        ]
+      },
       "seo": {
         "meta_title": "",
         "meta_description": "Practical guides for trekkers: Manthali (Ramechhap) to Lukla flights, getting from Kathmandu to Manthali, and what to do if your Lukla flight is delayed or cancelled.",
@@ -910,11 +1486,819 @@
       "status": "published",
       "published_at": "2026-09-30T06:00:00Z",
       "menu_order": 6,
-      "fields": {},
+      "fields": {
+        "sections": [
+          {
+            "layout": "page_hero",
+            "photo": "media:exterior",
+            "eyebrow": "Contact",
+            "heading": "Book your *stay*",
+            "text": "Send us your dates and we'll confirm on WhatsApp, or just give us a call.",
+            "crumb": "Contact"
+          },
+          {
+            "layout": "enquiry",
+            "anchor": "enquiry",
+            "form_heading": "Booking enquiry",
+            "form_text": "Fill this in and it will open WhatsApp with your message ready to send.",
+            "side_eyebrow": "Reach us directly",
+            "side_heading": "We're happy *to help*",
+            "rooms_text": "From {price_from} a night, room only"
+          },
+          {
+            "layout": "faq",
+            "background": "sand",
+            "eyebrow": "FAQ",
+            "heading": "Common *questions*"
+          }
+        ]
+      },
       "seo": {
         "meta_title": "",
         "meta_description": "Book your room at Hotel Manakamana Airport View, Manthali. Call or WhatsApp +977 984-4228627. Rooms from NPR 2,000 a night.",
         "focus_keyword": ""
+      }
+    }
+  ],
+  "patches": [
+    {
+      "key": "page:home:sections",
+      "type": "page",
+      "path": "home",
+      "fields": {
+        "sections": [
+          {
+            "layout": "hero_slideshow",
+            "eyebrow": "Manthali · Ramechhap · Nepal",
+            "heading": "Rest well, \n*fly early.*",
+            "text": "A warm, family-run hotel just 500 m from Manthali (Ramechhap) Airport, with air-conditioned rooms, private balconies, free Wi-Fi and a rooftop restaurant looking over the valley.",
+            "buttons": [
+              {
+                "label": "Check availability",
+                "link": "/contact",
+                "style": "gold",
+                "icon": "arrow"
+              },
+              {
+                "label": "Explore rooms",
+                "link": "/rooms",
+                "style": "light"
+              }
+            ],
+            "show_rating": true,
+            "slides": [
+              {
+                "photo": "media:hero-valley-view",
+                "caption": "The valley from our terrace"
+              },
+              {
+                "photo": "media:fb-airport-runway",
+                "caption": "Manthali Airport runway at night"
+              },
+              {
+                "photo": "media:ebn-rooftop-terrace",
+                "caption": "Our rooftop terrace"
+              },
+              {
+                "photo": "media:fb-hotel-exterior",
+                "caption": "Our hotel, lit up at night",
+                "tall": true
+              }
+            ]
+          },
+          {
+            "layout": "booking_bar"
+          },
+          {
+            "layout": "facts",
+            "items": [
+              {
+                "value": "{rating}",
+                "suffix": "★",
+                "label": "Google rating"
+              },
+              {
+                "value": "{reviews}",
+                "label": "Guest reviews"
+              },
+              {
+                "value": "4.5",
+                "suffix": "hrs",
+                "label": "From Kathmandu by road"
+              },
+              {
+                "value": "500",
+                "suffix": "m",
+                "label": "To Manthali Airport"
+              }
+            ]
+          },
+          {
+            "layout": "marquee",
+            "words": [
+              "Rest well",
+              "Fly early",
+              "Dal bhat power",
+              "Rooftop evenings",
+              "Manthali",
+              "Ramechhap"
+            ]
+          },
+          {
+            "layout": "split",
+            "number": "01",
+            "eyebrow": "Welcome",
+            "heading": "A warm Nepali welcome, *minutes* from your flight",
+            "photo": "media:fb-hotel-exterior",
+            "badge_value": "{rating}★",
+            "badge_text": "Rated \"Very good\" by {reviews} guests on Google",
+            "lead": "Hotel Manakamana Airport View is a friendly, family-run hotel in Manthali, Ramechhap: 500 m from the airport and 300 m from the bus park.",
+            "text": "Many trekkers stay here before flying from Manthali to Lukla. Others stop on the Lamosangu–Ramechhap highway on the way through. Either way, you get a clean, air-conditioned room with its own balcony, a hot shower, a good plate of dal bhat and tea on the rooftop.",
+            "checks": [
+              "Private balconies over the runway and green hills",
+              "Air conditioning, flat-screen TV and free Wi-Fi",
+              "Private bathrooms with plenty of hot water",
+              "Rooftop restaurant, room service and kind, helpful hosts"
+            ],
+            "buttons": [
+              {
+                "label": "Explore our rooms",
+                "link": "/rooms",
+                "style": "outline",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "features",
+            "background": "pine",
+            "number": "02",
+            "eyebrow": "Why guests choose us",
+            "heading": "Everything you need, *nothing* you don't",
+            "items": [
+              {
+                "icon": "plane",
+                "title": "Close to the airport",
+                "text": "Just 500 m from Manthali Airport, so an early Lukla flight is easy."
+              },
+              {
+                "icon": "shower",
+                "title": "Clean & comfortable",
+                "text": "Air-conditioned rooms with a balcony, flat-screen TV and a proper hot shower after a long road."
+              },
+              {
+                "icon": "food",
+                "title": "Home-cooked food",
+                "text": "Nepali thali, dal bhat, breakfasts, snacks and hot tea, all made fresh."
+              },
+              {
+                "icon": "heart",
+                "title": "Friendly service",
+                "text": "Guests keep telling us they felt at home. We'll mind your luggage and help with travel plans."
+              }
+            ]
+          },
+          {
+            "layout": "stay_story",
+            "number": "03",
+            "eyebrow": "Your stay",
+            "heading": "From the road to *the runway*",
+            "text": "One easy night between Kathmandu and the mountains. Scroll to follow your stay, step by step.",
+            "steps": [
+              {
+                "step": "01 · Arrive",
+                "title": "Drop your bags",
+                "text": "After the drive from Kathmandu (about 4½ hours), check in at Manthali. We can store your luggage.",
+                "photo": "media:ebn-exterior-day"
+              },
+              {
+                "step": "02 · Unwind",
+                "title": "Your own balcony",
+                "text": "An air-conditioned room with a flat-screen TV, free Wi-Fi, a hot shower and a balcony over the hills.",
+                "photo": "media:ebn-room-sofa"
+              },
+              {
+                "step": "03 · Dine",
+                "title": "Dal bhat on the roof",
+                "text": "Home-cooked Nepali thali on the rooftop terrace, or room service if you would rather stay in.",
+                "photo": "media:food-thali"
+              },
+              {
+                "step": "04 · Rest",
+                "title": "Runway lights",
+                "text": "An early night, with Manthali Airport’s runway just beyond the rooftops.",
+                "photo": "media:fb-airport-runway"
+              },
+              {
+                "step": "05 · Fly",
+                "title": "500 m to the terminal",
+                "text": "Wake up close to the airport and start your Everest journey rested.",
+                "photo": "media:hero-valley-view"
+              }
+            ]
+          },
+          {
+            "layout": "rooms_preview",
+            "number": "04",
+            "eyebrow": "Stay",
+            "heading": "Our rooms",
+            "text": "Air-conditioned rooms with private balconies and free Wi-Fi. Rates are room only and can change, so call or WhatsApp to confirm.",
+            "link_label": "All rooms & amenities →"
+          },
+          {
+            "layout": "split",
+            "background": "sand",
+            "photo_side": "right",
+            "photo": "media:rooftop-dining",
+            "number": "05",
+            "eyebrow": "Rooftop restaurant",
+            "heading": "Dal bhat *with a view*",
+            "text": "Our rooftop terrace is where guests meet. Trekking groups share stories there over a Nepali thali, and the hills turn golden in the evening.",
+            "checks": [
+              "Traditional Nepali thali & dal bhat",
+              "Breakfast, sandwiches & snacks",
+              "Tea and coffee all day"
+            ],
+            "buttons": [
+              {
+                "label": "See the menu",
+                "link": "/dining",
+                "style": "outline",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "banner",
+            "photo": "media:fb-airport-runway",
+            "number": "06",
+            "eyebrow": "Flying to Lukla?",
+            "heading": "Start your Everest journey *rested*",
+            "text": "In peak trekking season, many Lukla flights leave from Manthali (Ramechhap) Airport. Drive in from Kathmandu the day before and stay with us. Then it's a short trip to the airport in the morning.",
+            "buttons": [
+              {
+                "label": "Getting here",
+                "link": "/location#flights",
+                "style": "gold",
+                "icon": "arrow"
+              },
+              {
+                "label": "Book your night",
+                "link": "/contact",
+                "style": "light"
+              }
+            ],
+            "show_weather": true
+          },
+          {
+            "layout": "flight_board",
+            "note": "Flights usually leave early in the morning and move with the weather. Tickets are booked with the airline or your trekking agency, so always confirm your departure time with them. [Read our Manthali to Lukla flight guide →](/guides/manthali-to-lukla-flights)",
+            "tips": [
+              {
+                "icon": "calendar",
+                "title": "Confirm the evening before",
+                "text": "Lukla schedules move with the mountain weather. Check your flight time with your airline or agency the evening before, and again in the morning."
+              },
+              {
+                "icon": "bag",
+                "title": "Pack light, leave the rest",
+                "text": "Lukla flights have strict baggage limits, so check yours with the airline. Leave extra bags with us while you trek."
+              },
+              {
+                "icon": "plane",
+                "title": "500 m to the terminal",
+                "text": "Wake up close to Manthali Airport: an easy walk or a very short ride, with no pre-dawn drive from Kathmandu."
+              }
+            ],
+            "guides_eyebrow": "Travel guides",
+            "guides_heading": "Plan your *flight day*"
+          },
+          {
+            "layout": "review"
+          },
+          {
+            "layout": "photo_mosaic",
+            "background": "sand",
+            "number": "07",
+            "eyebrow": "Gallery",
+            "heading": "A glimpse of *your stay*",
+            "link_label": "View all photos →",
+            "link": "/gallery",
+            "photos": [
+              "media:view-manthali-town",
+              "media:food-thali",
+              "media:fb-rooftop-dining",
+              "media:fb-room-two-beds"
+            ]
+          },
+          {
+            "layout": "split",
+            "media": "map",
+            "number": "08",
+            "eyebrow": "Find us",
+            "heading": "500 m from Manthali *Airport*",
+            "text": "{address}",
+            "details": [
+              {
+                "term": "Airport",
+                "detail": "Manthali (Ramechhap) Airport, 500 m"
+              },
+              {
+                "term": "Bus park",
+                "detail": "Manthali Bus Park, 300 m"
+              },
+              {
+                "term": "Kathmandu",
+                "detail": "{distance_kathmandu}"
+              }
+            ],
+            "buttons": [
+              {
+                "label": "Directions & nearby",
+                "link": "/location",
+                "style": "outline",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
+          }
+        ]
+      }
+    },
+    {
+      "key": "page:rooms:sections",
+      "type": "page",
+      "path": "rooms",
+      "fields": {
+        "sections": [
+          {
+            "layout": "page_hero",
+            "photo": "media:ebn-room-mural",
+            "eyebrow": "Stay",
+            "heading": "Rooms & *amenities*",
+            "text": "{room_count} air-conditioned rooms with private balconies, flat-screen TVs and free Wi-Fi, 500 m from Manthali Airport.",
+            "crumb": "Rooms"
+          },
+          {
+            "layout": "rooms_list",
+            "note": "Prices are per room per night, room only, as listed in September 2026. They can change, so please confirm when you book."
+          },
+          {
+            "layout": "amenities",
+            "background": "sand",
+            "eyebrow": "Amenities",
+            "heading": "At the *hotel*"
+          },
+          {
+            "layout": "split",
+            "photo": "media:bathroom",
+            "eyebrow": "Good to know",
+            "heading": "Before you *arrive*",
+            "show_policies": true,
+            "buttons": [
+              {
+                "label": "Send an enquiry",
+                "link": "/contact#enquiry",
+                "style": "dark",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
+          }
+        ]
+      }
+    },
+    {
+      "key": "page:dining:sections",
+      "type": "page",
+      "path": "dining",
+      "fields": {
+        "sections": [
+          {
+            "layout": "page_hero",
+            "photo": "media:ebn-rooftop-terrace",
+            "eyebrow": "Dining",
+            "heading": "Rooftop *restaurant*",
+            "text": "Home-cooked Nepali food, hearty breakfasts and hot tea, served with views of the hills.",
+            "crumb": "Dining"
+          },
+          {
+            "layout": "split",
+            "photo": "media:food-dal-bhat",
+            "eyebrow": "Our kitchen",
+            "heading": "Cooked fresh, *Nepali* style",
+            "lead": "\"Dal bhat power, 24 hour!\" There's no better fuel before the mountains.",
+            "text": "We cook everything fresh for our guests. You can have a full Nepali thali with rice, dal, seasonal greens and pickles, or a quick breakfast before the airport. Groups are welcome and we're happy to cater for vegetarians. Prefer to eat in? Room service is available.",
+            "buttons": [
+              {
+                "label": "Book a table or group meal",
+                "link": "/contact#enquiry",
+                "style": "outline",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "banner",
+            "photo": "media:fb-rooftop-terrace",
+            "eyebrow": "The rooftop",
+            "heading": "Where travellers *meet*",
+            "text": "Pull up a chair, order a pot of tea and watch the hills. Trekking groups love our rooftop for dinner the night before they fly.",
+            "buttons": [
+              {
+                "label": "Plan a group dinner",
+                "link": "/contact#enquiry",
+                "style": "gold",
+                "icon": "arrow"
+              }
+            ]
+          },
+          {
+            "layout": "menu_cards",
+            "background": "sand",
+            "eyebrow": "Menu highlights",
+            "heading": "What we *serve*",
+            "items": [
+              {
+                "photo": "media:food-thali",
+                "tag": "Signature",
+                "title": "Nepali thali",
+                "text": "Rice, dal, vegetable curry, saag, pickles, papad and curd, served the traditional way."
+              },
+              {
+                "photo": "media:food-dal-bhat",
+                "tag": "Everyday favourite",
+                "title": "Dal bhat",
+                "text": "The classic trekker's meal. It's filling and wholesome, and refills are always welcome."
+              },
+              {
+                "photo": "media:food-breakfast",
+                "tag": "Morning",
+                "title": "Breakfast",
+                "text": "Eggs, potatoes and local sides, so you set off well fed."
+              },
+              {
+                "photo": "media:food-sandwich",
+                "tag": "Light bites",
+                "title": "Sandwiches & snacks",
+                "text": "Toasted sandwiches, fries and snacks when you arrive hungry."
+              }
+            ]
+          },
+          {
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
+          }
+        ]
+      }
+    },
+    {
+      "key": "page:gallery:sections",
+      "type": "page",
+      "path": "gallery",
+      "fields": {
+        "sections": [
+          {
+            "layout": "page_hero",
+            "photo": "media:view-manthali-town",
+            "eyebrow": "Gallery",
+            "heading": "Photo *gallery*",
+            "text": "Our rooms, our rooftop, our food and the green hills of Ramechhap.",
+            "crumb": "Gallery"
+          },
+          {
+            "layout": "gallery",
+            "photos": [
+              {
+                "photo": "media:hero-valley-view",
+                "category": "views",
+                "caption": "Valley view from the terrace"
+              },
+              {
+                "photo": "media:fb-hotel-exterior",
+                "category": "hotel",
+                "caption": "Hotel lit up at night"
+              },
+              {
+                "photo": "media:fb-airport-runway",
+                "category": "views",
+                "caption": "Airport runway at night"
+              },
+              {
+                "photo": "media:ebn-rooftop-terrace",
+                "category": "rooftop",
+                "caption": "Rooftop terrace by day"
+              },
+              {
+                "photo": "media:ebn-room-sofa",
+                "category": "rooms",
+                "caption": "Deluxe Double Room"
+              },
+              {
+                "photo": "media:exterior",
+                "category": "hotel",
+                "caption": "Hotel building"
+              },
+              {
+                "photo": "media:room-deluxe",
+                "category": "rooms",
+                "caption": "Room with sofa seating"
+              },
+              {
+                "photo": "media:food-thali",
+                "category": "food",
+                "caption": "Nepali thali"
+              },
+              {
+                "photo": "media:rooftop-dining",
+                "category": "rooftop",
+                "caption": "Rooftop dining"
+              },
+              {
+                "photo": "media:fb-room-two-beds",
+                "category": "rooms",
+                "caption": "Room with two beds"
+              },
+              {
+                "photo": "media:ebn-room-leaf",
+                "category": "rooms",
+                "caption": "Double Room"
+              },
+              {
+                "photo": "media:fb-rooftop-dining",
+                "category": "rooftop",
+                "caption": "Dinner on the rooftop"
+              },
+              {
+                "photo": "media:room-standard",
+                "category": "rooms",
+                "caption": "Room with peacock mural"
+              },
+              {
+                "photo": "media:ebn-room-mural",
+                "category": "rooms",
+                "caption": "Room with mountain mural"
+              },
+              {
+                "photo": "media:view-manthali-town",
+                "category": "views",
+                "caption": "Manthali town"
+              },
+              {
+                "photo": "media:food-dal-bhat",
+                "category": "food",
+                "caption": "Dal bhat"
+              },
+              {
+                "photo": "media:bathroom",
+                "category": "rooms",
+                "caption": "Private bathroom"
+              },
+              {
+                "photo": "media:ebn-room-teal",
+                "category": "rooms",
+                "caption": "Air-conditioned room"
+              },
+              {
+                "photo": "media:ebn-exterior-day",
+                "category": "hotel",
+                "caption": "Hotel by day"
+              },
+              {
+                "photo": "media:rooftop-evening",
+                "category": "rooftop",
+                "caption": "Evening on the rooftop"
+              },
+              {
+                "photo": "media:food-breakfast",
+                "category": "food",
+                "caption": "Breakfast"
+              },
+              {
+                "photo": "media:fb-room-double-single",
+                "category": "rooms",
+                "caption": "Room interior"
+              },
+              {
+                "photo": "media:ebn-room-bath",
+                "category": "rooms",
+                "caption": "Room with private bathroom"
+              },
+              {
+                "photo": "media:fb-rooftop-terrace",
+                "category": "rooftop",
+                "caption": "Rooftop at night"
+              },
+              {
+                "photo": "media:view-valley-clouds",
+                "category": "views",
+                "caption": "Clouds over the valley"
+              },
+              {
+                "photo": "media:food-sandwich",
+                "category": "food",
+                "caption": "Sandwich & fries"
+              }
+            ]
+          },
+          {
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
+          }
+        ]
+      },
+      "carry": {
+        "photos": "sections.gallery.photos"
+      }
+    },
+    {
+      "key": "page:location:sections",
+      "type": "page",
+      "path": "location",
+      "fields": {
+        "sections": [
+          {
+            "layout": "page_hero",
+            "photo": "media:view-valley-clouds",
+            "eyebrow": "Location",
+            "heading": "Getting *here*",
+            "text": "500 m from Manthali (Ramechhap) Airport and 300 m from the bus park, on the Lamosangu–Ramechhap Highway.",
+            "crumb": "Location"
+          },
+          {
+            "layout": "split",
+            "photo": "media:ramechhap-airport-aerial",
+            "eyebrow": "Address",
+            "heading": "Find us in *Manthali*",
+            "text": "{address}",
+            "details": [
+              {
+                "term": "Phone",
+                "detail": "[{phone}](tel:{phone_tel})"
+              },
+              {
+                "term": "Airport",
+                "detail": "Manthali (Ramechhap) Airport, 500 m"
+              },
+              {
+                "term": "Bus park",
+                "detail": "Manthali Bus Park, 300 m"
+              }
+            ],
+            "buttons": [
+              {
+                "label": "Open in Google Maps",
+                "link": "{maps_url}",
+                "style": "dark",
+                "icon": "pin"
+              }
+            ]
+          },
+          {
+            "layout": "area_map",
+            "background": "sand",
+            "anchor": "map",
+            "eyebrow": "Explore the map",
+            "heading": "Manthali *in 3D*",
+            "text": "The walk to the airport, the drive from Kathmandu and the flight to Lukla, over the real terrain. Tap a place for details."
+          },
+          {
+            "layout": "routes",
+            "eyebrow": "Travel times",
+            "heading": "How to *reach us*",
+            "items": [
+              {
+                "time": "~4½ hrs",
+                "title": "From Kathmandu",
+                "text": "By road via the BP Highway and Lamosangu–Ramechhap Highway. Tourist jeeps and buses run daily."
+              },
+              {
+                "time": "500 m",
+                "title": "From the airport",
+                "text": "Manthali (Ramechhap) Airport is about 500 m away, an easy walk or a very short ride. Ask us about getting to your early flight."
+              },
+              {
+                "time": "300 m",
+                "title": "From the bus park",
+                "text": "Manthali Bus Park is about 300 m away, a short walk with your bags."
+              }
+            ]
+          },
+          {
+            "layout": "split",
+            "background": "sand",
+            "anchor": "flights",
+            "photo_side": "right",
+            "photo": "media:fb-airport-runway",
+            "eyebrow": "Lukla flights",
+            "heading": "Flying to Lukla from *Ramechhap*",
+            "text": "During the busy trekking seasons, many Lukla flights for the Everest region leave from Manthali (Ramechhap) Airport rather than Kathmandu. Flights usually go early in the morning, when the weather is clearest.",
+            "checks": [
+              "Drive from Kathmandu the day before",
+              "Stay the night with us, 500 m from the airport",
+              "Eat an early breakfast, then head to the terminal"
+            ],
+            "show_weather": true,
+            "note": "Always check your flight time and departure airport with your airline or trekking agency.",
+            "buttons": [
+              {
+                "label": "Book your night before",
+                "link": "/contact#enquiry",
+                "style": "dark",
+                "icon": "arrow"
+              },
+              {
+                "label": "Read the flight guide",
+                "link": "/guides/manthali-to-lukla-flights",
+                "style": "outline"
+              }
+            ]
+          },
+          {
+            "layout": "nearby",
+            "eyebrow": "Explore nearby",
+            "heading": "Places worth *the drive*",
+            "note": "Distances and driving times are approximate."
+          },
+          {
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
+          }
+        ]
+      }
+    },
+    {
+      "key": "page:guides:sections",
+      "type": "page",
+      "path": "guides",
+      "fields": {
+        "sections": [
+          {
+            "layout": "page_hero",
+            "photo": "media:ramechhap-airport-aerial",
+            "eyebrow": "Travel guides",
+            "heading": "Plan your *flight*",
+            "text": "Practical guides for trekkers flying from Manthali (Ramechhap) to Lukla, written by the hotel 500 m from the airport.",
+            "crumb": "Guides"
+          },
+          {
+            "layout": "guides_grid"
+          },
+          {
+            "layout": "cta_band",
+            "eyebrow": "Reservations",
+            "heading": "Ready to rest before *your flight?*",
+            "text": "Rooms from {price_from} a night. Call or WhatsApp us to check availability."
+          }
+        ]
+      }
+    },
+    {
+      "key": "page:contact:sections",
+      "type": "page",
+      "path": "contact",
+      "fields": {
+        "sections": [
+          {
+            "layout": "page_hero",
+            "photo": "media:exterior",
+            "eyebrow": "Contact",
+            "heading": "Book your *stay*",
+            "text": "Send us your dates and we'll confirm on WhatsApp, or just give us a call.",
+            "crumb": "Contact"
+          },
+          {
+            "layout": "enquiry",
+            "anchor": "enquiry",
+            "form_heading": "Booking enquiry",
+            "form_text": "Fill this in and it will open WhatsApp with your message ready to send.",
+            "side_eyebrow": "Reach us directly",
+            "side_heading": "We're happy *to help*",
+            "rooms_text": "From {price_from} a night, room only"
+          },
+          {
+            "layout": "faq",
+            "background": "sand",
+            "eyebrow": "FAQ",
+            "heading": "Common *questions*"
+          }
+        ]
       }
     }
   ]
