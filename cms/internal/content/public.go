@@ -43,21 +43,31 @@ type PublicEntry struct {
 	Template      string         `json:"template"`
 	FeaturedMedia *MediaRef      `json:"featured_media"`
 	Fields        map[string]any `json:"fields"`
-	PublishedAt   *time.Time     `json:"published_at"`
-	UpdatedAt     time.Time      `json:"updated_at"`
-	Head          Head           `json:"head"`
+	// Media holds every media item the fields refer to (galleries, photo
+	// tables...), keyed by ID, so one request has all the image details.
+	Media       map[string]MediaRef `json:"media"`
+	PublishedAt *time.Time          `json:"published_at"`
+	UpdatedAt   time.Time           `json:"updated_at"`
+	Head        Head                `json:"head"`
 }
 
 // Present converts entries to their public form, resolving media in one batch.
 func (s *Service) Present(ctx context.Context, entries ...*Entry) ([]PublicEntry, error) {
 	var ids []uuid.UUID
-	for _, e := range entries {
+	fieldMedia := make([][]uuid.UUID, len(entries))
+	for i, e := range entries {
 		if e.FeaturedMediaID != nil {
 			ids = append(ids, *e.FeaturedMediaID)
 		}
 		if e.SEO.OGImageID != nil {
 			ids = append(ids, *e.SEO.OGImageID)
 		}
+		if ct, ok := s.Types.Get(e.Type); ok {
+			for _, f := range ct.FieldsFor(e.Template) {
+				fieldMedia[i] = append(fieldMedia[i], f.MediaIDs(e.Fields[f.Name])...)
+			}
+		}
+		ids = append(ids, fieldMedia[i]...)
 	}
 	media := map[uuid.UUID]MediaRef{}
 	if len(ids) > 0 {
@@ -68,7 +78,7 @@ func (s *Service) Present(ctx context.Context, entries ...*Entry) ([]PublicEntry
 	}
 
 	out := make([]PublicEntry, 0, len(entries))
-	for _, e := range entries {
+	for i, e := range entries {
 		ct, err := s.Type(e.Type)
 		if err != nil {
 			return nil, err
@@ -81,6 +91,12 @@ func (s *Service) Present(ctx context.Context, entries ...*Entry) ([]PublicEntry
 		}
 		if p.Fields == nil {
 			p.Fields = map[string]any{}
+		}
+		p.Media = map[string]MediaRef{}
+		for _, id := range fieldMedia[i] {
+			if m, ok := media[id]; ok {
+				p.Media[id.String()] = m
+			}
 		}
 		if e.FeaturedMediaID != nil {
 			if m, ok := media[*e.FeaturedMediaID]; ok {

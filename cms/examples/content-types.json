@@ -1,17 +1,24 @@
 [
   {
-    "name": "room",
-    "label": "Room",
-    "label_plural": "Rooms",
-    "description": "Room types with prices, shown on /rooms/<slug>.",
-    "route_prefix": "/rooms",
+    "name": "activity",
+    "label": "Activity",
+    "label_plural": "Things to do",
+    "description": "Things to do around Manthali, shown on /things-to-do/<slug>.",
+    "route_prefix": "/things-to-do",
+    "sortable": true,
     "fields": [
-      { "name": "price_npr", "label": "Price per night (NPR)", "type": "number", "required": true },
-      { "name": "max_guests", "label": "Maximum guests", "type": "integer", "required": true },
-      { "name": "bed_type", "label": "Bed type", "type": "select", "options": ["double", "twin", "double + single"] },
-      { "name": "size_sqm", "label": "Size (m²)", "type": "number" },
-      { "name": "amenities", "label": "Amenities", "type": "list", "help": "One per item, e.g. \"Hot shower\"." },
-      { "name": "gallery", "label": "Gallery photos", "type": "list", "help": "Media IDs, in display order." },
+      { "name": "distance", "label": "Distance from the hotel", "type": "text", "help": "e.g. \"15 minutes on foot\"." },
+      { "name": "season", "label": "Best season", "type": "select", "options": ["all year", "spring", "monsoon", "autumn", "winter"] },
+      { "name": "price_npr", "label": "Typical cost (NPR)", "type": "number" },
+      { "name": "highlights", "label": "Highlights", "type": "list", "help": "One per item." },
+      { "name": "photos", "label": "Photos", "type": "gallery" },
+      {
+        "name": "schedule", "label": "Schedule", "type": "table",
+        "columns": [
+          { "name": "time", "label": "Time", "type": "text" },
+          { "name": "what", "label": "What happens", "type": "textarea" }
+        ]
+      },
       { "name": "booking_url", "label": "External booking link", "type": "url" }
     ]
   }

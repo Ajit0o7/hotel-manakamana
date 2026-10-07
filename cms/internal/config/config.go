@@ -50,6 +50,12 @@ type Config struct {
 
 	ShutdownTimeout time.Duration
 	LogLevel        string
+
+	// AutoMigrate applies pending database migrations at startup.
+	AutoMigrate bool
+	// Seed imports the website's original content (pages, rooms, guides,
+	// photos, hotel settings) once, in the background, after startup.
+	Seed bool
 }
 
 // Load reads the configuration from the environment and validates it.
@@ -67,6 +73,8 @@ func Load() (Config, error) {
 		SiteURL:            strings.TrimRight(env("SITE_URL", "https://www.hotelmanthali.com"), "/"),
 		ContentTypesFile:   os.Getenv("CONTENT_TYPES_FILE"),
 		LogLevel:           env("LOG_LEVEL", "info"),
+		AutoMigrate:        env("AUTO_MIGRATE", "true") != "false",
+		Seed:               env("CMS_SEED", "on") != "off",
 	}
 
 	var errs []error

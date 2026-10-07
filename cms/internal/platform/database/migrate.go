@@ -31,7 +31,12 @@ func Migrate(ctx context.Context, pool *pgxpool.Pool, fsys fs.FS, log *slog.Logg
 		create table if not exists cms.schema_migrations (
 			version    text primary key,
 			applied_at timestamptz not null default now()
-		);`, pgx.QueryExecModeSimpleProtocol); err != nil {
+		);
+		-- The first migration may have been pasted into the Supabase SQL
+		-- editor by hand; if its tables exist, record it as applied.
+		insert into cms.schema_migrations (version)
+		select '0001_cms_init' where to_regclass('cms.entries') is not null
+		on conflict do nothing;`, pgx.QueryExecModeSimpleProtocol); err != nil {
 		return fmt.Errorf("create migrations table: %w", err)
 	}
 

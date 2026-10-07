@@ -84,7 +84,7 @@ func setup(t *testing.T) *env {
 	app.RegisterContentTypes(types)
 	// A custom type, registered the same way a real one would be.
 	types.MustRegister(content.ContentType{
-		Name: "room", Label: "Room", RoutePrefix: "/rooms",
+		Name: "activity", Label: "Activity", LabelPlural: "Activities", RoutePrefix: "/activities",
 		Fields: []content.Field{{Name: "price_npr", Label: "Price (NPR)", Type: content.FieldNumber, Required: true}},
 	})
 
@@ -331,15 +331,15 @@ func TestEndToEnd(t *testing.T) {
 
 	// --- Posts, custom fields, filtering ----------------------------------------
 	for _, p := range []map[string]any{
-		{"title": "Dashain Offer", "status": "published", "fields": map[string]any{"category": "offer", "offer_price_npr": 3500}},
-		{"title": "Airport News", "status": "published", "fields": map[string]any{"category": "news"}},
-		{"title": "Draft Offer", "fields": map[string]any{"category": "offer"}},
+		{"title": "Dashain Offer", "status": "published", "template": "offer", "fields": map[string]any{"eyebrow": "offer", "offer_price_npr": 3500}},
+		{"title": "Airport News", "status": "published", "template": "news", "fields": map[string]any{"eyebrow": "news"}},
+		{"title": "Draft Offer", "template": "offer", "fields": map[string]any{"eyebrow": "offer"}},
 	} {
 		expect(t, "create post", e.do("POST", "/api/v1/admin/content/post", admin, p), 201)
 	}
-	offers := e.do("GET", "/api/v1/content/post?field.category=offer", "", nil)
+	offers := e.do("GET", "/api/v1/content/post?field.eyebrow=offer", "", nil)
 	expect(t, "public offers", offers, 200)
-	if len(offers.list()) != 1 || offers.list()[0].(map[string]any)["url"] != "/blog/dashain-offer" {
+	if len(offers.list()) != 1 || offers.list()[0].(map[string]any)["url"] != "/guides/dashain-offer" {
 		t.Errorf("offers = %v", offers.Body)
 	}
 	all := e.do("GET", "/api/v1/admin/content/post?status=draft&per_page=5", admin, nil)
@@ -348,21 +348,34 @@ func TestEndToEnd(t *testing.T) {
 	}
 	expect(t, "bad field filter", e.do("GET", "/api/v1/content/post?field.colour=red", "", nil), 422)
 
-	// The custom "room" type works with no extra code or migration.
-	room := e.do("POST", "/api/v1/admin/content/room", admin, map[string]any{"title": "Deluxe Double", "status": "published"})
-	expect(t, "room missing required field", room, 422)
-	room = e.do("POST", "/api/v1/admin/content/room", admin, map[string]any{
-		"title": "Deluxe Double", "status": "published", "fields": map[string]any{"price_npr": 4500},
+	// The custom "activity" type works with no extra code or migration.
+	act := e.do("POST", "/api/v1/admin/content/activity", admin, map[string]any{"title": "Valley Walk", "status": "published"})
+	expect(t, "activity missing required field", act, 422)
+	act = e.do("POST", "/api/v1/admin/content/activity", admin, map[string]any{
+		"title": "Valley Walk", "status": "published", "fields": map[string]any{"price_npr": 4500},
+	})
+	expect(t, "create activity", act, 201)
+	pubAct := e.do("GET", "/api/v1/content/activity/by-path/valley-walk", "", nil)
+	expect(t, "public activity", pubAct, 200)
+	if pubAct.data()["url"] != "/activities/valley-walk" {
+		t.Errorf("activity url = %v", pubAct.data()["url"])
+	}
+
+	// Built-in rooms: a gallery field's photos come back resolved in "media".
+	room := e.do("POST", "/api/v1/admin/content/room", admin, map[string]any{
+		"title": "Deluxe Double", "status": "published",
+		"fields": map[string]any{"price_npr": 2500, "max_guests": 2, "photos": []any{imgID}},
 	})
 	expect(t, "create room", room, 201)
-	pubRoom := e.do("GET", "/api/v1/content/room/by-path/deluxe-double", "", nil)
-	expect(t, "public room", pubRoom, 200)
-	if pubRoom.data()["url"] != "/rooms/deluxe-double" {
-		t.Errorf("room url = %v", pubRoom.data()["url"])
+	pubRoom := e.do("GET", "/api/v1/content/room?order=menu", "", nil)
+	expect(t, "public rooms", pubRoom, 200)
+	rm := pubRoom.list()[0].(map[string]any)
+	if photo, ok := rm["media"].(map[string]any)[imgID].(map[string]any); !ok || photo["blur_data_url"] == "" || photo["sizes"] == nil {
+		t.Errorf("room media = %v", rm["media"])
 	}
 	types := e.do("GET", "/api/v1/content-types", "", nil)
-	if len(types.list()) != 3 {
-		t.Errorf("content types = %v", types.Body)
+	if len(types.list()) != 5 {
+		t.Errorf("content types = %d, want 5", len(types.list()))
 	}
 
 	// --- SEO analysis ---------------------------------------------------------------

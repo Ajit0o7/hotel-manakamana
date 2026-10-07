@@ -115,6 +115,7 @@ func (s *Service) Upload(ctx context.Context, in UploadInput) (*Media, error) {
 			return nil, &apperr.Error{Code: apperr.CodeInvalid, Message: "the image could not be read; it may be corrupt", Err: err}
 		}
 		m.Width, m.Height = &res.Width, &res.Height
+		m.BlurDataURL = res.BlurDataURL
 		renditions = res.Renditions
 		body = bytes.NewReader(data)
 	}

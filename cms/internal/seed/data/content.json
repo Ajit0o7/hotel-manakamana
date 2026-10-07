@@ -1,0 +1,921 @@
+{
+  "version": 1,
+  "media": [
+    {
+      "key": "ebn-room-sofa",
+      "file": "ebn-room-sofa.jpg",
+      "alt": "Deluxe Double Room at Hotel Manakamana Airport View, Manthali, with a double bed and sofa",
+      "title": "Room sofa"
+    },
+    {
+      "key": "room-deluxe",
+      "file": "room-deluxe.jpg",
+      "alt": "Room with double bed and armchair",
+      "title": "Room deluxe"
+    },
+    {
+      "key": "ebn-room-bath",
+      "file": "ebn-room-bath.jpg",
+      "alt": "Room with attached private bathroom",
+      "title": "Room bath"
+    },
+    {
+      "key": "fb-room-two-beds",
+      "file": "fb-room-two-beds.jpg",
+      "alt": "Spacious room with seating area",
+      "title": "Room two beds"
+    },
+    {
+      "key": "bathroom",
+      "file": "bathroom.jpg",
+      "alt": "Private bathroom with shower",
+      "title": "Bathroom"
+    },
+    {
+      "key": "ebn-room-leaf",
+      "file": "ebn-room-leaf.jpg",
+      "alt": "Double Room at Hotel Manakamana Airport View, Manthali, with a double bed and armchair",
+      "title": "Room leaf"
+    },
+    {
+      "key": "ebn-room-teal",
+      "file": "ebn-room-teal.jpg",
+      "alt": "Air-conditioned room with patterned wallpaper",
+      "title": "Room teal"
+    },
+    {
+      "key": "room-standard",
+      "file": "room-standard.jpg",
+      "alt": "Room with hand-painted peacock mural",
+      "title": "Room standard"
+    },
+    {
+      "key": "ebn-room-mural",
+      "file": "ebn-room-mural.jpg",
+      "alt": "Room with Himalayan mountain mural and wall TV",
+      "title": "Room mural"
+    },
+    {
+      "key": "ramechhap-airport-terminal",
+      "file": "ramechhap-airport-terminal.jpg",
+      "alt": "Ramechhap Airport terminal with its departures and arrivals entrances and control tower",
+      "title": "Ramechhap airport terminal"
+    },
+    {
+      "key": "ramechhap-airport-tara-air",
+      "file": "ramechhap-airport-tara-air.jpg",
+      "alt": "Tara Air Twin Otter and Dornier 228 aircraft parked on the apron at Ramechhap Airport",
+      "title": "Ramechhap airport tara air"
+    },
+    {
+      "key": "lukla-airport-takeoff",
+      "file": "lukla-airport-takeoff.jpg",
+      "alt": "A Tara Air Dornier 228 lifting off from the sloping runway at Lukla, with the Khumbu mountains behind",
+      "title": "Lukla airport takeoff"
+    },
+    {
+      "key": "summit-air-let-410",
+      "file": "summit-air-let-410.jpg",
+      "alt": "A Summit Air Let L-410 aircraft in flight against a blue sky",
+      "title": "Summit air let 410"
+    },
+    {
+      "key": "ramechhap-airport-aerial",
+      "file": "ramechhap-airport-aerial.jpg",
+      "alt": "Ramechhap Airport runway beside the river in Manthali, with the town and hills behind",
+      "title": "Ramechhap airport aerial"
+    },
+    {
+      "key": "bp-highway-beni-ghat",
+      "file": "bp-highway-beni-ghat.jpg",
+      "alt": "The road above Beni Ghat, where the Tamakoshi River joins the Sunkoshi",
+      "title": "Highway beni ghat"
+    },
+    {
+      "key": "bp-highway-mulkot",
+      "file": "bp-highway-mulkot.jpg",
+      "alt": "The BP Highway winding beside the Sunkoshi River at Mulkot, Sindhuli",
+      "title": "Highway mulkot"
+    },
+    {
+      "key": "lukla-airport-cloud",
+      "file": "lukla-airport-cloud.jpg",
+      "alt": "Low cloud rolling over the runway at Lukla as a small Tara Air plane prepares to take off",
+      "title": "Lukla airport cloud"
+    },
+    {
+      "key": "view-valley-clouds",
+      "file": "view-valley-clouds.jpg",
+      "alt": "Low cloud over the valley around Manthali",
+      "title": "View valley clouds"
+    },
+    {
+      "key": "hero-valley-view",
+      "file": "hero-valley-view.jpg",
+      "alt": "Valley view from the terrace",
+      "title": "Hero valley view"
+    },
+    {
+      "key": "fb-hotel-exterior",
+      "file": "fb-hotel-exterior.jpg",
+      "alt": "Hotel lit up at night",
+      "title": "Hotel exterior"
+    },
+    {
+      "key": "fb-airport-runway",
+      "file": "fb-airport-runway.jpg",
+      "alt": "Airport runway at night",
+      "title": "Airport runway"
+    },
+    {
+      "key": "ebn-rooftop-terrace",
+      "file": "ebn-rooftop-terrace.jpg",
+      "alt": "Rooftop terrace by day",
+      "title": "Rooftop terrace"
+    },
+    {
+      "key": "exterior",
+      "file": "exterior.jpg",
+      "alt": "Hotel building",
+      "title": "Exterior"
+    },
+    {
+      "key": "food-thali",
+      "file": "food-thali.jpg",
+      "alt": "Nepali thali",
+      "title": "Food thali"
+    },
+    {
+      "key": "rooftop-dining",
+      "file": "rooftop-dining.jpg",
+      "alt": "Rooftop dining",
+      "title": "Rooftop dining"
+    },
+    {
+      "key": "fb-rooftop-dining",
+      "file": "fb-rooftop-dining.jpg",
+      "alt": "Dinner on the rooftop",
+      "title": "Rooftop dining"
+    },
+    {
+      "key": "view-manthali-town",
+      "file": "view-manthali-town.jpg",
+      "alt": "Manthali town",
+      "title": "View manthali town"
+    },
+    {
+      "key": "food-dal-bhat",
+      "file": "food-dal-bhat.jpg",
+      "alt": "Dal bhat",
+      "title": "Food dal bhat"
+    },
+    {
+      "key": "ebn-exterior-day",
+      "file": "ebn-exterior-day.jpg",
+      "alt": "Hotel by day",
+      "title": "Exterior day"
+    },
+    {
+      "key": "rooftop-evening",
+      "file": "rooftop-evening.jpg",
+      "alt": "Evening on the rooftop",
+      "title": "Rooftop evening"
+    },
+    {
+      "key": "food-breakfast",
+      "file": "food-breakfast.jpg",
+      "alt": "Breakfast",
+      "title": "Food breakfast"
+    },
+    {
+      "key": "fb-room-double-single",
+      "file": "fb-room-double-single.jpg",
+      "alt": "Room interior",
+      "title": "Room double single"
+    },
+    {
+      "key": "fb-rooftop-terrace",
+      "file": "fb-rooftop-terrace.jpg",
+      "alt": "Rooftop at night",
+      "title": "Rooftop terrace"
+    },
+    {
+      "key": "food-sandwich",
+      "file": "food-sandwich.jpg",
+      "alt": "Sandwich & fries",
+      "title": "Food sandwich"
+    }
+  ],
+  "entries": [
+    {
+      "key": "settings:hotel",
+      "type": "settings",
+      "title": "Hotel settings",
+      "slug": "hotel",
+      "status": "published",
+      "published_at": "2026-09-30T06:00:00Z",
+      "fields": {
+        "phone": "+977 984-4228627",
+        "whatsapp": "9779844228627",
+        "address": "Manthali Bus Stand, Lamosangu–Ramechhap Highway, Manthali, Bagmati Province 45400, Nepal",
+        "street": "Manthali Bus Stand, Lamosangu–Ramechhap Highway",
+        "locality": "Manthali",
+        "region": "Bagmati Province",
+        "postal_code": "45400",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=Hotel+Manakamana+Airport+View+Manthali",
+        "room_count": 10,
+        "rating_value": 4.1,
+        "rating_count": 54,
+        "review_quote": "Excellent service with great food and tea. People are very kind and friendly.",
+        "review_author": "Orichiz",
+        "review_source": "Tripadvisor (5/5)",
+        "distance_airport": "500 m",
+        "distance_bus_park": "300 m",
+        "distance_kathmandu": "About 4½ hours by road",
+        "languages": [
+          "English",
+          "Hindi",
+          "Nepali"
+        ],
+        "payment": [
+          "Cash",
+          "Card"
+        ],
+        "google_url": "https://share.google/l2kmadcr3xYDrXExC",
+        "facebook_url": "https://www.facebook.com/p/Hotel-Manakamana-Airport-View-100039384645150/",
+        "tripadvisor_url": "https://www.tripadvisor.com/Hotel_Review-g21224011-d21222024-Reviews-Hotel_Manakamana_Airport-Manthali_Bagmati_Zone_Central_Region.html",
+        "ebooking_url": "https://ebookingnepal.com/property/hotel-manakamana-airport-view",
+        "policies": [
+          {
+            "term": "Check-in",
+            "detail": "Any time, day or night. Tell us your arrival time when you book"
+          },
+          {
+            "term": "Check-out",
+            "detail": "Any time, to suit your flight or onward journey"
+          },
+          {
+            "term": "Early flights",
+            "detail": "Tell us your flight time and we'll help you plan the morning"
+          },
+          {
+            "term": "ID",
+            "detail": "A valid ID is required at check-in"
+          },
+          {
+            "term": "Rates",
+            "detail": "Room only. Meals are available at our restaurant"
+          },
+          {
+            "term": "Payment",
+            "detail": "Cash or card"
+          },
+          {
+            "term": "Languages",
+            "detail": "We speak English, Hindi and Nepali"
+          },
+          {
+            "term": "Cancellation",
+            "detail": "Depends on the room type. We'll confirm it when you book"
+          },
+          {
+            "term": "Pets",
+            "detail": "Not allowed"
+          },
+          {
+            "term": "Smoking",
+            "detail": "Non-smoking rooms, with a designated smoking area"
+          },
+          {
+            "term": "House rules",
+            "detail": "No outside food. Damage to hotel property is charged to the guest"
+          }
+        ],
+        "amenities": [
+          {
+            "icon": "wifi",
+            "label": "Free Wi-Fi"
+          },
+          {
+            "icon": "ac",
+            "label": "Air conditioning"
+          },
+          {
+            "icon": "tv",
+            "label": "Flat-screen TV"
+          },
+          {
+            "icon": "shower",
+            "label": "Private bathroom & hot shower"
+          },
+          {
+            "icon": "balcony",
+            "label": "Private balcony"
+          },
+          {
+            "icon": "bell",
+            "label": "Room service"
+          },
+          {
+            "icon": "food",
+            "label": "Restaurant"
+          },
+          {
+            "icon": "sun",
+            "label": "Rooftop terrace"
+          },
+          {
+            "icon": "car",
+            "label": "Parking"
+          },
+          {
+            "icon": "bag",
+            "label": "Luggage storage"
+          },
+          {
+            "icon": "nosmoke",
+            "label": "Non-smoking rooms"
+          },
+          {
+            "icon": "smoke",
+            "label": "Designated smoking area"
+          }
+        ],
+        "nearby": [
+          {
+            "name": "Manthali (Ramechhap) Airport",
+            "note": "Lukla flights",
+            "time": "500 m"
+          },
+          {
+            "name": "Manthali Bus Park",
+            "note": "buses & jeeps",
+            "time": "300 m"
+          },
+          {
+            "name": "Khandadevi Temple",
+            "note": "hilltop temple & viewpoint",
+            "time": "~1 hr 15 min"
+          },
+          {
+            "name": "Sindhuli Gadhi War Museum",
+            "note": "historic fort",
+            "time": "~1 hr 15 min"
+          },
+          {
+            "name": "Kala Ghar",
+            "note": "local point of interest",
+            "time": "~1 hr 30 min"
+          },
+          {
+            "name": "Tribhuvan International Airport",
+            "note": "Kathmandu",
+            "time": "~4 hr 30 min"
+          }
+        ],
+        "faqs": [
+          {
+            "question": "How do I book a room?",
+            "answer": "Use the booking form to send us your dates on WhatsApp, or call +977 984-4228627. We'll confirm availability and today's rate."
+          },
+          {
+            "question": "How close are you to Manthali (Ramechhap) Airport?",
+            "answer": "About 500 m, an easy walk or a very short ride, and Manthali Bus Park is about 300 m away. Many guests stay with us the night before their Lukla flight."
+          },
+          {
+            "question": "How much are the rooms?",
+            "answer": "The Deluxe Double Room is from NPR 2,500 and the Double Room from NPR 2,000 per night, room only. Prices can change, so please confirm when you book."
+          },
+          {
+            "question": "What time is check-in and check-out?",
+            "answer": "Any time, day or night. Just tell us your arrival time when you book, and your flight time so we can help you plan the morning."
+          },
+          {
+            "question": "Can I pay by card?",
+            "answer": "Yes. We accept cash and card."
+          },
+          {
+            "question": "Is breakfast included?",
+            "answer": "Our rates are room only. Breakfast and other meals are available at our rooftop restaurant, and room service is available too."
+          },
+          {
+            "question": "How long is the drive from Kathmandu?",
+            "answer": "Around 4½ hours by road, depending on traffic and road conditions."
+          },
+          {
+            "question": "Do you have Wi-Fi and parking?",
+            "answer": "Yes. Free Wi-Fi and parking are available, and we can store your luggage."
+          },
+          {
+            "question": "Are pets allowed?",
+            "answer": "Sorry, pets are not allowed."
+          },
+          {
+            "question": "Can you host trekking groups?",
+            "answer": "Yes, we regularly welcome groups. Contact us with your group size and dates so we can prepare rooms and meals."
+          }
+        ]
+      }
+    },
+    {
+      "key": "room:deluxe-double-room",
+      "type": "room",
+      "title": "Deluxe Double Room",
+      "slug": "deluxe-double-room",
+      "status": "published",
+      "published_at": "2026-09-30T06:00:00Z",
+      "menu_order": 1,
+      "excerpt": "Double bed, seating space, air conditioning, flat-screen TV and a private balcony. Sleeps 2.",
+      "content": "<p>Our best room, with a comfortable double bed and its own seating area for relaxing after a long drive. It has air conditioning, a flat-screen TV, a private balcony and a private bathroom with hot shower. There is even a socket by the bed for charging up before an early flight.</p>",
+      "featured": "ebn-room-sofa",
+      "fields": {
+        "price_npr": 2500,
+        "max_guests": 2,
+        "beds": "1 double bed",
+        "tag": "Deluxe",
+        "features": [
+          "Air conditioning",
+          "Flat-screen TV",
+          "Balcony",
+          "Socket near the bed",
+          "Seating space",
+          "In-room slippers",
+          "Free Wi-Fi"
+        ],
+        "photos": [
+          "media:ebn-room-sofa",
+          "media:room-deluxe",
+          "media:ebn-room-bath",
+          "media:fb-room-two-beds",
+          "media:bathroom"
+        ]
+      },
+      "seo": {
+        "meta_title": "Deluxe Double Room · NPR 2,500 a night",
+        "meta_description": "Double bed, seating space, air conditioning, flat-screen TV and a private balcony. Sleeps 2. Room only, NPR 2,500 per night, 500 m from Manthali (Ramechhap) Airport.",
+        "focus_keyword": "hotel near Ramechhap Airport"
+      }
+    },
+    {
+      "key": "room:double-room",
+      "type": "room",
+      "title": "Double Room",
+      "slug": "double-room",
+      "status": "published",
+      "published_at": "2026-09-30T06:00:00Z",
+      "menu_order": 2,
+      "excerpt": "A comfortable double bed, air conditioning, flat-screen TV, seating space and balcony. Sleeps 2.",
+      "content": "<p>Everything you need for a good night before an early flight: a comfortable double bed, air conditioning, a flat-screen TV, a seating space and your own balcony, plus a private bathroom with hot shower.</p>",
+      "featured": "ebn-room-leaf",
+      "fields": {
+        "price_npr": 2000,
+        "max_guests": 2,
+        "beds": "1 double bed",
+        "tag": "Best value",
+        "features": [
+          "Air conditioning",
+          "Flat-screen TV",
+          "Balcony",
+          "Seating space",
+          "In-room slippers",
+          "Free Wi-Fi"
+        ],
+        "photos": [
+          "media:ebn-room-leaf",
+          "media:ebn-room-teal",
+          "media:room-standard",
+          "media:ebn-room-mural",
+          "media:bathroom"
+        ]
+      },
+      "seo": {
+        "meta_title": "Double Room · NPR 2,000 a night",
+        "meta_description": "A comfortable double bed, air conditioning, flat-screen TV, seating space and balcony. Sleeps 2. Room only, NPR 2,000 per night, 500 m from Manthali (Ramechhap) Airport.",
+        "focus_keyword": "hotel near Ramechhap Airport"
+      }
+    },
+    {
+      "key": "post:manthali-to-lukla-flights",
+      "type": "post",
+      "template": "guide",
+      "title": "Manthali (Ramechhap) to Lukla Flights: The Complete Guide",
+      "slug": "manthali-to-lukla-flights",
+      "status": "published",
+      "published_at": "2026-09-30T06:00:00Z",
+      "excerpt": "When Lukla flights leave from Ramechhap, which airlines fly the route, flight time, baggage limits, weather delays and why to sleep in Manthali the night before.",
+      "content": "<h2>Why Lukla flights leave from Manthali</h2>\n<p>Kathmandu's Tribhuvan International Airport gets extremely busy in the trekking seasons. To ease the congestion, Nepal's Civil Aviation Authority moves scheduled Lukla flights to <strong>Ramechhap Airport in Manthali</strong> during the peak spring and autumn seasons. From 25 September 2025, for example, all scheduled Lukla flights were operated from Ramechhap instead of Kathmandu.</p>\n<img src=\"media:ramechhap-airport-terminal\" alt=\"Ramechhap Airport terminal with its departures and arrivals entrances and control tower\" title=\"The small terminal at Ramechhap Airport. Departures are on the left, arrivals on the right, and the control tower sits in between.\">\n<p>The exact dates change from year to year, and outside the peak seasons most Lukla flights go from Kathmandu again. Always check with your airline or trekking agency which airport your flight leaves from.</p>\n<h2>Airlines flying Manthali to Lukla</h2>\n<p>Three airlines fly small STOL (short take-off and landing) aircraft on the route. Tickets are sold by the airlines and by trekking agencies. We do not sell flight tickets, but here is how to reach each airline:</p>\n<img src=\"media:ramechhap-airport-tara-air\" alt=\"Tara Air Twin Otter and Dornier 228 aircraft parked on the apron at Ramechhap Airport\" title=\"Tara Air's Twin Otter and Dornier 228 on the apron at Ramechhap Airport.\"><p><em>Photo: <a href=\"https://commons.wikimedia.org/wiki/File:Rammechap_Airport_-_Everest_Base_Camp_Trek_,_Himalayan_Asia_Treks.jpg\">Himalayanasiatreks</a>, <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a></em></p>\n<p>[airlines]</p>\n<h2>Flight time and what to expect</h2>\n<p>The flight takes about <strong>15–25 minutes</strong>, shorter than the flight from Kathmandu. Flights leave early in the morning, usually between about 6 and 10 AM, when mountain weather tends to be calmest. Arrive at the terminal early: your airline or agency will tell you your check-in time.</p>\n<p>You land at Lukla's Tenzing-Hillary Airport, a short, sloping airstrip at about 2,850 m. Only small aircraft can use it, which is why seats and baggage space are limited.</p>\n<img src=\"media:lukla-airport-takeoff\" alt=\"A Tara Air Dornier 228 lifting off from the sloping runway at Lukla, with the Khumbu mountains behind\" title=\"A Tara Air Dornier 228 lifts off from Lukla's short, steeply sloping runway.\"><p><em>Photo: <a href=\"https://commons.wikimedia.org/wiki/File:2015-12-19_Lukla_airport.jpg\">Petr Meissner</a>, <a href=\"https://creativecommons.org/licenses/by/2.0/\">CC BY 2.0</a></em></p>\n<h2>Baggage limits</h2>\n<p>Because the planes are small, baggage limits are strict. A common allowance is <strong>10 kg of checked baggage plus 5 kg of hand luggage</strong> per passenger, but it varies by airline and ticket. Extra weight is charged and only carried if there is space, so check your allowance when you book.</p>\n<img src=\"media:summit-air-let-410\" alt=\"A Summit Air Let L-410 aircraft in flight against a blue sky\" title=\"A Summit Air Let L-410. Planes this size carry fewer than 20 passengers, so there is little room for extra bags.\"><p><em>Photo: <a href=\"https://commons.wikimedia.org/wiki/File:Summit_Air.jpg\">Treflyn</a>, <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a></em></p>\n<blockquote><p><strong>Leave the rest with us</strong></p><p>Staying with us before your trek? We can store your extra bags until you are back from the mountains.</p></blockquote>\n<h2>Weather, delays and cancellations</h2>\n<p>Lukla flights depend on the weather. Pilots need good visibility at Lukla and along the route, so cloud or wind in the mountains can delay or cancel flights even on a clear morning in Manthali. Here are the conditions right now:</p>\n<p>[weather]</p>\n<p>If your flight is held or cancelled, read our <a href=\"/guides/lukla-flight-cancelled\">guide to Lukla flight delays and cancellations</a>.</p>\n<h2>Getting to Manthali in time</h2>\n<p>Ramechhap Airport is about 130–145 km from Kathmandu, a 4–5 hour drive along the BP Highway. To catch a morning flight, many trekkers leave Kathmandu between 1 and 3 AM. The easier option is to drive the day before and sleep in Manthali. See <a href=\"/guides/kathmandu-to-manthali\">how to get from Kathmandu to Manthali</a>.</p>\n<p>[booking Sleep 500 m from the terminal | Arrive the evening before, have dinner on our rooftop and walk to the airport in the morning, rested.]</p>\n<h2>Your night before the flight</h2>\n<ul><li><p>About 500 m from the terminal: an easy walk or a very short ride</p></li><li><p>Air-conditioned rooms with a private bathroom and hot shower</p></li><li><p>Rooftop restaurant, with breakfast and room service available</p></li><li><p>Free Wi-Fi to follow flight updates</p></li><li><p>Luggage storage while you trek</p></li></ul>",
+      "featured": "ramechhap-airport-aerial",
+      "fields": {
+        "eyebrow": "Flight guide",
+        "heading": "Manthali to Lukla",
+        "heading_accent": "flights",
+        "updated_on": "2026-09-30",
+        "read_minutes": 5,
+        "facts": [
+          {
+            "term": "Route",
+            "value": "Manthali (Ramechhap) → Lukla"
+          },
+          {
+            "term": "Flight time",
+            "value": "About 15–25 minutes"
+          },
+          {
+            "term": "Airlines",
+            "value": "Tara Air, Summit Air, Sita Air"
+          },
+          {
+            "term": "When",
+            "value": "Peak spring and autumn seasons"
+          },
+          {
+            "term": "Departures",
+            "value": "Early morning, weather permitting"
+          },
+          {
+            "term": "Baggage",
+            "value": "Often 10 kg checked + 5 kg hand"
+          }
+        ],
+        "sources": [
+          {
+            "label": "Ramechhap Airport (Wikipedia)",
+            "url": "https://en.wikipedia.org/wiki/Ramechhap_Airport"
+          },
+          {
+            "label": "Tenzing-Hillary Airport, Lukla (Wikipedia)",
+            "url": "https://en.wikipedia.org/wiki/Tenzing-Hillary_Airport"
+          },
+          {
+            "label": "Tara Air",
+            "url": "https://www.taraair.com"
+          },
+          {
+            "label": "Summit Air",
+            "url": "https://summitair.com.np"
+          },
+          {
+            "label": "Sita Air",
+            "url": "https://www.sitaair.com.np"
+          }
+        ]
+      },
+      "seo": {
+        "meta_description": "When Lukla flights leave from Ramechhap, which airlines fly the route, flight time, baggage limits, weather delays and why to sleep in Manthali the night before."
+      }
+    },
+    {
+      "key": "post:kathmandu-to-manthali",
+      "type": "post",
+      "template": "guide",
+      "title": "Kathmandu to Manthali (Ramechhap Airport): How to Get There",
+      "slug": "kathmandu-to-manthali",
+      "status": "published",
+      "published_at": "2026-09-30T05:59:00Z",
+      "excerpt": "Distance, route, drive time and transport options from Kathmandu to Manthali and Ramechhap Airport, plus whether to drive through the night or arrive the day before your Lukla flight.",
+      "content": "<h2>The route</h2>\n<p>Most drivers leave the Kathmandu Valley through Bhaktapur and Dhulikhel, then follow the <strong>BP Highway</strong> down towards the Sunkoshi River and turn off at Khurkot onto the road to Manthali, the headquarters of Ramechhap district.</p>\n<img src=\"media:bp-highway-beni-ghat\" alt=\"The road above Beni Ghat, where the Tamakoshi River joins the Sunkoshi\" title=\"The Tamakoshi joins the Sunkoshi at Beni Ghat. From Khurkot, the road to Manthali follows the Tamakoshi upstream.\"><p><em>Photo: <a href=\"https://commons.wikimedia.org/wiki/File:Meeting_point_of_Sunkoshi_and_Tama_Koshi_River_from_Beni_Ghat-IMG0620-Pano.jpg\">Bijay Chaurasia</a>, <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a></em></p>\n<p>[map Driving route from Kathmandu to Manthali | https://maps.google.com/maps?saddr=Thamel,+Kathmandu&amp;daddr=Ramechhap+Airport,+Manthali&amp;output=embed]</p>\n<h2>How long it takes</h2>\n<p>Plan on <strong>4–5 hours</strong> for the drive. Traffic leaving Kathmandu, roadworks and landslides in the monsoon can make it longer. In October 2025, for example, floods and landslides damaged parts of the BP Highway and traffic had to be diverted, so check the road before you set off.</p>\n<h2>Ways to travel</h2>\n<ul><li><p><strong>Private car or jeep:</strong> most trekking agencies arrange one as part of your package, and you can also hire one in Kathmandu.</p></li><li><p><strong>Shared jeeps and tourist buses:</strong> in the trekking seasons they run between Kathmandu and Manthali, often overnight to reach the morning flights. Ask your agency or your Kathmandu hotel about current departures.</p></li><li><p><strong>Local buses:</strong> the cheapest and slowest option. Ask locally for the latest times.</p></li></ul>\n<h2>Drive through the night, or arrive the day before?</h2>\n<p>[compare]</p><h3>Night drive</h3><ul><li><p>Leave Kathmandu around 1–3 AM</p></li><li><p>No extra hotel night</p></li><li><p>Little sleep before the flight</p></li><li><p>A slow road can make you late for check-in</p></li></ul><h3>Arrive the day before (recommended)</h3><ul><li><p>Drive in daylight and see the valley</p></li><li><p>Sleep 500 m from the terminal</p></li><li><p>A calm, rested start to your trek</p></li><li><p>A buffer if the weather holds flights</p></li></ul><p>[/compare]</p>\n<p>[booking Break the journey in Manthali | Drive down in daylight, stay with us and walk to the airport in the morning.]</p>\n<h2>Arriving in Manthali</h2>\n<p>We are on the Lamosangu–Ramechhap Highway at Manthali Bus Stand, about 300 m from the bus park and 500 m from the airport. See our <a href=\"/location\">location page</a> for the map and directions.</p>\n<img src=\"media:ramechhap-airport-aerial\" alt=\"Manthali town beside Ramechhap Airport runway and the river\" title=\"Manthali from the hillside across the Tamakoshi River. The airport runway runs along the riverbank, with the town right beside it.\">",
+      "featured": "bp-highway-mulkot",
+      "fields": {
+        "eyebrow": "Getting here",
+        "heading": "Kathmandu to",
+        "heading_accent": "Manthali",
+        "updated_on": "2026-09-30",
+        "read_minutes": 4,
+        "facts": [
+          {
+            "term": "Distance",
+            "value": "About 130–145 km"
+          },
+          {
+            "term": "Drive time",
+            "value": "4–5 hours, longer in the monsoon"
+          },
+          {
+            "term": "Route",
+            "value": "Dhulikhel → BP Highway → Khurkot → Manthali"
+          },
+          {
+            "term": "Night drive",
+            "value": "Leave around 1–3 AM for a morning flight"
+          },
+          {
+            "term": "Our hotel",
+            "value": "500 m from the airport, 300 m from the bus park"
+          }
+        ],
+        "sources": [
+          {
+            "label": "Ramechhap Airport (Wikipedia)",
+            "url": "https://en.wikipedia.org/wiki/Ramechhap_Airport"
+          },
+          {
+            "label": "BP Highway traffic diverted after floods (The Kathmandu Post, Oct 2025)",
+            "url": "https://kathmandupost.com/nepali-diaspora/2025/10/06/bp-highway-traffic-diverted-after-floods-and-landslides-damage-road"
+          }
+        ],
+        "hero_credit_author": "Bijay Chaurasia",
+        "hero_credit_url": "https://commons.wikimedia.org/wiki/File:Mulkot,_Sindhuli_District,Nepal.jpg",
+        "hero_credit_license": "CC BY-SA 4.0",
+        "hero_credit_license_url": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "seo": {
+        "meta_description": "Distance, route, drive time and transport options from Kathmandu to Manthali and Ramechhap Airport, plus whether to drive through the night or arrive the day before your Lukla flight."
+      }
+    },
+    {
+      "key": "post:lukla-flight-cancelled",
+      "type": "post",
+      "template": "guide",
+      "title": "Lukla Flight Delayed or Cancelled? What to Do in Manthali",
+      "slug": "lukla-flight-cancelled",
+      "status": "published",
+      "published_at": "2026-09-30T05:58:00Z",
+      "excerpt": "Why Lukla flights get delayed or cancelled, what to do at Ramechhap Airport, your options if the weather will not clear, how to spend a delay day in Manthali, and where to stay near the airport tonight.",
+      "content": "<h2>Why Lukla flights get cancelled</h2>\n<p>Flights to Lukla fly by sight into a short mountain airstrip, so pilots need clear visibility at Lukla and along the route. Cloud or wind in the mountains can hold flights even when the sky over Manthali is blue. When a morning is lost, the backlog of passengers can take a day or more to clear.</p>\n<img src=\"media:lukla-airport-cloud\" alt=\"Low cloud rolling over the runway at Lukla as a small Tara Air plane prepares to take off\" title=\"Cloud rolling in over Lukla's runway. When the airstrip or the route is covered, flights from Manthali wait until it clears.\"><p><em>Photo: <a href=\"https://commons.wikimedia.org/wiki/File:LuklaAirportBadWeather.JPG\">James Heilman</a>, <a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC BY-SA 3.0</a></em></p>\n<p>[weather]</p>\n<h2>What to do if your flight is held</h2>\n<ol><li><p>Stay in touch with your airline or agency. They announce new departure times and rebook passengers.</p></li><li><p>Keep your ticket, ID and hand luggage with you while you wait.</p></li><li><p>If flights are called off for the day, ask about your place on the next flights and find a bed close to the airport.</p></li><li><p>Keep a spare day or two in your itinerary, for the flight back from Lukla too.</p></li></ol>\n<h2>If the weather will not clear</h2>\n<ul><li><p><strong>Wait for the next flight:</strong> usually the cheapest option.</p></li><li><p><strong>Helicopter:</strong> charter or shared seats cost more. Ask your agency, and check whether your travel insurance covers it.</p></li><li><p><strong>Another route:</strong> some agencies can arrange road transport into the Solukhumbu region instead. Ask yours.</p></li></ul>\n<h2>Making the most of a delay day</h2>\n<p>Rebooked onto a later flight, or told there are no more flights today? Then the day is yours. If you are still on standby, keep your phone charged and switched on and stay within easy reach of the terminal: the airline may call you back at short notice when the weather clears. Here is an easy plan for a free day, all on foot from the hotel:</p>\n<table><tbody><tr><th><p>Time</p></th><th><p>What to do</p></th></tr><tr><td><p>06:00–08:00</p></td><td><p>Walk into Manthali bazaar for a hot milk tea, and take out cash while you are there. The banks are about 1 km from the hotel: see them on our <a href=\"/location#map\">area map</a>.</p></td></tr><tr><td><p>08:30–09:30</p></td><td><p>Watch the airstrip from our rooftop, or ask us the way to <strong>Selfie Danda</strong>, a small hill near the runway with a view over the airport and the valley.</p></td></tr><tr><td><p>10:00–13:00</p></td><td><p>Walk down past the runway to the wide bed of the <strong>Tamakoshi River</strong>, about 15 minutes away, and watch valley life along the water.</p></td></tr><tr><td><p>13:30–15:00</p></td><td><p>Lunch in the bazaar, or dal bhat on our rooftop.</p></td></tr><tr><td><p>16:00–18:30</p></td><td><p>Walk up the ridge behind the airport for sunset over the valley, and head back before the evening chill.</p></td></tr></tbody></table>\n<p><strong>Grounded for the whole day?</strong> <a href=\"/location#map\">Khandadevi Temple</a>, a hilltop temple and viewpoint, is about 1 hr 15 min away by hired jeep. Only go once your airline has confirmed there are no more flights today.</p>\n<blockquote><p><strong>Bring cash from Kathmandu</strong></p><p>ATMs in Manthali can run out of cash in the busy trekking seasons, so carry enough rupees for your stay and for your trek.</p></blockquote>\n<h2>Useful Nepali phrases for the bazaar</h2>\n<p>Shopkeepers are used to trekkers, and a few words of Nepali go a long way:</p>\n<table><tbody><tr><th><p>English</p></th><th><p>Nepali</p></th><th><p>When to use it</p></th></tr><tr><td><p>Hello</p></td><td><p><strong>Namaste</strong></p></td><td><p>A greeting for anyone, at any time of day</p></td></tr><tr><td><p>How much is this?</p></td><td><p><strong>Yasko kati ho?</strong></p></td><td><p>Asking the price in a shop</p></td></tr><tr><td><p>Where is the ATM?</p></td><td><p><strong>ATM kaha cha?</strong></p></td><td><p>Finding a cash point</p></td></tr><tr><td><p>Where is the pharmacy?</p></td><td><p><strong>Medical kaha cha?</strong></p></td><td><p>Pharmacies are usually called “medical” in Nepal</p></td></tr><tr><td><p>Is there water?</p></td><td><p><strong>Paani cha?</strong></p></td><td><p>Buying bottled drinking water</p></td></tr><tr><td><p>Thank you</p></td><td><p><strong>Dhanyabaad</strong></p></td><td><p>Showing appreciation</p></td></tr><tr><td><p>That’s very expensive!</p></td><td><p><strong>Ekdam mahango bhayo!</strong></p></td><td><p>Friendly bargaining, with a smile</p></td></tr></tbody></table>\n<p>[booking Need a room tonight? | Stay 500 m from the terminal: air-conditioned rooms, hot showers, free Wi-Fi to follow flight updates, a rooftop restaurant and luggage storage. Call or WhatsApp us to check what is free tonight.]</p>\n<h2>Plan ahead for next time</h2>\n<p>Arriving in Manthali the day before your flight gives you a calmer start and a buffer if the weather is slow to clear. See <a href=\"/guides/kathmandu-to-manthali\">how to get from Kathmandu to Manthali</a> and our <a href=\"/guides/manthali-to-lukla-flights\">Manthali to Lukla flight guide</a>.</p>",
+      "featured": "view-valley-clouds",
+      "fields": {
+        "eyebrow": "When the weather turns",
+        "heading": "Lukla flight",
+        "heading_accent": "cancelled?",
+        "updated_on": "2026-09-30",
+        "read_minutes": 6,
+        "facts": [
+          {
+            "term": "Why",
+            "value": "Cloud, wind or poor visibility at Lukla or on the route"
+          },
+          {
+            "term": "First step",
+            "value": "Talk to your airline or agency about rebooking"
+          },
+          {
+            "term": "Options",
+            "value": "Next flight, helicopter (extra cost) or another route"
+          },
+          {
+            "term": "Near the airport",
+            "value": "We are 500 m from the terminal"
+          }
+        ],
+        "sources": [
+          {
+            "label": "Tenzing-Hillary Airport, Lukla (Wikipedia)",
+            "url": "https://en.wikipedia.org/wiki/Tenzing-Hillary_Airport"
+          },
+          {
+            "label": "Ramechhap Airport (Wikipedia)",
+            "url": "https://en.wikipedia.org/wiki/Ramechhap_Airport"
+          }
+        ]
+      },
+      "seo": {
+        "meta_description": "Why Lukla flights get delayed or cancelled, what to do at Ramechhap Airport, your options if the weather will not clear, how to spend a delay day in Manthali, and where to stay near the airport tonight."
+      }
+    },
+    {
+      "key": "page:home",
+      "type": "page",
+      "template": "home",
+      "title": "Home",
+      "slug": "home",
+      "status": "published",
+      "published_at": "2026-09-30T06:00:00Z",
+      "menu_order": 0,
+      "fields": {},
+      "seo": {
+        "meta_title": "Hotel Manakamana Airport View | 500 m from Manthali (Ramechhap) Airport",
+        "meta_description": "Family-run hotel in Manthali, 500 m from Ramechhap Airport for Lukla flights. Air-conditioned rooms with balconies, free Wi-Fi and a rooftop restaurant. From NPR 2,000.",
+        "focus_keyword": "hotel near Ramechhap Airport"
+      }
+    },
+    {
+      "key": "page:rooms",
+      "type": "page",
+      "template": "rooms",
+      "title": "Rooms & Rates",
+      "slug": "rooms",
+      "status": "published",
+      "published_at": "2026-09-30T06:00:00Z",
+      "menu_order": 1,
+      "fields": {},
+      "seo": {
+        "meta_title": "",
+        "meta_description": "Deluxe Double and Double rooms with air conditioning, balcony, flat-screen TV and free Wi-Fi, 500 m from Manthali (Ramechhap) Airport. From NPR 2,000 a night.",
+        "focus_keyword": ""
+      }
+    },
+    {
+      "key": "page:dining",
+      "type": "page",
+      "template": "dining",
+      "title": "Rooftop Restaurant",
+      "slug": "dining",
+      "status": "published",
+      "published_at": "2026-09-30T06:00:00Z",
+      "menu_order": 2,
+      "fields": {},
+      "seo": {
+        "meta_title": "",
+        "meta_description": "Nepali thali, dal bhat, breakfasts and tea on our rooftop terrace in Manthali, Ramechhap. Room service available.",
+        "focus_keyword": ""
+      }
+    },
+    {
+      "key": "page:gallery",
+      "type": "page",
+      "template": "gallery",
+      "title": "Photo Gallery",
+      "slug": "gallery",
+      "status": "published",
+      "published_at": "2026-09-30T06:00:00Z",
+      "menu_order": 3,
+      "fields": {
+        "photos": [
+          {
+            "photo": "media:hero-valley-view",
+            "category": "views",
+            "caption": "Valley view from the terrace"
+          },
+          {
+            "photo": "media:fb-hotel-exterior",
+            "category": "hotel",
+            "caption": "Hotel lit up at night"
+          },
+          {
+            "photo": "media:fb-airport-runway",
+            "category": "views",
+            "caption": "Airport runway at night"
+          },
+          {
+            "photo": "media:ebn-rooftop-terrace",
+            "category": "rooftop",
+            "caption": "Rooftop terrace by day"
+          },
+          {
+            "photo": "media:ebn-room-sofa",
+            "category": "rooms",
+            "caption": "Deluxe Double Room"
+          },
+          {
+            "photo": "media:exterior",
+            "category": "hotel",
+            "caption": "Hotel building"
+          },
+          {
+            "photo": "media:room-deluxe",
+            "category": "rooms",
+            "caption": "Room with sofa seating"
+          },
+          {
+            "photo": "media:food-thali",
+            "category": "food",
+            "caption": "Nepali thali"
+          },
+          {
+            "photo": "media:rooftop-dining",
+            "category": "rooftop",
+            "caption": "Rooftop dining"
+          },
+          {
+            "photo": "media:fb-room-two-beds",
+            "category": "rooms",
+            "caption": "Room with two beds"
+          },
+          {
+            "photo": "media:ebn-room-leaf",
+            "category": "rooms",
+            "caption": "Double Room"
+          },
+          {
+            "photo": "media:fb-rooftop-dining",
+            "category": "rooftop",
+            "caption": "Dinner on the rooftop"
+          },
+          {
+            "photo": "media:room-standard",
+            "category": "rooms",
+            "caption": "Room with peacock mural"
+          },
+          {
+            "photo": "media:ebn-room-mural",
+            "category": "rooms",
+            "caption": "Room with mountain mural"
+          },
+          {
+            "photo": "media:view-manthali-town",
+            "category": "views",
+            "caption": "Manthali town"
+          },
+          {
+            "photo": "media:food-dal-bhat",
+            "category": "food",
+            "caption": "Dal bhat"
+          },
+          {
+            "photo": "media:bathroom",
+            "category": "rooms",
+            "caption": "Private bathroom"
+          },
+          {
+            "photo": "media:ebn-room-teal",
+            "category": "rooms",
+            "caption": "Air-conditioned room"
+          },
+          {
+            "photo": "media:ebn-exterior-day",
+            "category": "hotel",
+            "caption": "Hotel by day"
+          },
+          {
+            "photo": "media:rooftop-evening",
+            "category": "rooftop",
+            "caption": "Evening on the rooftop"
+          },
+          {
+            "photo": "media:food-breakfast",
+            "category": "food",
+            "caption": "Breakfast"
+          },
+          {
+            "photo": "media:fb-room-double-single",
+            "category": "rooms",
+            "caption": "Room interior"
+          },
+          {
+            "photo": "media:ebn-room-bath",
+            "category": "rooms",
+            "caption": "Room with private bathroom"
+          },
+          {
+            "photo": "media:fb-rooftop-terrace",
+            "category": "rooftop",
+            "caption": "Rooftop at night"
+          },
+          {
+            "photo": "media:view-valley-clouds",
+            "category": "views",
+            "caption": "Clouds over the valley"
+          },
+          {
+            "photo": "media:food-sandwich",
+            "category": "food",
+            "caption": "Sandwich & fries"
+          }
+        ]
+      },
+      "seo": {
+        "meta_title": "",
+        "meta_description": "Photos of our rooms, rooftop restaurant, food and views in Manthali, Ramechhap.",
+        "focus_keyword": ""
+      }
+    },
+    {
+      "key": "page:location",
+      "type": "page",
+      "template": "location",
+      "title": "Location & Getting Here",
+      "slug": "location",
+      "status": "published",
+      "published_at": "2026-09-30T06:00:00Z",
+      "menu_order": 4,
+      "fields": {},
+      "seo": {
+        "meta_title": "",
+        "meta_description": "500 m from Manthali (Ramechhap) Airport and 300 m from Manthali Bus Park: an easy base for Lukla flights.",
+        "focus_keyword": ""
+      }
+    },
+    {
+      "key": "page:guides",
+      "type": "page",
+      "template": "guides",
+      "title": "Travel Guides: Manthali, Ramechhap Airport & Lukla Flights",
+      "slug": "guides",
+      "status": "published",
+      "published_at": "2026-09-30T06:00:00Z",
+      "menu_order": 5,
+      "fields": {},
+      "seo": {
+        "meta_title": "",
+        "meta_description": "Practical guides for trekkers: Manthali (Ramechhap) to Lukla flights, getting from Kathmandu to Manthali, and what to do if your Lukla flight is delayed or cancelled.",
+        "focus_keyword": ""
+      }
+    },
+    {
+      "key": "page:contact",
+      "type": "page",
+      "template": "contact",
+      "title": "Contact & Book",
+      "slug": "contact",
+      "status": "published",
+      "published_at": "2026-09-30T06:00:00Z",
+      "menu_order": 6,
+      "fields": {},
+      "seo": {
+        "meta_title": "",
+        "meta_description": "Book your room at Hotel Manakamana Airport View, Manthali. Call or WhatsApp +977 984-4228627. Rooms from NPR 2,000 a night.",
+        "focus_keyword": ""
+      }
+    }
+  ]
+}
