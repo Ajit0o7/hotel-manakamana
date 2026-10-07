@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import { HOTEL } from '@/content/hotel';
+import { useSiteData } from '@/components/layout/SiteData';
 import { MAP_VIEWS, POIS, type ViewId } from '@/content/map';
 import type { AreaMapHandle } from './createAreaMap';
 
@@ -11,6 +11,7 @@ type Status = 'idle' | 'loading' | 'ready' | 'failed';
 /** Interactive 3D area map. MapLibre loads only when the map nears the viewport; the place list below
     works without it (and is what keyboard and screen-reader users can rely on). */
 export function AreaMap() {
+  const { hotel } = useSiteData();
   const canvas = useRef<HTMLDivElement>(null);
   const handle = useRef<AreaMapHandle | null>(null);
   const viewRef = useRef<ViewId>('area');
@@ -71,7 +72,7 @@ export function AreaMap() {
             {status === 'failed' ? (
               <p>
                 Sorry, the interactive map can&apos;t run in this browser.{' '}
-                <a href={HOTEL.mapsUrl} target="_blank" rel="noopener noreferrer">Open the hotel in Google Maps</a>.
+                <a href={hotel.mapsUrl} target="_blank" rel="noopener noreferrer">Open the hotel in Google Maps</a>.
               </p>
             ) : (
               <p>Loading the map…</p>
@@ -94,7 +95,7 @@ export function AreaMap() {
         {view === 'flight'
           ? 'The dashed line shows the direction of the flight only; the planes follow the valleys. '
           : 'Ctrl + scroll (or two fingers) to zoom and pan. '}
-        <a href={HOTEL.mapsUrl} target="_blank" rel="noopener noreferrer">
+        <a href={hotel.mapsUrl} target="_blank" rel="noopener noreferrer">
           Directions in Google Maps <Icon name="arrowRight" className="link__icon" />
         </a>
       </p>

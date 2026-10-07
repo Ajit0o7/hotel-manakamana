@@ -3,14 +3,20 @@ import { FilterGallery } from '@/components/gallery/FilterGallery';
 import { CtaBand } from '@/components/sections/CtaBand';
 import { PageHero } from '@/components/sections/PageHero';
 import { IMG } from '@/content/images';
+import { getGallery, pageMetadata } from '@/lib/cms/site';
 
-export const metadata: Metadata = {
+const FALLBACK: Metadata = {
   title: 'Photo Gallery',
   description: 'Photos of our rooms, rooftop restaurant, food and views in Manthali, Ramechhap.',
   alternates: { canonical: '/gallery' },
 };
 
-export default function GalleryPage() {
+export function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('gallery', '/gallery', FALLBACK);
+}
+
+export default async function GalleryPage() {
+  const items = await getGallery();
   return (
     <>
       <PageHero
@@ -22,7 +28,7 @@ export default function GalleryPage() {
       />
       <section className="section">
         <div className="container">
-          <FilterGallery />
+          <FilterGallery items={items} />
         </div>
       </section>
       <CtaBand />

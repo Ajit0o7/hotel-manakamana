@@ -10,18 +10,19 @@ import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Icon } from '@/components/ui/Icon';
 import { SplitHeading } from '@/components/ui/SplitHeading';
 import { TLink } from '@/components/ui/TLink';
-import { POLICIES, formatNPR } from '@/content/hotel';
-import { ROOMS, getRoom } from '@/content/rooms';
+import { formatNPR } from '@/content/hotel';
 import { roomLd } from '@/content/schema';
+import { getHotel, getRoom, getRooms, headMetadata } from '@/lib/cms/site';
 
-export function generateStaticParams() {
-  return ROOMS.map((r) => ({ slug: r.slug }));
+export async function generateStaticParams() {
+  return (await getRooms()).map((r) => ({ slug: r.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<'/rooms/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
-  const room = getRoom(slug);
+  const room = await getRoom(slug);
   if (!room) return {};
+  if (room.head) return headMetadata(room.head, `/rooms/${room.slug}`);
   return {
     title: `${room.name} · ${formatNPR(room.price)} a night`,
     description: `${room.summary} Room only, ${formatNPR(room.price)} per night, 500 m from Manthali (Ramechhap) Airport.`,
@@ -31,9 +32,10 @@ export async function generateMetadata({ params }: PageProps<'/rooms/[slug]'>): 
 
 export default async function RoomPage({ params }: PageProps<'/rooms/[slug]'>) {
   const { slug } = await params;
-  const room = getRoom(slug);
+  const room = await getRoom(slug);
   if (!room) notFound();
-  const other = ROOMS.find((r) => r.slug !== room.slug)!;
+  const [hotel, rooms] = await Promise.all([getHotel(), getRooms()]);
+  const other = rooms.find((r) => r.slug !== room.slug);
 
   return (
     <>
@@ -67,7 +69,7 @@ export default async function RoomPage({ params }: PageProps<'/rooms/[slug]'>) {
 
             <Eyebrow>Good to know</Eyebrow>
             <dl className="info reveal">
-              {POLICIES.map((p) => [<dt key={`t-${p.term}`}>{p.term}</dt>, <dd key={`d-${p.term}`}>{p.detail}</dd>])}
+              {hotel.policies.map((p) => [<dt key={`t-${p.term}`}>{p.term}</dt>, <dd key={`d-${p.term}`}>{p.detail}</dd>])}
             </dl>
           </div>
 
@@ -77,7 +79,7 @@ export default async function RoomPage({ params }: PageProps<'/rooms/[slug]'>) {
         </div>
       </section>
 
-      <section className="section section--sand">
+      {other && <section className="section section--sand">
         <div className="container">
           <div className="section__head">
             <div>
@@ -101,7 +103,7 @@ export default async function RoomPage({ params }: PageProps<'/rooms/[slug]'>) {
             </div>
           </article>
         </div>
-      </section>
+      </section>}
 
       <CtaBand />
     </>

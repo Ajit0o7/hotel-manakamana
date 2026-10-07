@@ -27,7 +27,9 @@ import (
 	"github.com/Ajit0o7/hotel-manakamana/cms/internal/platform/database"
 	"github.com/Ajit0o7/hotel-manakamana/cms/internal/platform/supabase"
 	"github.com/Ajit0o7/hotel-manakamana/cms/internal/sanitize"
+	"github.com/Ajit0o7/hotel-manakamana/cms/internal/seed"
 	"github.com/Ajit0o7/hotel-manakamana/cms/internal/seo"
+	"github.com/Ajit0o7/hotel-manakamana/cms/migrations"
 )
 
 // RegisterContentTypes registers the built-in content types. Add your own
@@ -35,6 +37,8 @@ import (
 func RegisterContentTypes(r *content.Registry) {
 	r.MustRegister(content.PageType)
 	r.MustRegister(content.PostType)
+	r.MustRegister(content.RoomType)
+	r.MustRegister(content.SettingsType)
 }
 
 // Run starts the server and blocks until ctx is cancelled.
@@ -45,10 +49,17 @@ func Run(ctx context.Context, cfg config.Config, log *slog.Logger) error {
 	}
 	defer pool.Close()
 
-	handler, err := Build(ctx, cfg, pool, log)
+	if cfg.AutoMigrate {
+		if err := database.Migrate(ctx, pool, migrations.FS, log); err != nil {
+			return err
+		}
+	}
+
+	built, err := Build(ctx, cfg, pool, log)
 	if err != nil {
 		return err
 	}
+	handler := built.Handler
 
 	srv := &http.Server{
 		Addr:              net.JoinHostPort("", cfg.Port),
@@ -65,6 +76,10 @@ func Run(ctx context.Context, cfg config.Config, log *slog.Logger) error {
 		errc <- srv.ListenAndServe()
 	}()
 
+	if cfg.Seed {
+		go importSeed(ctx, pool, built, log)
+	}
+
 	select {
 	case err := <-errc:
 		return err
@@ -79,8 +94,28 @@ func Run(ctx context.Context, cfg config.Config, log *slog.Logger) error {
 	return nil
 }
 
+// Built is the wired application.
+type Built struct {
+	Handler http.Handler
+	Content *content.Service
+	Media   *media.Service
+}
+
+// importSeed imports the website's original content once (see package seed).
+func importSeed(ctx context.Context, pool *pgxpool.Pool, b *Built, log *slog.Logger) {
+	bundle, images, err := seed.Load()
+	if err != nil {
+		log.Error("seed: cannot read bundle", "err", err)
+		return
+	}
+	im := &seed.Importer{Pool: pool, Media: b.Media, Content: b.Content, Log: log}
+	if err := im.Run(ctx, bundle, images); err != nil && ctx.Err() == nil {
+		log.Error("seed: import incomplete; it will continue on the next start", "err", err)
+	}
+}
+
 // Build wires all components into an HTTP handler.
-func Build(ctx context.Context, cfg config.Config, pool *pgxpool.Pool, log *slog.Logger) (http.Handler, error) {
+func Build(ctx context.Context, cfg config.Config, pool *pgxpool.Pool, log *slog.Logger) (*Built, error) {
 	gin.SetMode(gin.ReleaseMode)
 
 	types := content.NewRegistry()
@@ -125,7 +160,7 @@ func Build(ctx context.Context, cfg config.Config, pool *pgxpool.Pool, log *slog
 		SiteURL:   cfg.SiteURL,
 	})
 
-	return httpapi.NewRouter(httpapi.Deps{
+	handler := httpapi.NewRouter(httpapi.Deps{
 		Content:        contentSvc,
 		Media:          mediaSvc,
 		Analyzer:       analyzer,
@@ -134,7 +169,8 @@ func Build(ctx context.Context, cfg config.Config, pool *pgxpool.Pool, log *slog
 		MaxUploadBytes: cfg.MaxUploadBytes,
 		Ready:          pool.Ping,
 		Logger:         log,
-	}), nil
+	})
+	return &Built{Handler: handler, Content: contentSvc, Media: mediaSvc}, nil
 }
 
 // MediaResolver adapts the media service to content.MediaResolver, so the
@@ -153,7 +189,7 @@ func (r MediaResolver) ResolveMedia(ctx context.Context, ids []uuid.UUID) (map[u
 	for _, m := range items {
 		ref := content.MediaRef{
 			ID: m.ID, URL: m.URL, MimeType: m.MimeType, AltText: m.AltText, Caption: m.Caption,
-			Width: m.Width, Height: m.Height,
+			Width: m.Width, Height: m.Height, BlurDataURL: m.BlurDataURL,
 		}
 		if len(m.Variants) > 0 {
 			ref.Sizes = make(map[string]content.MediaSize, len(m.Variants))

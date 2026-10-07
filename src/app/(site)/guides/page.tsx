@@ -4,15 +4,19 @@ import { CtaBand } from '@/components/sections/CtaBand';
 import { PageHero } from '@/components/sections/PageHero';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { SITE_URL } from '@/content/hotel';
-import { GUIDES } from '@/content/guides';
 import { IMG } from '@/content/images';
+import { getGuides, pageMetadata } from '@/lib/cms/site';
 
-export const metadata: Metadata = {
+const FALLBACK: Metadata = {
   title: 'Travel Guides: Manthali, Ramechhap Airport & Lukla Flights',
   description:
     'Practical guides for trekkers: Manthali (Ramechhap) to Lukla flights, getting from Kathmandu to Manthali, and what to do if your Lukla flight is delayed or cancelled.',
   alternates: { canonical: '/guides' },
 };
+
+export function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('guides', '/guides', FALLBACK);
+}
 
 const breadcrumbLd = {
   '@context': 'https://schema.org',
@@ -23,7 +27,8 @@ const breadcrumbLd = {
   ],
 };
 
-export default function GuidesPage() {
+export default async function GuidesPage() {
+  const guides = await getGuides();
   return (
     <>
       <JsonLd data={breadcrumbLd} />
@@ -37,7 +42,7 @@ export default function GuidesPage() {
       <section className="section">
         <div className="container">
           <div className="grid grid--3" data-stagger="">
-            {GUIDES.map((g) => <GuideCard key={g.slug} guide={g} />)}
+            {guides.map((g) => <GuideCard key={g.slug} guide={g} />)}
           </div>
         </div>
       </section>

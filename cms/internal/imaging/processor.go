@@ -5,6 +5,7 @@ package imaging
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"image"
@@ -65,6 +66,9 @@ type Result struct {
 	// Width and Height of the original, after EXIF rotation.
 	Width, Height int
 	Renditions    []Rendition
+	// BlurDataURL is a tiny JPEG of the image as a data: URL, for blur-up
+	// placeholders while the real image loads.
+	BlurDataURL string
 }
 
 // ErrTooLarge is returned for images whose pixel count exceeds MaxPixels.
@@ -77,7 +81,11 @@ type Processor struct {
 	Sizes     []Size
 	Quality   int // 1–100, for both WebP and JPEG
 	MaxPixels int
-	sem       chan struct{}
+	// WebPMethod trades encoding speed for size (0 fastest … 6 smallest).
+	// 0 encodes about 5× faster than 4 for files ~20% larger, which matters
+	// on small servers; the website re-optimizes images anyway.
+	WebPMethod int
+	sem        chan struct{}
 }
 
 // NewProcessor returns a processor with DefaultSizes.
@@ -143,7 +151,7 @@ func (p *Processor) Process(ctx context.Context, data []byte) (*Result, error) {
 	}
 	work = orient(work, orientation)
 
-	res := &Result{Width: w, Height: h}
+	res := &Result{Width: w, Height: h, BlurDataURL: blurDataURL(work)}
 	for _, size := range p.Sizes {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -207,7 +215,7 @@ func (p *Processor) encode(img image.Image, s Size) (Rendition, error) {
 		}
 		r.MimeType, r.Ext = "image/jpeg", ".jpg"
 	default:
-		if err := webp.Encode(&buf, img, webp.Options{Quality: p.Quality, Method: 4}); err != nil {
+		if err := webp.Encode(&buf, img, webp.Options{Quality: p.Quality, Method: p.WebPMethod}); err != nil {
 			return r, err
 		}
 		r.MimeType, r.Ext = "image/webp", ".webp"
@@ -217,3 +225,20 @@ func (p *Processor) encode(img image.Image, s Size) (Rendition, error) {
 }
 
 func round(f float64) int { return int(math.Round(f)) }
+
+// blurDataURL encodes a 10-pixel-wide copy of img as a base64 JPEG data URL
+// (a few hundred bytes), like the placeholders Next.js makes for local images.
+func blurDataURL(img image.Image) string {
+	b := img.Bounds()
+	w := 10
+	h := max(1, round(float64(b.Dy())*float64(w)/float64(b.Dx())))
+	small := resize(img, b, w, h)
+	flat := image.NewRGBA(small.Bounds())
+	draw.Draw(flat, flat.Bounds(), image.NewUniform(color.White), image.Point{}, draw.Src)
+	draw.Draw(flat, flat.Bounds(), small, image.Point{}, draw.Over)
+	var buf bytes.Buffer
+	if err := jpeg.Encode(&buf, flat, &jpeg.Options{Quality: 60}); err != nil {
+		return ""
+	}
+	return "data:image/jpeg;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+}

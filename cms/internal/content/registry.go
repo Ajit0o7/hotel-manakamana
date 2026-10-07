@@ -27,6 +27,12 @@ type ContentType struct {
 	Templates []string `json:"templates,omitempty"`
 	// Fields declares the type's custom fields, validated on save.
 	Fields []Field `json:"fields,omitempty"`
+	// TemplateFields declares extra fields for entries using a given
+	// template (e.g. the photo list of the "gallery" page template).
+	TemplateFields map[string][]Field `json:"template_fields,omitempty"`
+	// Sortable types are ordered by menu_order (like hierarchical ones),
+	// so editors can set the order, e.g. of rooms.
+	Sortable bool `json:"sortable,omitempty"`
 
 	// RoutePrefix is where the type lives on the public site ("/blog" for
 	// posts, "" for pages). It is used to build default canonical URLs.
@@ -57,11 +63,30 @@ func (ct ContentType) HasTemplate(t string) bool {
 	return false
 }
 
-// Field returns the field definition named name.
+// FieldsFor returns the fields of an entry using template: the type's own
+// fields followed by the template's extra fields.
+func (ct ContentType) FieldsFor(template string) []Field {
+	extra := ct.TemplateFields[template]
+	if len(extra) == 0 {
+		return ct.Fields
+	}
+	out := make([]Field, 0, len(ct.Fields)+len(extra))
+	return append(append(out, ct.Fields...), extra...)
+}
+
+// Field returns the field definition named name, looking at the type's
+// fields and every template's fields.
 func (ct ContentType) Field(name string) (Field, bool) {
 	for _, f := range ct.Fields {
 		if f.Name == name {
 			return f, true
+		}
+	}
+	for _, fields := range ct.TemplateFields {
+		for _, f := range fields {
+			if f.Name == name {
+				return f, true
+			}
 		}
 	}
 	return Field{}, false
@@ -79,15 +104,32 @@ func (ct ContentType) validate() error {
 	if ct.RoutePrefix != "" && !strings.HasPrefix(ct.RoutePrefix, "/") {
 		return fmt.Errorf("content type %q: route_prefix must start with /", ct.Name)
 	}
-	seen := map[string]bool{}
-	for _, f := range ct.Fields {
-		if err := f.validate(); err != nil {
-			return fmt.Errorf("content type %q: %w", ct.Name, err)
+	check := func(fields []Field, seen map[string]bool) error {
+		for _, f := range fields {
+			if err := f.validate(); err != nil {
+				return fmt.Errorf("content type %q: %w", ct.Name, err)
+			}
+			if seen[f.Name] {
+				return fmt.Errorf("content type %q: duplicate field %q", ct.Name, f.Name)
+			}
+			seen[f.Name] = true
 		}
-		if seen[f.Name] {
-			return fmt.Errorf("content type %q: duplicate field %q", ct.Name, f.Name)
+		return nil
+	}
+	if err := check(ct.Fields, map[string]bool{}); err != nil {
+		return err
+	}
+	for tpl, fields := range ct.TemplateFields {
+		if !ct.HasTemplate(tpl) || tpl == "" {
+			return fmt.Errorf("content type %q: template fields for unknown template %q", ct.Name, tpl)
 		}
-		seen[f.Name] = true
+		seen := map[string]bool{}
+		for _, f := range ct.Fields {
+			seen[f.Name] = true
+		}
+		if err := check(fields, seen); err != nil {
+			return err
+		}
 	}
 	return nil
 }

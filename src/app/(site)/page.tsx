@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import { BookingBar } from '@/components/home/BookingBar';
@@ -13,12 +14,14 @@ import { Icon, type IconName } from '@/components/ui/Icon';
 import { SplitHeading } from '@/components/ui/SplitHeading';
 import { TLink } from '@/components/ui/TLink';
 import { ManthaliNow } from '@/components/weather/ManthaliNow';
-import { HOTEL, formatNPR } from '@/content/hotel';
+import { formatNPR } from '@/content/hotel';
 import { IMG } from '@/content/images';
-import { ROOMS } from '@/content/rooms';
 import { hotelLd, websiteLd } from '@/content/schema';
+import { getGuides, getHotel, getRooms, pageMetadata } from '@/lib/cms/site';
 
-export const metadata = { alternates: { canonical: '/' } };
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('home', '/', { alternates: { canonical: '/' } }, { absolute: true });
+}
 
 const SLIDES: Slide[] = [
   { src: IMG.heroValleyView, alt: 'Green hills and Manthali valley seen from the hotel terrace', caption: 'The valley from our terrace' },
@@ -37,12 +40,13 @@ const STORY: StoryStep[] = [
 
 const MARQUEE = ['Rest well', 'Fly early', 'Dal bhat power', 'Rooftop evenings', 'Manthali', 'Ramechhap'];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [hotel, rooms, guides] = await Promise.all([getHotel(), getRooms(), getGuides()]);
   const marquee = (run: string) =>
     MARQUEE.flatMap((w) => [<span key={`${run}-${w}`}>{w}</span>, <span key={`${run}-${w}-sep`} className="sep">✦</span>]);
   return (
     <>
-      <JsonLd data={[websiteLd, hotelLd]} />
+      <JsonLd data={[websiteLd, hotelLd(hotel, rooms)]} />
 
       {/* ===== HERO ===== */}
       <HeroSlideshow slides={SLIDES}>
@@ -57,8 +61,8 @@ export default function HomePage() {
           <Button href="/rooms" label="Explore rooms" variant="light" magnetic />
         </div>
         <p className="hero__rating" data-hero="" style={{ '--h': 5 } as CSSProperties}>
-          <span className="stars" aria-hidden="true">★★★★☆</span> <strong>{HOTEL.rating.value}</strong>{' '}
-          <span>· {HOTEL.rating.count} Google reviews</span>
+          <span className="stars" aria-hidden="true">★★★★☆</span> <strong>{hotel.rating.value}</strong>{' '}
+          <span>· {hotel.rating.count} Google reviews</span>
         </p>
       </HeroSlideshow>
 
@@ -67,8 +71,8 @@ export default function HomePage() {
       {/* ===== QUICK FACTS ===== */}
       <div className="container">
         <div className="facts" data-stagger="">
-          <div className="fact reveal"><span className="fact__num"><span data-count="4.1" data-decimals="1">4.1</span><small>★</small></span><span className="fact__label">Google rating</span></div>
-          <div className="fact reveal"><span className="fact__num"><span data-count="54">54</span></span><span className="fact__label">Guest reviews</span></div>
+          <div className="fact reveal"><span className="fact__num"><span data-count={hotel.rating.value} data-decimals="1">{hotel.rating.value}</span><small>★</small></span><span className="fact__label">Google rating</span></div>
+          <div className="fact reveal"><span className="fact__num"><span data-count={hotel.rating.count}>{hotel.rating.count}</span></span><span className="fact__label">Guest reviews</span></div>
           <div className="fact reveal"><span className="fact__num"><span data-count="4.5" data-decimals="1">4.5</span><small>hrs</small></span><span className="fact__label">From Kathmandu by road</span></div>
           <div className="fact reveal"><span className="fact__num"><span data-count="500">500</span><small>m</small></span><span className="fact__label">To Manthali Airport</span></div>
         </div>
@@ -85,7 +89,7 @@ export default function HomePage() {
               <Image src={IMG.fbHotelExterior} alt="Hotel Manakamana Airport View lit up at night" sizes="(max-width: 680px) 100vw, 560px" placeholder="blur" />
             </div>
             <div className="split__badge reveal" style={{ '--d': '.7s' } as CSSProperties}>
-              <strong>4.1★</strong><span>Rated &quot;Very good&quot; by 54 guests on Google</span>
+              <strong>{hotel.rating.value}★</strong><span>Rated &quot;Very good&quot; by {hotel.rating.count} guests on Google</span>
             </div>
           </div>
           <div data-stagger="">
@@ -161,7 +165,7 @@ export default function HomePage() {
             <TLink href="/rooms" className="link reveal">All rooms &amp; amenities →</TLink>
           </div>
           <div className="grid grid--2" data-stagger="">
-            {ROOMS.map((r) => (
+            {rooms.map((r) => (
               <article className="card reveal" key={r.slug}>
                 <TLink href={`/rooms/${r.slug}`} className="card__media" aria-label={`${r.name} details`}>
                   <Image src={r.image.src} alt={r.image.alt} fill sizes="(max-width: 680px) 100vw, 580px" placeholder="blur" />
@@ -224,14 +228,14 @@ export default function HomePage() {
       </section>
 
       {/* ===== FLIGHT BOARD ===== */}
-      <FlightBoard />
+      <FlightBoard guides={guides} />
 
       {/* ===== REVIEW ===== */}
       <section className="section">
         <div className="container container--narrow center testimonial">
-          <div className="rating reveal"><span className="stars">★★★★☆</span> {HOTEL.rating.value} · {HOTEL.rating.count} Google reviews</div>
-          <blockquote className="quote reveal">“{HOTEL.review.quote}”</blockquote>
-          <p className="quote__by reveal">— {HOTEL.review.author}, {HOTEL.review.source}</p>
+          <div className="rating reveal"><span className="stars">★★★★☆</span> {hotel.rating.value} · {hotel.rating.count} Google reviews</div>
+          <blockquote className="quote reveal">“{hotel.review.quote}”</blockquote>
+          <p className="quote__by reveal">— {hotel.review.author}, {hotel.review.source}</p>
         </div>
       </section>
 
@@ -261,15 +265,15 @@ export default function HomePage() {
       {/* ===== LOCATION TEASER ===== */}
       <section className="section">
         <div className="container split">
-          <iframe className="map reveal" title="Map showing Hotel Manakamana Airport View" loading="lazy" referrerPolicy="no-referrer-when-downgrade" src={HOTEL.mapEmbed} />
+          <iframe className="map reveal" title="Map showing Hotel Manakamana Airport View" loading="lazy" referrerPolicy="no-referrer-when-downgrade" src={hotel.mapEmbed} />
           <div data-stagger="">
             <Eyebrow num="08">Find us</Eyebrow>
             <SplitHeading>500 m from Manthali <em className="accent">Airport</em></SplitHeading>
-            <p className="reveal">{HOTEL.address}</p>
+            <p className="reveal">{hotel.address}</p>
             <dl className="info reveal">
               <dt>Airport</dt><dd>Manthali (Ramechhap) Airport, 500 m</dd>
               <dt>Bus park</dt><dd>Manthali Bus Park, 300 m</dd>
-              <dt>Kathmandu</dt><dd>{HOTEL.distances.kathmandu}</dd>
+              <dt>Kathmandu</dt><dd>{hotel.distances.kathmandu}</dd>
             </dl>
             <Button href="/location" label="Directions & nearby" variant="outline" arrow className="reveal" />
           </div>

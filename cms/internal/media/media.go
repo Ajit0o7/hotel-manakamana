@@ -52,6 +52,8 @@ type Media struct {
 
 	// Variants are keyed by size name: thumbnail, medium, large, og.
 	Variants map[string]Variant `json:"variants"`
+	// BlurDataURL is a tiny blurred preview (data: URL) of an image.
+	BlurDataURL string `json:"blur_data_url"`
 
 	UploadedBy *uuid.UUID `json:"uploaded_by"`
 	CreatedAt  time.Time  `json:"created_at"`

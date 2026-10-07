@@ -12,6 +12,9 @@ the media library through the admin endpoints.
 - Media library with automatic thumbnails, responsive WebP sizes and a
   1200×630 social-card crop
 - New content types can be added with a few lines of Go or a JSON file, with no migration
+- Built-in types for the hotel site: pages (with templates), posts (guides, news,
+  offers), rooms and hotel settings. On first start the server imports the
+  website's existing content, so everything is editable straight away
 
 ## Layout
 
@@ -34,6 +37,7 @@ cms/
     ├── seo/             SEO metadata struct + pluggable analyzer
     ├── imaging/         resizing, EXIF rotation, WebP/JPEG renditions
     ├── sanitize/        HTML sanitizer for editor content
+    ├── seed/            one-time import of the website's content (data/ is generated)
     ├── platform/
     │   ├── database/    connection pool, migration runner, query helpers
     │   └── supabase/    Supabase Storage client
@@ -110,6 +114,8 @@ cp .env.example .env   # fill in DATABASE_URL, SUPABASE_URL, SUPABASE_SECRET_KEY
 | `SITE_URL` | no | Public site origin. Default `https://www.hotelmanthali.com`. |
 | `MAX_UPLOAD_MB` | no | Default `50`. |
 | `CONTENT_TYPES_FILE` | no | JSON file with extra content types. |
+| `AUTO_MIGRATE` | no | Default `true`: the server applies pending migrations at startup. Set `false` to run `cmd/migrate` yourself. |
+| `CMS_SEED` | no | Default on: import the website's content (below). Set `off` to skip it. |
 | `PORT`, `LOG_LEVEL`, `SHUTDOWN_TIMEOUT` | no | Defaults: `8080`, `info`, `15s`. |
 
 ### 3. Run
@@ -129,8 +135,23 @@ docker run --env-file .env -p 8080:8080 hotel-cms
 ```
 
 The server is a long-running process, so deploy it to a container host
-(Fly.io, Render, Railway, Cloud Run...) rather than to Vercel functions. Point
-the Next.js site at it with an environment variable such as `CMS_API_URL`.
+(Fly.io, Render, Railway, Cloud Run...) rather than to Vercel functions. The
+Next.js site finds it through `NEXT_PUBLIC_CMS_API_URL`.
+
+### Content import
+
+On startup the server imports the content the website was built with:
+hotel settings, both rooms, the three guides, a page entry (with SEO data)
+for each site page, and their 34 photos. It runs in the background, takes
+about a minute, and resumes where it stopped if the server restarts.
+Everything it creates is recorded in `cms.seed_items`, so it never imports
+anything twice, and it never overwrites an entry an editor has already
+created at the same address. Deleting an imported entry does not bring it
+back.
+
+The data lives in `internal/seed/data/` and is generated from the site's
+built-in content by `node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
+scripts/export-cms-seed.mjs` (run from the repository root).
 
 ## Admin dashboard
 
@@ -279,14 +300,44 @@ r.MustRegister(content.ContentType{
 
 Or without recompiling, list types in a JSON file and set
 `CONTENT_TYPES_FILE` (see [`examples/content-types.json`](examples/content-types.json),
-which defines a `room` type). The new type immediately gets every endpoint
+which defines an `activity` type). The new type immediately gets every endpoint
 (`/api/v1/content/offer`, `/api/v1/admin/content/offer`...), SEO metadata,
 analysis, publishing and field validation.
 
 Field types: `text`, `textarea`, `richtext` (sanitized HTML), `number`,
 `integer`, `boolean`, `date`, `datetime`, `url`, `email`, `media` (must exist
-in the library), `select` (with `options`), `list` (array of strings). Unknown
-fields are rejected, so typos surface as errors instead of being silently lost.
+in the library), `select` (with `options`), `list` (array of strings),
+`gallery` (ordered list of media) and `table` (repeating rows; its `columns`
+are fields of the simple kinds above, e.g. FAQs with a question and an
+answer). Unknown fields are rejected, so typos surface as errors instead of
+being silently lost.
+
+Other options:
+
+- `template_fields`: extra fields per template, e.g. the `gallery` page
+  template has a photos table and the `guide` post template has a facts box
+  and sources. Values for other templates are dropped when an entry changes
+  template.
+- `sortable`: list entries by their order number (like rooms) instead of by
+  date.
+
+The public API returns `media` with every entry: the media items its fields
+point at (sizes, alt text and a tiny blurred preview), keyed by ID, so the
+site needs no extra requests.
+
+### Built-in types
+
+| Type | Address | What it holds |
+|---|---|---|
+| `page` | `/<path>` | Site pages. Templates: `home`, `rooms`, `dining`, `gallery`, `location`, `guides`, `contact`, `about`, `landing`. Their title, description and share image feed the page's SEO; the gallery template holds the gallery photos. |
+| `post` | `/guides/<slug>` | Guides (facts box, sources, photo credit, reading time), news and offers (valid dates, price). |
+| `room` | `/rooms/<slug>` | Price, guests, beds, label, features and photos. Sorted by order number. |
+| `settings` | (not shown) | One entry, `hotel`: phone, WhatsApp, address, ratings, review, distances, languages, payment, profile links, policies, amenities, nearby places and FAQs. |
+
+Guide content supports a few shortcodes, each on its own line:
+`[airlines]`, `[weather]`, `[booking Title | Text]`, `[map Title | https://maps.google.com/…]`
+and `[compare]` … `[/compare]` around H3 + list pairs (add "(recommended)" to
+an H3 to highlight it).
 
 ## SEO analyzer
 
@@ -346,6 +397,8 @@ server, and real JWT verification.
 
 - Taxonomies (categories and tags tables) if the `category` select field outgrows itself
 - Revisions and autosave (an `entry_revisions` table written on update)
-- On-demand ISR: call a Next.js revalidation webhook after publish
+- On-demand ISR: call a Next.js revalidation webhook after publish (today
+  the site picks up changes within about a minute)
+- Editable page texts (headlines and intros) per page template
 - Direct-to-Storage signed uploads for very large videos
 - Background image processing for big batches

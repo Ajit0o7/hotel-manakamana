@@ -2,6 +2,7 @@
 
 import { fromLocalInput, toLocalInput } from '@/lib/cms/format';
 import type { Field } from '@/lib/cms/types';
+import { cleanRows, GalleryField, TableField } from './CollectionFields';
 import { MediaField } from './MediaPicker';
 import { RichTextEditor } from './RichTextEditor';
 
@@ -73,6 +74,12 @@ export function FieldInput(props: { field: Field; value: unknown; onChange: (v: 
     case 'media':
       input = <MediaField value={str || null} onChange={onChange} />;
       break;
+    case 'gallery':
+      input = <GalleryField value={value} onChange={onChange} />;
+      break;
+    case 'table':
+      input = <TableField columns={f.columns ?? []} value={value} onChange={onChange} label={f.label} />;
+      break;
     default:
       input = (
         <input
@@ -85,7 +92,7 @@ export function FieldInput(props: { field: Field; value: unknown; onChange: (v: 
       );
   }
 
-  const labelled = f.type === 'richtext' || f.type === 'media';
+  const labelled = ['richtext', 'media', 'gallery', 'table'].includes(f.type);
   return (
     <div className="cms-label">
       {labelled ? <span>{f.label}{f.required && ' *'}</span> : <label htmlFor={id}>{f.label}{f.required && ' *'}</label>}
@@ -96,17 +103,24 @@ export function FieldInput(props: { field: Field; value: unknown; onChange: (v: 
   );
 }
 
-/** Drops empty values and trims list items before sending fields to the API. */
-export function cleanFields(fields: Record<string, unknown>): Record<string, unknown> {
+/** Keeps only the given fields, dropping empty values and rows, before
+    sending them to the API. Fields of another template are left out too. */
+export function cleanFields(values: Record<string, unknown>, fields: Field[]): Record<string, unknown> {
   const out: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(fields)) {
+  for (const f of fields) {
+    const v = values[f.name];
     if (v === null || v === undefined || v === '') continue;
-    if (Array.isArray(v)) {
-      const items = v.map((x) => String(x).trim()).filter(Boolean);
-      if (items.length) out[k] = items;
-      continue;
+    if (f.type === 'table') {
+      const rows = cleanRows(Array.isArray(v) ? (v as Record<string, unknown>[]) : []);
+      if (rows.length) out[f.name] = rows;
+    } else if (f.type === 'list') {
+      const items = (Array.isArray(v) ? v : []).map((x) => String(x).trim()).filter(Boolean);
+      if (items.length) out[f.name] = items;
+    } else if (f.type === 'gallery') {
+      if (Array.isArray(v) && v.length) out[f.name] = v;
+    } else {
+      out[f.name] = v;
     }
-    out[k] = v;
   }
   return out;
 }

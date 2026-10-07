@@ -5,6 +5,7 @@
    Keep claims hedged where they change from season to season (dates, baggage allowances, schedules).
 
    Inline text supports [link text](/path) and **bold**. */
+import type { CmsHead } from '@/lib/cms/site';
 import { IMG, type Photo } from './images';
 
 export type Block =
@@ -50,7 +51,10 @@ export type Guide = {
   readMins: number;
   facts: [string, string][];
   body: Block[];
+  /** HTML body, for guides written in the CMS (used instead of `body`). */
+  html?: string;
   sources: { label: string; url: string }[];
+  head?: CmsHead; // SEO settings from the CMS
 };
 
 export const GUIDES: Guide[] = [

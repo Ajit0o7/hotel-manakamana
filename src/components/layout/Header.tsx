@@ -6,10 +6,12 @@ import { PagodaMark } from '@/components/brand/PagodaMark';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { TLink } from '@/components/ui/TLink';
-import { HOTEL, NAV, WHATSAPP_URL } from '@/content/hotel';
+import { useSiteData } from '@/components/layout/SiteData';
+import { HOTEL, NAV } from '@/content/hotel';
 import { lockScroll } from '@/lib/scroll-lock';
 
 export function Header() {
+  const { hotel } = useSiteData();
   const pathname = usePathname();
   const [solid, setSolid] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -101,13 +103,13 @@ export function Header() {
             </TLink>
           ))}
           <div className="nav__extra" style={{ '--i': NAV.length } as CSSProperties}>
-            <a href={`tel:${HOTEL.phoneTel}`}>{HOTEL.phoneDisplay}</a>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">WhatsApp us</a>
+            <a href={`tel:${hotel.phoneTel}`}>{hotel.phoneDisplay}</a>
+            <a href={hotel.whatsappUrl} target="_blank" rel="noopener noreferrer">WhatsApp us</a>
           </div>
         </nav>
         <div className="header__actions">
-          <a href={`tel:${HOTEL.phoneTel}`} className="header__phone">
-            <Icon name="phone" /> {HOTEL.phoneDisplay}
+          <a href={`tel:${hotel.phoneTel}`} className="header__phone">
+            <Icon name="phone" /> {hotel.phoneDisplay}
           </a>
           <Button href="/contact" label="Book now" variant="dark" magnetic />
           <button

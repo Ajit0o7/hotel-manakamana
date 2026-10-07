@@ -162,11 +162,11 @@ func TestCreateValidation(t *testing.T) {
 		Slug:     "Bad Slug",
 		Status:   "live",
 		ParentID: ptr(uuid.New()),
-		Fields:   map[string]any{"category": "events"},
+		Fields:   map[string]any{"colour": "red"},
 		SEO:      seo.Meta{CanonicalURL: "not-a-url"},
 	}, nil)
 	errs := fieldErrors(t, err)
-	for _, k := range []string{"title", "slug", "status", "parent_id", "fields.category", "seo.canonical_url"} {
+	for _, k := range []string{"title", "slug", "status", "parent_id", "fields.colour", "seo.canonical_url"} {
 		if errs[k] == "" {
 			t.Errorf("missing error for %s; got %v", k, errs)
 		}
@@ -315,11 +315,39 @@ func TestPresentHead(t *testing.T) {
 	}
 
 	ph := out[1].Head
-	if out[1].URL != "/blog/lukla-tips" || ph.Title != "Lukla flight tips" || ph.OGTitle != "Lukla flight tips" ||
-		ph.Canonical != "https://example.com/original" || ph.OGURL != "https://www.hotelmanthali.com/blog/lukla-tips" ||
+	if out[1].URL != "/guides/lukla-tips" || ph.Title != "Lukla flight tips" || ph.OGTitle != "Lukla flight tips" ||
+		ph.Canonical != "https://example.com/original" || ph.OGURL != "https://www.hotelmanthali.com/guides/lukla-tips" ||
 		ph.Robots != "noindex, follow" || ph.OGImage != "https://img.example/card.png" || ph.OGType != "article" {
 		t.Errorf("post head = %+v", ph)
 	}
 }
 
 func ptr[T any](v T) *T { return &v }
+
+func TestFieldMediaIsCheckedAndPresented(t *testing.T) {
+	a, b := uuid.New(), uuid.New()
+	svc, _ := newTestService(t, memMedia{a: {ID: a, URL: "https://cdn/a.jpg"}, b: {ID: b, URL: "https://cdn/b.jpg"}})
+	svc.Types.MustRegister(RoomType)
+	ctx := context.Background()
+
+	_, err := svc.Create(ctx, "page", Input{Title: "Gallery", Template: "gallery", Fields: map[string]any{
+		"photos": []any{map[string]any{"photo": uuid.NewString(), "category": "food"}},
+	}}, nil)
+	if fieldErrors(t, err)["fields.photos"] != "media item not found" {
+		t.Errorf("missing table photo not reported: %v", err)
+	}
+
+	room, err := svc.Create(ctx, "room", Input{Title: "Deluxe", Status: StatusPublished, Fields: map[string]any{
+		"price_npr": 2500.0, "max_guests": 2.0, "photos": []any{a.String(), b.String()},
+	}}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	out, err := svc.Present(ctx, room)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(out[0].Media) != 2 || out[0].Media[b.String()].URL != "https://cdn/b.jpg" || out[0].URL != "/rooms/deluxe" {
+		t.Errorf("presented room = %+v", out[0])
+	}
+}

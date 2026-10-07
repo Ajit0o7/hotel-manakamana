@@ -61,6 +61,9 @@ type MediaRef struct {
 	Width    *int                 `json:"width,omitempty"`
 	Height   *int                 `json:"height,omitempty"`
 	Sizes    map[string]MediaSize `json:"sizes,omitempty"`
+	// BlurDataURL is a tiny, blurred version of an image (a data: URL) to
+	// show while the real one loads.
+	BlurDataURL string `json:"blur_data_url,omitempty"`
 }
 
 // MediaSize is one generated rendition of an image.

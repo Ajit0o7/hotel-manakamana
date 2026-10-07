@@ -6,31 +6,33 @@ import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { SplitHeading } from '@/components/ui/SplitHeading';
-import { AMENITIES, HOTEL, POLICIES, formatNPR } from '@/content/hotel';
+import { formatNPR } from '@/content/hotel';
 import { IMG } from '@/content/images';
-import { ROOMS } from '@/content/rooms';
+import { getHotel, getPriceFrom, getRooms, pageMetadata } from '@/lib/cms/site';
 
-export const metadata: Metadata = {
-  title: 'Rooms & Rates',
-  description:
-    'Deluxe Double and Double rooms with air conditioning, balcony, flat-screen TV and free Wi-Fi, 500 m from Manthali (Ramechhap) Airport. From NPR 2,000 a night.',
-  alternates: { canonical: '/rooms' },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('rooms', '/rooms', {
+    title: 'Rooms & Rates',
+    description: `Deluxe Double and Double rooms with air conditioning, balcony, flat-screen TV and free Wi-Fi, 500 m from Manthali (Ramechhap) Airport. From ${formatNPR(await getPriceFrom())} a night.`,
+    alternates: { canonical: '/rooms' },
+  });
+}
 
-export default function RoomsPage() {
+export default async function RoomsPage() {
+  const [hotel, rooms] = await Promise.all([getHotel(), getRooms()]);
   return (
     <>
       <PageHero
         photo={{ src: IMG.ebnRoomMural, alt: 'Room with a Himalayan mountain mural' }}
         eyebrow="Stay"
         title={<>Rooms &amp; <em className="accent">amenities</em></>}
-        text={`${HOTEL.roomCount} air-conditioned rooms with private balconies, flat-screen TVs and free Wi-Fi, 500 m from Manthali Airport.`}
+        text={`${hotel.roomCount} air-conditioned rooms with private balconies, flat-screen TVs and free Wi-Fi, 500 m from Manthali Airport.`}
         crumbs={[{ label: 'Rooms' }]}
       />
 
       <section className="section">
         <div className="container">
-          {ROOMS.map((r, i) => (
+          {rooms.map((r, i) => (
             <article className={`room${i % 2 ? ' room--reverse' : ''}`} id={r.anchor} key={r.slug}>
               <div className="room__media">
                 <div className="reveal-img">
@@ -71,7 +73,7 @@ export default function RoomsPage() {
             </div>
           </div>
           <div className="amenities" data-stagger="">
-            {AMENITIES.map((a) => (
+            {hotel.amenities.map((a) => (
               <div className="amenity reveal" key={a.label}><Icon name={a.icon as IconName} /> {a.label}</div>
             ))}
           </div>
@@ -89,7 +91,7 @@ export default function RoomsPage() {
             <Eyebrow>Good to know</Eyebrow>
             <SplitHeading>Before you <em className="accent">arrive</em></SplitHeading>
             <dl className="info reveal">
-              {POLICIES.map((p) => [<dt key={`t-${p.term}`}>{p.term}</dt>, <dd key={`d-${p.term}`}>{p.detail}</dd>])}
+              {hotel.policies.map((p) => [<dt key={`t-${p.term}`}>{p.term}</dt>, <dd key={`d-${p.term}`}>{p.detail}</dd>])}
             </dl>
             <Button href="/contact#enquiry" label="Send an enquiry" variant="dark" arrow className="reveal" />
           </div>

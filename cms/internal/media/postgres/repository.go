@@ -28,14 +28,14 @@ var _ media.Repository = (*Repository)(nil)
 
 const selectMedia = `
 select id, bucket, object_path, filename, mime_type, kind, size_bytes, width, height,
-       title, alt_text, caption, description, variants, uploaded_by, created_at, updated_at
+       title, alt_text, caption, description, variants, blur_data_url, uploaded_by, created_at, updated_at
 from cms.media`
 
 func scanMedia(row pgx.Row) (*media.Media, error) {
 	var m media.Media
 	err := row.Scan(&m.ID, &m.Bucket, &m.Path, &m.Filename, &m.MimeType, &m.Kind, &m.Size,
 		&m.Width, &m.Height, &m.Title, &m.AltText, &m.Caption, &m.Description, &m.Variants,
-		&m.UploadedBy, &m.CreatedAt, &m.UpdatedAt)
+		&m.BlurDataURL, &m.UploadedBy, &m.CreatedAt, &m.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -54,11 +54,11 @@ func (r *Repository) Create(ctx context.Context, m *media.Media) error {
 	}
 	err := r.pool.QueryRow(ctx, `
 		insert into cms.media (id, bucket, object_path, filename, mime_type, kind, size_bytes, width, height,
-		                       title, alt_text, caption, description, variants, uploaded_by)
-		values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+		                       title, alt_text, caption, description, variants, blur_data_url, uploaded_by)
+		values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
 		returning created_at, updated_at`,
 		m.ID, m.Bucket, m.Path, m.Filename, m.MimeType, m.Kind, m.Size, m.Width, m.Height,
-		m.Title, m.AltText, m.Caption, m.Description, variants, m.UploadedBy,
+		m.Title, m.AltText, m.Caption, m.Description, variants, m.BlurDataURL, m.UploadedBy,
 	).Scan(&m.CreatedAt, &m.UpdatedAt)
 	if pgErr, ok := database.PgError(err); ok && pgErr.Code == database.CodeUniqueViolation {
 		return apperr.Conflict("a file already exists at this path")

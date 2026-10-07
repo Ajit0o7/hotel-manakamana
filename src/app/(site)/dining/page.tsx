@@ -6,12 +6,17 @@ import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { SplitHeading } from '@/components/ui/SplitHeading';
 import { IMG, type Photo } from '@/content/images';
+import { pageMetadata } from '@/lib/cms/site';
 
-export const metadata: Metadata = {
+const FALLBACK: Metadata = {
   title: 'Rooftop Restaurant',
   description: 'Nepali thali, dal bhat, breakfasts and tea on our rooftop terrace in Manthali, Ramechhap. Room service available.',
   alternates: { canonical: '/dining' },
 };
+
+export function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('dining', '/dining', FALLBACK);
+}
 
 const MENU: (Photo & { tag: string; title: string; text: string })[] = [
   { src: IMG.foodThali, alt: 'Nepali thali', tag: 'Signature', title: 'Nepali thali', text: 'Rice, dal, vegetable curry, saag, pickles, papad and curd, served the traditional way.' },

@@ -230,7 +230,7 @@ func (s *Service) normalizeFilter(ct ContentType, f *ListFilter) error {
 	f.Offset = max(f.Offset, 0)
 	if f.Order == "" {
 		f.Order = OrderNewest
-		if ct.Hierarchical {
+		if ct.Hierarchical || ct.Sortable {
 			f.Order = OrderMenu
 		}
 	}
@@ -311,7 +311,7 @@ func (s *Service) apply(ctx context.Context, ct ContentType, e *Entry, in Input)
 		errs["content"] = fmt.Sprintf("must be at most %d bytes", maxContentLen)
 	}
 
-	fields, fieldErrs := ct.ValidateFields(in.Fields)
+	fields, fieldErrs := ct.ValidateFields(in.Fields, in.Template)
 	for k, v := range fieldErrs {
 		errs[k] = v
 	}
@@ -330,9 +330,9 @@ func (s *Service) apply(ctx context.Context, ct ContentType, e *Entry, in Input)
 	if meta.OGImageID != nil {
 		refs["seo.og_image_id"] = *meta.OGImageID
 	}
-	for _, f := range ct.Fields {
-		if v, ok := fields[f.Name].(string); ok && f.Type == FieldMedia {
-			refs["fields."+f.Name] = uuid.MustParse(v)
+	for _, f := range ct.FieldsFor(in.Template) {
+		for i, id := range f.MediaIDs(fields[f.Name]) {
+			refs[fmt.Sprintf("fields.%s#%d", f.Name, i)] = id
 		}
 	}
 	if err := s.checkMedia(ctx, refs, errs); err != nil {
@@ -343,7 +343,7 @@ func (s *Service) apply(ctx context.Context, ct ContentType, e *Entry, in Input)
 		return apperr.Validation(errs)
 	}
 
-	for _, f := range ct.Fields {
+	for _, f := range ct.FieldsFor(in.Template) {
 		if v, ok := fields[f.Name].(string); ok && f.Type == FieldRichText {
 			fields[f.Name] = s.Sanitizer.HTML(v)
 		}
@@ -407,7 +407,8 @@ func (s *Service) checkMedia(ctx context.Context, refs map[string]uuid.UUID, err
 	}
 	for field, id := range refs {
 		if _, ok := found[id]; !ok {
-			errs[field] = "media item not found"
+			name, _, _ := strings.Cut(field, "#")
+			errs[name] = "media item not found"
 		}
 	}
 	return nil

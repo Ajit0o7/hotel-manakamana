@@ -1,14 +1,13 @@
 import Image from 'next/image';
-import { Button } from '@/components/ui/Button';
-import { Icon } from '@/components/ui/Icon';
 import { ManthaliNow } from '@/components/weather/ManthaliNow';
-import { AIRLINES } from '@/content/airlines';
 import type { Block } from '@/content/guides';
-import { HOTEL, WHATSAPP_URL } from '@/content/hotel';
+import type { Hotel } from '@/lib/cms/site';
+import { AirlinesTable, GuideCta } from './GuideBlocks';
 import { RichText } from './RichText';
 
-/** Renders a guide's content blocks (see src/content/guides.ts). */
-export function GuideBody({ blocks }: { blocks: Block[] }) {
+/** Renders a built-in guide's content blocks (see src/content/guides.ts). Guides written in the CMS
+    go through GuideHtml instead. */
+export function GuideBody({ blocks, hotel }: { blocks: Block[]; hotel: Hotel }) {
   return (
     <div className="guide-body">
       {blocks.map((b, i) => {
@@ -40,24 +39,7 @@ export function GuideBody({ blocks }: { blocks: Block[] }) {
               </div>
             );
           case 'airlines':
-            return (
-              <table key={i} className="guide-airlines">
-                <caption className="visually-hidden">Airlines flying Manthali (Ramechhap) to Lukla</caption>
-                <thead>
-                  <tr><th scope="col">Airline</th><th scope="col">Aircraft</th><th scope="col">Phone</th><th scope="col">Website</th></tr>
-                </thead>
-                <tbody>
-                  {AIRLINES.map((a) => (
-                    <tr key={a.name}>
-                      <td>{a.name}</td>
-                      <td>{a.aircraft}</td>
-                      <td><a href={`tel:${a.phoneTel}`}>{a.phoneDisplay}</a></td>
-                      <td><a href={a.url} target="_blank" rel="noopener noreferrer">{a.site}</a></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            );
+            return <AirlinesTable key={i} />;
           case 'table':
             return (
               <table key={i} className="guide-table">
@@ -92,17 +74,7 @@ export function GuideBody({ blocks }: { blocks: Block[] }) {
               </figure>
             );
           case 'cta':
-            return (
-              <aside key={i} className="guide-cta">
-                <h3>{b.title}</h3>
-                <p>{b.text}</p>
-                <div className="hero__ctas">
-                  <Button href="/contact#enquiry" label="Check availability" variant="gold" arrow />
-                  <Button href={`tel:${HOTEL.phoneTel}`} label="Call us" variant="light" icon={<Icon name="phone" />} />
-                  <Button href={WHATSAPP_URL} label="WhatsApp" variant="light" />
-                </div>
-              </aside>
-            );
+            return <GuideCta key={i} title={b.title} text={b.text} hotel={hotel} />;
         }
       })}
     </div>

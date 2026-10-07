@@ -1,19 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { GALLERY, GALLERY_FILTERS } from '@/content/gallery';
+import { GALLERY_FILTERS, type GalleryItem } from '@/content/gallery';
 import { PhotoGrid } from './PhotoGrid';
 
 /** Gallery page: sticky filter pills + masonry grid. After a filter change the tiles pop in. */
-export function FilterGallery() {
+export function FilterGallery({ items: all }: { items: GalleryItem[] }) {
   const [filter, setFilter] = useState<string>('all');
   const [changed, setChanged] = useState(false);
-  const items = filter === 'all' ? GALLERY : GALLERY.filter((g) => g.cat === filter);
+  const items = filter === 'all' ? all : all.filter((g) => g.cat === filter);
+  // Only offer filters that have photos.
+  const filters = GALLERY_FILTERS.filter((f) => f.key === 'all' || all.some((g) => g.cat === f.key));
 
   return (
     <>
       <div className="filters" role="group" aria-label="Filter photos">
-        {GALLERY_FILTERS.map((f) => (
+        {filters.map((f) => (
           <button
             key={f.key}
             type="button"

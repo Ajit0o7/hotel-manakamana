@@ -4,8 +4,9 @@ import { useSearchParams } from 'next/navigation';
 import { useMemo, useState, type FormEvent } from 'react';
 import { ActionButton } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
-import { HOTEL, formatNPR, whatsappWith } from '@/content/hotel';
-import { ROOMS } from '@/content/rooms';
+import { useSiteData } from '@/components/layout/SiteData';
+import { formatNPR } from '@/content/hotel';
+import { whatsappLink } from '@/lib/cms/site';
 import { addDaysISO, formatDateLong, nightsBetween } from '@/lib/dates';
 import { useToday } from '@/lib/hooks';
 
@@ -14,6 +15,7 @@ type Errors = Partial<Record<'name' | 'phone' | 'checkout', string>>;
 /** Booking enquiry → WhatsApp message, with a live nights × rooms × price estimate.
  *  Dates, guests and room can arrive in the URL (?checkin=…&checkout=…&guests=…&room=slug). */
 export function EnquiryForm() {
+  const { hotel, rooms: ROOMS } = useSiteData();
   const params = useSearchParams();
   const today = useToday();
   const [name, setName] = useState('');
@@ -46,7 +48,7 @@ export function EnquiryForm() {
     const lo = Math.min(...ROOMS.map((r) => r.price)) * nights * roomCount;
     const hi = Math.max(...ROOMS.map((r) => r.price)) * nights * roomCount;
     return { text: `${formatNPR(lo)} – ${formatNPR(hi)}`, detail: `${nights} night${nights > 1 ? 's' : ''} × ${roomCount} room${roomCount > 1 ? 's' : ''}, depending on the room` };
-  }, [nights, roomCount, selected]);
+  }, [nights, roomCount, selected, ROOMS]);
 
   const tooMany = guestCount > roomCount * 2;
 
@@ -69,7 +71,7 @@ export function EnquiryForm() {
       estimate ? `Estimate shown on the website: ${estimate.text} (room only)` : '',
       message.trim() ? `Note: ${message.trim()}` : '',
     ].filter(Boolean);
-    window.open(whatsappWith(lines.join('\n')), '_blank', 'noopener');
+    window.open(whatsappLink(hotel, lines.join('\n')), '_blank', 'noopener');
     setSent(true);
   };
 
@@ -135,7 +137,7 @@ export function EnquiryForm() {
       {sent && (
         <p className="form-status full" role="status">
           <Icon name="check" /> WhatsApp opened with your message. If it didn&apos;t, call us on{' '}
-          <a href={`tel:${HOTEL.phoneTel}`}>{HOTEL.phoneDisplay}</a>.
+          <a href={`tel:${hotel.phoneTel}`}>{hotel.phoneDisplay}</a>.
         </p>
       )}
     </form>
