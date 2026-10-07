@@ -131,6 +131,13 @@ function Cell({ column: c, value, onChange }: { column: Column; value: unknown; 
         </select>
       );
       break;
+    case 'boolean':
+      return (
+        <label className="cms-cell cms-cell--check">
+          <input type="checkbox" checked={value === true} onChange={(e) => onChange(e.target.checked || null)} />
+          <span className="cms-cell__label">{c.label}</span>
+        </label>
+      );
     case 'media':
       return (
         <div className="cms-cell cms-cell--media">

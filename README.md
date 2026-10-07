@@ -24,6 +24,8 @@ npm run lint
 | Built-in rooms, prices, room photos | `src/content/rooms.ts` |
 | Built-in gallery photos and filters | `src/content/gallery.ts` |
 | Built-in guides | `src/content/guides.ts` |
+| Built-in page sections (the pages' texts and photos) | `src/content/pages.ts` |
+| Section components (one per layout) | `src/components/sections/` |
 | All photos (static imports → automatic blur placeholders) | `src/assets/images/`, `src/content/images.ts` |
 | Global styles (ported 1:1 from the static site) | `src/app/globals.css` |
 | Emblem (loading screen) and pagoda mark | `src/components/brand/` |
@@ -66,8 +68,14 @@ shows the change within about a minute. The files in `src/content/` are only a f
   [`cms/README.md`](cms/README.md).
 
 The public pages read their content from the CMS: hotel settings (phone, WhatsApp, address, ratings, policies,
-amenities, nearby places, FAQs), rooms and prices, the gallery, guides, and each page's SEO title, description and share
-image. Page headlines and intro texts are still in the code.
+amenities, nearby places, FAQs), rooms and prices, guides, and the pages themselves.
+
+Every page is a list of **sections** (like ACF Flexible Content): page header, hero slideshow, photo and text, feature
+cards, photo banner, text, gallery, FAQ, room cards, booking enquiry and more. In the admin, open a page to edit,
+reorder, duplicate, add or remove its sections. A new page (Pages → Add page) starts with a header, a text and the
+call-to-action band, and is live at its own address (e.g. `/about-us`) when published. Section layouts are defined in
+`cms/internal/content/sections.go`, drawn by `src/components/sections/`, and the original pages' sections are in
+`src/content/pages.ts`.
 
 - Pages are pre-built and refreshed in the background at most once a minute, so visitors never wait for the CMS (which
   sleeps when idle on Render's free plan).

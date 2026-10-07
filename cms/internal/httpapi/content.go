@@ -220,7 +220,13 @@ func (h *contentHandler) analyzeEntry(c *gin.Context) {
 // analyzeDraft: POST /api/v1/admin/seo/analyze
 // Scores unsaved content, for live feedback while editing.
 func (h *contentHandler) analyzeDraft(c *gin.Context) {
-	var in seo.Input
+	var in struct {
+		seo.Input
+		// With a type, the text of the entry's sections is analyzed too.
+		Type     string         `json:"type"`
+		Template string         `json:"template"`
+		Fields   map[string]any `json:"fields"`
+	}
 	if !decodeJSON(c, &in) {
 		return
 	}
@@ -228,5 +234,8 @@ func (h *contentHandler) analyzeDraft(c *gin.Context) {
 		respondError(c, apperr.Validation(errs))
 		return
 	}
-	respond(c, http.StatusOK, h.analyzer.Analyze(in))
+	if in.Type != "" {
+		in.Content += h.svc.SectionsHTML(in.Type, in.Template, in.Fields)
+	}
+	respond(c, http.StatusOK, h.analyzer.Analyze(in.Input))
 }

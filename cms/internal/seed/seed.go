@@ -1,11 +1,15 @@
 // Package seed imports the website's original content (hotel settings,
-// rooms, guides, page SEO settings and their photos) into the CMS, once.
+// rooms, guides, pages and their photos) into the CMS, once.
 //
 // The bundle in data/ is generated from the Next.js site's built-in content
 // by scripts/export-cms-seed.mjs. The import runs in the background when the
 // server starts. Every item it creates is recorded in cms.seed_items, so a
 // restart continues where it stopped, nothing is imported twice, and items an
 // editor deletes later are not brought back.
+//
+// Patches add fields to entries imported by an earlier version (e.g. page
+// sections): they only fill fields the entry does not have yet, so an
+// editor's content is never overwritten.
 package seed
 
 import (
@@ -39,6 +43,19 @@ type Bundle struct {
 	Version int     `json:"version"`
 	Media   []Media `json:"media"`
 	Entries []Entry `json:"entries"`
+	Patches []Patch `json:"patches"`
+}
+
+// Patch adds Fields to the existing entry of Type at Path, where missing.
+type Patch struct {
+	Key    string         `json:"key"`
+	Type   string         `json:"type"`
+	Path   string         `json:"path"`
+	Fields map[string]any `json:"fields"`
+	// Carry moves the value of an old field into the added sections:
+	// {"photos": "sections.gallery.photos"} puts the entry's "photos" into the
+	// "photos" of the first "gallery" section of the added "sections".
+	Carry map[string]string `json:"carry,omitempty"`
 }
 
 // Media is one photo of the bundle, stored in data/images.
@@ -127,10 +144,26 @@ func (im *Importer) Run(ctx context.Context, b *Bundle, images fs.FS) error {
 	if err := rows.Err(); err != nil {
 		return err
 	}
-	if len(done) == len(b.Media)+len(b.Entries) {
+	todo := 0
+	for _, m := range b.Media {
+		if _, ok := done["media:"+m.Key]; !ok {
+			todo++
+		}
+	}
+	for _, e := range b.Entries {
+		if _, ok := done[e.Key]; !ok {
+			todo++
+		}
+	}
+	for _, p := range b.Patches {
+		if _, ok := done[p.Key]; !ok {
+			todo++
+		}
+	}
+	if todo == 0 {
 		return nil
 	}
-	im.Log.Info("seed: importing the website's content", "photos", len(b.Media), "entries", len(b.Entries), "already_done", len(done))
+	im.Log.Info("seed: importing the website's content", "photos", len(b.Media), "entries", len(b.Entries), "patches", len(b.Patches), "to_do", todo)
 
 	record := func(key string, id uuid.UUID) error {
 		_, err := im.Pool.Exec(ctx, "insert into cms.seed_items (key, ref) values ($1, $2) on conflict (key) do nothing", key, id)
@@ -216,11 +249,88 @@ func (im *Importer) Run(ctx context.Context, b *Bundle, images fs.FS) error {
 		}
 		im.Log.Info("seed: entry imported", "key", e.Key)
 	}
+	for _, p := range b.Patches {
+		if _, ok := done[p.Key]; ok {
+			continue
+		}
+		id, err := im.patch(ctx, p, mediaByKey)
+		if err != nil {
+			failed = append(failed, fmt.Errorf("%s: %w", p.Key, err))
+			continue
+		}
+		if err := record(p.Key, id); err != nil {
+			return err
+		}
+	}
 	if len(failed) > 0 {
 		return errors.Join(failed...)
 	}
 	im.Log.Info("seed: import complete")
 	return nil
+}
+
+// patch fills in the patch's fields that the entry does not have yet. An
+// entry that no longer exists (an editor deleted it) is left alone.
+func (im *Importer) patch(ctx context.Context, p Patch, mediaByKey map[string]*media.Media) (uuid.UUID, error) {
+	e, err := im.Content.Repo.GetByPath(ctx, p.Type, p.Path)
+	if apperr.Is(err, apperr.CodeNotFound) {
+		im.Log.Info("seed: entry to update is gone; skipping", "key", p.Key)
+		return uuid.Nil, nil
+	}
+	if err != nil {
+		return uuid.Nil, err
+	}
+	ct, err := im.Content.Type(p.Type)
+	if err != nil {
+		return uuid.Nil, err
+	}
+	var missing []string
+	add := map[string]any{}
+	if p.Fields != nil {
+		add = resolveFields(p.Fields, func(key string) string {
+			if m, ok := mediaByKey[key]; ok {
+				return m.ID.String()
+			}
+			missing = append(missing, key)
+			return ""
+		}).(map[string]any)
+	}
+	if len(missing) > 0 {
+		return uuid.Nil, fmt.Errorf("unknown photos %v", missing)
+	}
+
+	for old, target := range p.Carry {
+		carry(add, target, e.Fields[old])
+	}
+
+	// Keep the fields the type still has (dropping ones it no longer
+	// declares, which would fail validation), then add the missing ones.
+	fields := map[string]any{}
+	for _, f := range ct.FieldsFor(e.Template) {
+		if v, ok := e.Fields[f.Name]; ok {
+			fields[f.Name] = v
+		}
+	}
+	changed := len(fields) != len(e.Fields)
+	for k, v := range add {
+		if _, ok := fields[k]; !ok {
+			fields[k] = v
+			changed = true
+		}
+	}
+	if !changed {
+		return e.ID, nil
+	}
+	_, err = im.Content.Update(ctx, p.Type, e.ID, content.Input{
+		Title: e.Title, Slug: e.Slug, Content: e.Content, Excerpt: e.Excerpt, Status: e.Status,
+		ParentID: e.ParentID, MenuOrder: e.MenuOrder, Template: e.Template,
+		FeaturedMediaID: e.FeaturedMediaID, Fields: fields, PublishedAt: e.PublishedAt, SEO: e.SEO,
+	})
+	if err != nil {
+		return uuid.Nil, err
+	}
+	im.Log.Info("seed: entry updated", "key", p.Key)
+	return e.ID, nil
 }
 
 var imgRef = regexp.MustCompile(`src="media:([a-z0-9-]+)"`)
@@ -255,7 +365,10 @@ func (e Entry) input(mediaByKey map[string]*media.Media) (content.Input, error) 
 	in := content.Input{
 		Title: e.Title, Slug: e.Slug, Content: html, Excerpt: e.Excerpt, Status: e.Status,
 		MenuOrder: e.MenuOrder, Template: e.Template, PublishedAt: e.PublishedAt, SEO: e.SEO,
-		Fields: resolveFields(e.Fields, resolveID).(map[string]any),
+		Fields: map[string]any{},
+	}
+	if e.Fields != nil {
+		in.Fields = resolveFields(e.Fields, resolveID).(map[string]any)
 	}
 	if e.Featured != "" {
 		if id := resolveID(e.Featured); id != "" {
@@ -269,11 +382,25 @@ func (e Entry) input(mediaByKey map[string]*media.Media) (content.Input, error) 
 	return in, nil
 }
 
+// carry sets field.layout.name (the first section of that layout in
+// fields[field]) to v, if v is set.
+func carry(fields map[string]any, target string, v any) {
+	parts := strings.Split(target, ".")
+	if v == nil || len(parts) != 3 {
+		return
+	}
+	sections, _ := fields[parts[0]].([]any)
+	for _, s := range sections {
+		if section, ok := s.(map[string]any); ok && section["layout"] == parts[1] {
+			section[parts[2]] = v
+			return
+		}
+	}
+}
+
 // resolveFields replaces "media:<key>" strings anywhere in v with media IDs.
 func resolveFields(v any, resolve func(string) string) any {
 	switch x := v.(type) {
-	case nil:
-		return map[string]any{}
 	case string:
 		if key, ok := strings.CutPrefix(x, "media:"); ok {
 			return resolve(key)

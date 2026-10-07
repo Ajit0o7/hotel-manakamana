@@ -1,6 +1,7 @@
 package content
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -136,6 +137,66 @@ func typeNames(types []ContentType) string {
 	return strings.Join(names, ",")
 }
 
+func TestFlexibleSections(t *testing.T) {
+	photo := "0b8f6c2e-8a3c-4d2e-9b5f-111111111111"
+	in := map[string]any{"sections": []any{
+		map[string]any{"layout": "page_hero", "photo": photo, "heading": "Rooftop *restaurant*", "text": ""},
+		map[string]any{"layout": "split", "heading": "Cooked fresh", "checks": []any{"Thali", " "},
+			"buttons": []any{map[string]any{"label": "Book", "link": "/contact#enquiry", "style": "gold", "icon": "arrow"}}},
+		map[string]any{"layout": "booking_bar"},
+		map[string]any{"layout": "hero_slideshow", "slides": []any{map[string]any{"photo": photo, "tall": true}}},
+	}}
+	out, errs := PageType.ValidateFields(in, "")
+	if len(errs) != 0 {
+		t.Fatal(errs)
+	}
+	sections := out["sections"].([]map[string]any)
+	if len(sections) != 4 || sections[0]["layout"] != "page_hero" || sections[0]["text"] != nil ||
+		len(sections[1]["checks"].([]string)) != 1 || sections[3]["slides"].([]map[string]any)[0]["tall"] != true {
+		t.Errorf("sections = %v", sections)
+	}
+	if ids := SectionsField.MediaIDs(out["sections"]); len(ids) != 2 {
+		t.Errorf("MediaIDs = %v", ids)
+	}
+
+	for name, bad := range map[string]any{
+		"unknown layout": []any{map[string]any{"layout": "carousel"}},
+		"no layout":      []any{map[string]any{"heading": "x"}},
+		"unknown field":  []any{map[string]any{"layout": "page_hero", "colour": "red"}},
+		"bad value":      []any{map[string]any{"layout": "split", "photo_side": "middle"}},
+		"not a list":     "x",
+	} {
+		if _, errs := PageType.ValidateFields(map[string]any{"sections": bad}, ""); errs["fields.sections"] == "" {
+			t.Errorf("%s: accepted", name)
+		}
+	}
+
+	html := PageType.SectionsHTML("", map[string]any{"sections": []any{
+		map[string]any{"layout": "split", "heading": "Dal bhat *with a view*", "text": "One.\n\nTwo, see [our menu](/dining).",
+			"checks": []any{"Thali"}, "buttons": []any{map[string]any{"label": "Book", "link": "/contact"}}},
+		map[string]any{"layout": "text", "content": "<p>Body</p>"},
+	}})
+	want := `<h2>Dal bhat with a view</h2><p>One.</p><p>Two, see <a href="/dining">our menu</a>.</p><p>Thali</p><p>Book</p><p>Body</p>`
+	if html != want {
+		t.Errorf("SectionsHTML =\n%s\nwant\n%s", html, want)
+	}
+}
+
+func TestFlexibleFieldDefinitions(t *testing.T) {
+	r := NewRegistry()
+	bad := []Field{
+		{Name: "s", Label: "S", Type: FieldFlexible},
+		{Name: "s", Label: "S", Type: FieldFlexible, Layouts: []Layout{{Name: "a", Label: "A"}, {Name: "a", Label: "A"}}},
+		{Name: "s", Label: "S", Type: FieldFlexible, Layouts: []Layout{{Name: "a", Label: "A", Fields: []Field{{Name: "inner", Label: "I", Type: FieldFlexible, Layouts: []Layout{{Name: "b", Label: "B"}}}}}}},
+		{Name: "s", Label: "S", Type: FieldFlexible, Layouts: []Layout{{Name: "a", Label: "A", Fields: []Field{{Name: "layout", Label: "L", Type: FieldText}}}}},
+	}
+	for i, f := range bad {
+		if err := r.Register(ContentType{Name: fmt.Sprintf("t%d", i), Label: "T", Fields: []Field{f}}); err == nil {
+			t.Errorf("definition %d accepted", i)
+		}
+	}
+}
+
 func TestExampleContentTypesFile(t *testing.T) {
 	r := NewRegistry()
 	if err := r.LoadFile("../../examples/content-types.json"); err != nil {
@@ -165,31 +226,33 @@ func TestGalleryAndTableFields(t *testing.T) {
 		t.Error("bad media ID accepted in gallery")
 	}
 
-	out, errs = PageType.ValidateFields(map[string]any{"photos": []any{
+	gallery := func(rows ...any) map[string]any {
+		return map[string]any{"sections": []any{map[string]any{"layout": "gallery", "photos": rows}}}
+	}
+	out, errs = PageType.ValidateFields(gallery(
 		map[string]any{"photo": a, "category": "food"},
 		map[string]any{"photo": "", "category": ""}, // empty rows are dropped
 		map[string]any{"photo": b, "category": "rooms"},
-	}}, "gallery")
-	rows, _ := out["photos"].([]map[string]any)
-	if len(errs) != 0 || len(rows) != 2 || rows[1]["category"] != "rooms" {
-		t.Fatalf("rows = %v, errs = %v", rows, errs)
+	), "gallery")
+	sections, _ := out["sections"].([]map[string]any)
+	if len(errs) != 0 || len(sections) != 1 {
+		t.Fatalf("sections = %v, errs = %v", sections, errs)
 	}
-	photos, _ := PageType.Field("photos")
-	if ids := photos.MediaIDs(out["photos"]); len(ids) != 2 {
-		t.Errorf("MediaIDs(table) = %v", ids)
+	rows, _ := sections[0]["photos"].([]map[string]any)
+	if len(rows) != 2 || rows[1]["category"] != "rooms" {
+		t.Fatalf("rows = %v", rows)
+	}
+	if ids := SectionsField.MediaIDs(out["sections"]); len(ids) != 2 {
+		t.Errorf("MediaIDs(table in a section) = %v", ids)
 	}
 	for _, bad := range []any{
-		[]any{map[string]any{"photo": a, "category": "pets"}},
-		[]any{map[string]any{"photo": a, "colour": "red"}},
-		[]any{"not a row"},
-		"not a list",
+		map[string]any{"photo": a, "category": "pets"},
+		map[string]any{"photo": a, "colour": "red"},
+		"not a row",
 	} {
-		if _, errs := PageType.ValidateFields(map[string]any{"photos": bad}, "gallery"); errs["fields.photos"] == "" {
+		if _, errs := PageType.ValidateFields(gallery(bad), ""); errs["fields.sections"] == "" {
 			t.Errorf("accepted %v", bad)
 		}
-	}
-	if _, errs := PageType.ValidateFields(map[string]any{"photos": []any{}}, "home"); errs["fields.photos"] != "unknown field" {
-		t.Errorf("gallery field accepted on another template: %v", errs)
 	}
 
 	out, errs = SettingsType.ValidateFields(map[string]any{

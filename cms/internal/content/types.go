@@ -6,32 +6,16 @@ package content
 // GalleryCategories are the filters on the website's gallery page.
 var GalleryCategories = []string{"rooms", "food", "rooftop", "views", "hotel"}
 
-// PageType is for the site's core, hierarchical pages (Home, About Us,
-// Rooms, Contact...). Each page of the website has an entry whose template
-// names the page; the entry holds the page's SEO settings and, for some
-// templates, extra content (e.g. the gallery's photos).
+// PageType is for the site's pages. A page is built from sections (see
+// sections.go), so editors can change everything on it and make new pages.
 var PageType = ContentType{
 	Name:         "page",
 	Label:        "Page",
 	LabelPlural:  "Pages",
-	Description:  "The website's pages (Home, Rooms, Dining, Gallery, Location, Guides, Contact). Their SEO settings and texts live here.",
+	Description:  "The website's pages. Each page is a list of sections you can edit, reorder, add and remove.",
 	Hierarchical: true,
 	Templates:    []string{"default", "home", "rooms", "dining", "gallery", "location", "guides", "contact", "about", "landing"},
-	Fields: []Field{
-		{Name: "subtitle", Label: "Subtitle", Type: FieldText, Help: "Shown under the page heading."},
-		{Name: "hero_image", Label: "Hero image", Type: FieldMedia},
-		{Name: "show_in_menu", Label: "Show in main menu", Type: FieldBoolean},
-	},
-	TemplateFields: map[string][]Field{
-		"gallery": {
-			{Name: "photos", Label: "Gallery photos", Type: FieldTable, Help: "Shown in this order; visitors can filter by category. The caption is also the alt text; leave it empty to use the photo's alt text.",
-				Columns: []Column{
-					{Name: "photo", Label: "Photo", Type: FieldMedia},
-					{Name: "category", Label: "Category", Type: FieldSelect, Options: GalleryCategories},
-					{Name: "caption", Label: "Caption", Type: FieldText},
-				}},
-		},
-	},
+	Fields:       []Field{SectionsField},
 	Permalink: func(e *Entry) string {
 		if e.ParentID == nil && e.Slug == "home" {
 			return "/"

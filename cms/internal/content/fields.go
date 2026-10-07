@@ -35,18 +35,22 @@ const (
 	// FieldTable is a list of rows; each row has the field's Columns (e.g. an
 	// FAQ with question and answer, or policies with term and detail).
 	FieldTable FieldType = "table"
+	// FieldFlexible is a list of sections, ACF "flexible content" style: each
+	// section uses one of the field's Layouts and holds that layout's fields.
+	FieldFlexible FieldType = "flexible"
 )
 
 var knownFieldTypes = map[FieldType]bool{
 	FieldText: true, FieldTextarea: true, FieldRichText: true, FieldNumber: true,
 	FieldInteger: true, FieldBoolean: true, FieldDate: true, FieldDateTime: true,
 	FieldURL: true, FieldEmail: true, FieldMedia: true, FieldSelect: true, FieldList: true,
-	FieldGallery: true, FieldTable: true,
+	FieldGallery: true, FieldTable: true, FieldFlexible: true,
 }
 
 // columnTypes are the field types a table column may have.
 var columnTypes = map[FieldType]bool{
 	FieldText: true, FieldTextarea: true, FieldURL: true, FieldMedia: true, FieldSelect: true, FieldNumber: true,
+	FieldBoolean: true,
 }
 
 // Field declares one custom field of a content type.
@@ -60,6 +64,29 @@ type Field struct {
 	Options []string `json:"options,omitempty"`
 	// Columns are the cells of each row of a table field.
 	Columns []Column `json:"columns,omitempty"`
+	// Layouts are the kinds of section a flexible field can hold.
+	Layouts []Layout `json:"layouts,omitempty"`
+}
+
+// Layout is one kind of section of a flexible field, e.g. "Photo and text".
+// Its fields may be of any type except flexible.
+type Layout struct {
+	Name   string  `json:"name"`
+	Label  string  `json:"label"`
+	Help   string  `json:"help,omitempty"`
+	Fields []Field `json:"fields"`
+}
+
+// LayoutKey is the key holding a section's layout name in a flexible value.
+const LayoutKey = "layout"
+
+func (f Field) layout(name string) (Layout, bool) {
+	for _, l := range f.Layouts {
+		if l.Name == name {
+			return l, true
+		}
+	}
+	return Layout{}, false
 }
 
 // Column is one cell of a table field's rows. Type is text, textarea, url,
@@ -110,6 +137,37 @@ func (f Field) validate() error {
 			seen[c.Name] = true
 		}
 	}
+	if f.Type == FieldFlexible {
+		if len(f.Layouts) == 0 {
+			return fmt.Errorf("field %q: flexible fields need layouts", f.Name)
+		}
+		layouts := map[string]bool{}
+		for _, l := range f.Layouts {
+			if !fieldNameRe.MatchString(l.Name) {
+				return fmt.Errorf("field %q: layout name %q must match %s", f.Name, l.Name, fieldNameRe)
+			}
+			if layouts[l.Name] {
+				return fmt.Errorf("field %q: duplicate layout %q", f.Name, l.Name)
+			}
+			layouts[l.Name] = true
+			fields := map[string]bool{}
+			for _, lf := range l.Fields {
+				if lf.Type == FieldFlexible {
+					return fmt.Errorf("field %q, layout %q: flexible fields cannot be nested", f.Name, l.Name)
+				}
+				if lf.Name == LayoutKey {
+					return fmt.Errorf("field %q, layout %q: %q is reserved", f.Name, l.Name, LayoutKey)
+				}
+				if err := lf.validate(); err != nil {
+					return fmt.Errorf("field %q, layout %q: %w", f.Name, l.Name, err)
+				}
+				if fields[lf.Name] {
+					return fmt.Errorf("field %q, layout %q: duplicate field %q", f.Name, l.Name, lf.Name)
+				}
+				fields[lf.Name] = true
+			}
+		}
+	}
 	return nil
 }
 
@@ -118,6 +176,7 @@ const (
 	maxLongTextLen = 100_000
 	maxListItems   = 100
 	maxTableRows   = 200
+	maxSections    = 60
 )
 
 // ValidateFields checks values against the fields of the type plus those of
@@ -198,21 +257,41 @@ func (f Field) MediaIDs(v any) []uuid.UUID {
 			if c.Type != FieldMedia {
 				continue
 			}
-			switch rows := v.(type) {
-			case []map[string]any:
-				for _, r := range rows {
-					add(r[c.Name])
-				}
-			case []any:
-				for _, r := range rows {
-					if m, ok := r.(map[string]any); ok {
-						add(m[c.Name])
-					}
-				}
+			for _, r := range objects(v) {
+				add(r[c.Name])
+			}
+		}
+	case FieldFlexible:
+		for _, section := range objects(v) {
+			name, _ := section[LayoutKey].(string)
+			l, ok := f.layout(name)
+			if !ok {
+				continue
+			}
+			for _, lf := range l.Fields {
+				ids = append(ids, lf.MediaIDs(section[lf.Name])...)
 			}
 		}
 	}
 	return ids
+}
+
+// objects returns the objects of a table or flexible value, whether freshly
+// validated ([]map[string]any) or read back from JSON ([]any).
+func objects(v any) []map[string]any {
+	switch rows := v.(type) {
+	case []map[string]any:
+		return rows
+	case []any:
+		out := make([]map[string]any, 0, len(rows))
+		for _, r := range rows {
+			if m, ok := r.(map[string]any); ok {
+				out = append(out, m)
+			}
+		}
+		return out
+	}
+	return nil
 }
 
 func (f Field) coerce(raw any) (any, error) {
@@ -367,8 +446,88 @@ func (f Field) coerce(raw any) (any, error) {
 			}
 		}
 		return out, nil
+	case FieldFlexible:
+		items, ok := raw.([]any)
+		if !ok {
+			return nil, fmt.Errorf("must be a list of sections")
+		}
+		if len(items) > maxSections {
+			return nil, fmt.Errorf("must have at most %d sections", maxSections)
+		}
+		out := make([]map[string]any, 0, len(items))
+		for i, it := range items {
+			values, ok := it.(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("section %d must be an object", i+1)
+			}
+			name, _ := values[LayoutKey].(string)
+			l, ok := f.layout(name)
+			if !ok {
+				return nil, fmt.Errorf("section %d: unknown layout %q", i+1, name)
+			}
+			section, err := l.validate(values)
+			if err != nil {
+				return nil, fmt.Errorf("section %d (%s), %v", i+1, l.Label, err)
+			}
+			out = append(out, section)
+		}
+		return out, nil
 	}
 	return nil, fmt.Errorf("unsupported field type %q", f.Type)
+}
+
+// validate checks one section's values against the layout's fields.
+func (l Layout) validate(values map[string]any) (map[string]any, error) {
+	out := map[string]any{LayoutKey: l.Name}
+	for name := range values {
+		if name == LayoutKey {
+			continue
+		}
+		if _, ok := fieldNamed(l.Fields, name); !ok {
+			return nil, fmt.Errorf("%s: unknown field", name)
+		}
+	}
+	for _, f := range l.Fields {
+		raw, present := values[f.Name]
+		if !present || raw == nil || raw == "" {
+			if f.Required {
+				return nil, fmt.Errorf("%s: is required", f.Label)
+			}
+			continue
+		}
+		v, err := f.coerce(raw)
+		if err != nil {
+			return nil, fmt.Errorf("%s: %v", f.Label, err)
+		}
+		out[f.Name] = v
+	}
+	return out, nil
+}
+
+func fieldNamed(fields []Field, name string) (Field, bool) {
+	for _, f := range fields {
+		if f.Name == name {
+			return f, true
+		}
+	}
+	return Field{}, false
+}
+
+// SanitizeRichText runs sanitize over the rich-text values inside v, a
+// validated value of f (only flexible fields hold nested rich text).
+func (f Field) SanitizeRichText(v any, sanitize func(string) string) {
+	if f.Type != FieldFlexible {
+		return
+	}
+	for _, section := range objects(v) {
+		name, _ := section[LayoutKey].(string)
+		l, _ := f.layout(name)
+		for _, lf := range l.Fields {
+			if s, ok := section[lf.Name].(string); ok && lf.Type == FieldRichText {
+				section[lf.Name] = sanitize(s)
+			}
+		}
+	}
 }
 
 func (f Field) hasColumn(name string) bool {

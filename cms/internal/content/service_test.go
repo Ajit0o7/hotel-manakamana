@@ -190,10 +190,10 @@ func TestMediaReferencesMustExist(t *testing.T) {
 	_, err := svc.Create(ctx, "page", Input{
 		Title: "Rooms", FeaturedMediaID: ptr(uuid.New()),
 		SEO:    seo.Meta{OGImageID: ptr(uuid.New())},
-		Fields: map[string]any{"hero_image": uuid.NewString()},
+		Fields: map[string]any{"sections": []any{map[string]any{"layout": "page_hero", "photo": uuid.NewString()}}},
 	}, nil)
 	errs := fieldErrors(t, err)
-	for _, k := range []string{"featured_media_id", "seo.og_image_id", "fields.hero_image"} {
+	for _, k := range []string{"featured_media_id", "seo.og_image_id", "fields.sections"} {
 		if errs[k] != "media item not found" {
 			t.Errorf("%s: got %q", k, errs[k])
 		}
@@ -331,9 +331,9 @@ func TestFieldMediaIsCheckedAndPresented(t *testing.T) {
 	ctx := context.Background()
 
 	_, err := svc.Create(ctx, "page", Input{Title: "Gallery", Template: "gallery", Fields: map[string]any{
-		"photos": []any{map[string]any{"photo": uuid.NewString(), "category": "food"}},
+		"sections": []any{map[string]any{"layout": "gallery", "photos": []any{map[string]any{"photo": uuid.NewString(), "category": "food"}}}},
 	}}, nil)
-	if fieldErrors(t, err)["fields.photos"] != "media item not found" {
+	if fieldErrors(t, err)["fields.sections"] != "media item not found" {
 		t.Errorf("missing table photo not reported: %v", err)
 	}
 
@@ -349,5 +349,26 @@ func TestFieldMediaIsCheckedAndPresented(t *testing.T) {
 	}
 	if len(out[0].Media) != 2 || out[0].Media[b.String()].URL != "https://cdn/b.jpg" || out[0].URL != "/rooms/deluxe" {
 		t.Errorf("presented room = %+v", out[0])
+	}
+}
+
+func TestSectionsAreSanitizedAndAnalyzed(t *testing.T) {
+	svc, _ := newTestService(t, memMedia{})
+	e, err := svc.Create(context.Background(), "page", Input{Title: "About us", Fields: map[string]any{"sections": []any{
+		map[string]any{"layout": "text", "heading": "Our *family*", "content": "<p>Run by one family since 2015.</p><script>alert(1)</script>"},
+	}}}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	section := e.Fields["sections"].([]map[string]any)[0]
+	if c := section["content"].(string); strings.Contains(c, "<script") || !strings.Contains(c, "since 2015") {
+		t.Errorf("content = %q", c)
+	}
+	rep, err := svc.Analyze(context.Background(), "page", e.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if rep.Stats.WordCount < 8 {
+		t.Errorf("section text not analyzed: %+v", rep.Stats)
 	}
 }

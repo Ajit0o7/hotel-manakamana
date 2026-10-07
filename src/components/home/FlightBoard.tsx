@@ -6,9 +6,11 @@ import { SplitHeading } from '@/components/ui/SplitHeading';
 import { TLink } from '@/components/ui/TLink';
 import { AIRLINES, FLIGHT_WINDOW } from '@/content/airlines';
 import type { Guide } from '@/content/guides';
+import type { Card } from '@/content/sections';
+import { heading, Inline } from '@/components/sections/text';
 import { SplitFlap } from './SplitFlap';
 
-const TIPS: { icon: IconName; title: string; text: string }[] = [
+const TIPS: Card[] = [
   {
     icon: 'calendar',
     title: 'Confirm the evening before',
@@ -28,7 +30,9 @@ const TIPS: { icon: IconName; title: string; text: string }[] = [
 
 /* Airport departures board for Manthali (Ramechhap) → Lukla. Overlaps the bottom of the Lukla banner
    the same way the booking card overlaps the hero. */
-export function FlightBoard({ guides }: { guides: Guide[] }) {
+export function FlightBoard({ guides, note, tips = TIPS, guidesEyebrow = 'Travel guides', guidesHeading = 'Plan your *flight day*' }: {
+  guides: Guide[]; note?: string; tips?: Card[]; guidesEyebrow?: string; guidesHeading?: string;
+}) {
   return (
     <section className="flights" aria-labelledby="flights-title">
       <div className="container">
@@ -78,19 +82,25 @@ export function FlightBoard({ guides }: { guides: Guide[] }) {
             ))}
           </ul>
           <p className="board__note">
-            Flights usually leave early in the morning and move with the weather. Tickets are booked with the airline or
-            your trekking agency, so always confirm your departure time with them.{' '}
-            <TLink href="/guides/manthali-to-lukla-flights">Read our Manthali to Lukla flight guide →</TLink>
+            {note === undefined ? (
+              <>
+                Flights usually leave early in the morning and move with the weather. Tickets are booked with the airline or
+                your trekking agency, so always confirm your departure time with them.{' '}
+                <TLink href="/guides/manthali-to-lukla-flights">Read our Manthali to Lukla flight guide →</TLink>
+              </>
+            ) : (
+              <Inline text={note} />
+            )}
           </p>
         </div>
 
         <div className="grid grid--3 flight-tips" data-stagger="">
-          {TIPS.map((t, i) => (
-            <div className="feature reveal" key={t.title}>
-              <span className="feature__num">0{i + 1}</span>
-              <div className="feature__icon"><Icon name={t.icon} /></div>
+          {tips.map((t, i) => (
+            <div className="feature reveal" key={i}>
+              <span className="feature__num">{String(i + 1).padStart(2, '0')}</span>
+              {t.icon && <div className="feature__icon"><Icon name={t.icon as IconName} /></div>}
               <h3>{t.title}</h3>
-              <p>{t.text}</p>
+              <p><Inline text={t.text} /></p>
             </div>
           ))}
         </div>
@@ -98,8 +108,8 @@ export function FlightBoard({ guides }: { guides: Guide[] }) {
         <div className="guides-strip">
           <div className="section__head">
             <div>
-              <Eyebrow>Travel guides</Eyebrow>
-              <SplitHeading>Plan your <em className="accent">flight day</em></SplitHeading>
+              {guidesEyebrow && <Eyebrow>{guidesEyebrow}</Eyebrow>}
+              {guidesHeading && <SplitHeading>{heading(guidesHeading)}</SplitHeading>}
             </div>
             <TLink href="/guides" className="link reveal">All guides →</TLink>
           </div>

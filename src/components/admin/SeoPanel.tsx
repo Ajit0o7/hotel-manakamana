@@ -17,6 +17,10 @@ interface Props {
   hasFeaturedImage: boolean;
   /** Public URL of the entry, for the search preview. */
   url: string;
+  /** With these, the CMS analyzes the text of the entry's sections too. */
+  type?: string;
+  template?: string;
+  fields?: Record<string, unknown>;
 }
 
 const TITLE_MAX = 60;
@@ -123,6 +127,9 @@ function useAnalysis(p: Props) {
     excerpt: p.excerpt,
     has_featured_image: p.hasFeaturedImage,
     seo: p.seo,
+    type: p.type,
+    template: p.template,
+    fields: p.fields,
   });
   const [state, setState] = useState<{ body: string; data: SeoReport | null; error: string | null }>({ body: '', data: null, error: null });
   useEffect(() => {

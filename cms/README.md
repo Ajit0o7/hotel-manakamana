@@ -12,9 +12,10 @@ the media library through the admin endpoints.
 - Media library with automatic thumbnails, responsive WebP sizes and a
   1200×630 social-card crop
 - New content types can be added with a few lines of Go or a JSON file, with no migration
-- Built-in types for the hotel site: pages (with templates), posts (guides, news,
-  offers), rooms and hotel settings. On first start the server imports the
-  website's existing content, so everything is editable straight away
+- Built-in types for the hotel site: pages built from sections (ACF-style
+  flexible content), posts (guides, news, offers), rooms and hotel settings.
+  On first start the server imports the website's existing content, so
+  everything is editable straight away
 
 ## Layout
 
@@ -148,6 +149,11 @@ Everything it creates is recorded in `cms.seed_items`, so it never imports
 anything twice, and it never overwrites an entry an editor has already
 created at the same address. Deleting an imported entry does not bring it
 back.
+
+The bundle also has *patches*, which add fields to entries an earlier
+version imported (this is how the pages got their sections). A patch only
+fills fields the entry doesn't have yet, so an editor's work is never
+overwritten, and it skips entries that were deleted.
 
 The data lives in `internal/seed/data/` and is generated from the site's
 built-in content by `node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
@@ -307,17 +313,45 @@ analysis, publishing and field validation.
 Field types: `text`, `textarea`, `richtext` (sanitized HTML), `number`,
 `integer`, `boolean`, `date`, `datetime`, `url`, `email`, `media` (must exist
 in the library), `select` (with `options`), `list` (array of strings),
-`gallery` (ordered list of media) and `table` (repeating rows; its `columns`
-are fields of the simple kinds above, e.g. FAQs with a question and an
-answer). Unknown fields are rejected, so typos surface as errors instead of
-being silently lost.
+`gallery` (ordered list of media), `table` (repeating rows; its `columns`
+are fields of the simple kinds above or checkboxes, e.g. FAQs with a
+question and an answer) and `flexible` (below). Unknown fields are rejected,
+so typos surface as errors instead of being silently lost.
+
+### Flexible content (page sections)
+
+A `flexible` field works like ACF's Flexible Content: its value is a list of
+sections, and each section uses one of the field's `layouts`, each with its
+own fields (any kind except `flexible`):
+
+```json
+{ "name": "sections", "label": "Sections", "type": "flexible", "layouts": [
+  { "name": "split", "label": "Photo and text", "fields": [
+    { "name": "heading", "label": "Heading", "type": "textarea" },
+    { "name": "photo", "label": "Photo", "type": "media" } ] } ] }
+```
+
+Stored, a section is `{"layout": "split", "heading": "…", "photo": "<media id>"}`.
+Sections are validated against their layout, their photos must exist and are
+returned in the entry's `media`, their rich text is sanitized, and their text
+counts in the SEO analysis.
+
+Pages have one such field, `sections`, with the layouts in
+[`internal/content/sections.go`](internal/content/sections.go): page header,
+hero slideshow, photo and text, feature cards, photo banner, text, FAQ, room
+cards, gallery, booking enquiry and more. The website draws each layout (see
+`src/components/sections/`); a layout added here needs a component there too.
+
+In section texts, `*stars*` in headings mark the gold italic words,
+`**bold**` and `[label](/link)` work in texts, and placeholders such as
+`{phone}`, `{price_from}` or `{rating}` show the current values from Hotel
+settings and Rooms.
 
 Other options:
 
-- `template_fields`: extra fields per template, e.g. the `gallery` page
-  template has a photos table and the `guide` post template has a facts box
-  and sources. Values for other templates are dropped when an entry changes
-  template.
+- `template_fields`: extra fields per template, e.g. the `guide` post
+  template has a facts box and sources. Values for other templates are
+  dropped when an entry changes template.
 - `sortable`: list entries by their order number (like rooms) instead of by
   date.
 
@@ -329,7 +363,7 @@ site needs no extra requests.
 
 | Type | Address | What it holds |
 |---|---|---|
-| `page` | `/<path>` | Site pages. Templates: `home`, `rooms`, `dining`, `gallery`, `location`, `guides`, `contact`, `about`, `landing`. Their title, description and share image feed the page's SEO; the gallery template holds the gallery photos. |
+| `page` | `/<path>` | Site pages, built from sections (see above). The seven original pages keep their own addresses (`home` is `/`); any other page is served at its path, so new pages go live when published. The SEO fields feed the page's `<head>`. |
 | `post` | `/guides/<slug>` | Guides (facts box, sources, photo credit, reading time), news and offers (valid dates, price). |
 | `room` | `/rooms/<slug>` | Price, guests, beds, label, features and photos. Sorted by order number. |
 | `settings` | (not shown) | One entry, `hotel`: phone, WhatsApp, address, ratings, review, distances, languages, payment, profile links, policies, amenities, nearby places and FAQs. |
@@ -399,6 +433,6 @@ server, and real JWT verification.
 - Revisions and autosave (an `entry_revisions` table written on update)
 - On-demand ISR: call a Next.js revalidation webhook after publish (today
   the site picks up changes within about a minute)
-- Editable page texts (headlines and intros) per page template
+- Menu management, so new pages can be added to the header navigation
 - Direct-to-Storage signed uploads for very large videos
 - Background image processing for big batches
