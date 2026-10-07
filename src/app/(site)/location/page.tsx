@@ -8,16 +8,19 @@ import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Icon } from '@/components/ui/Icon';
 import { SplitHeading } from '@/components/ui/SplitHeading';
 import { ManthaliNow } from '@/components/weather/ManthaliNow';
-import { HOTEL, NEARBY } from '@/content/hotel';
+import { getHotel, pageMetadata } from '@/lib/cms/site';
 import { IMG } from '@/content/images';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('location', '/location', {
   title: 'Location & Getting Here',
   description: '500 m from Manthali (Ramechhap) Airport and 300 m from Manthali Bus Park: an easy base for Lukla flights.',
   alternates: { canonical: '/location' },
-};
+});
+}
 
-export default function LocationPage() {
+export default async function LocationPage() {
+  const hotel = await getHotel();
   return (
     <>
       <PageHero
@@ -38,13 +41,13 @@ export default function LocationPage() {
           <div data-stagger="">
             <Eyebrow>Address</Eyebrow>
             <SplitHeading>Find us in <em className="accent">Manthali</em></SplitHeading>
-            <p className="reveal">{HOTEL.address}</p>
+            <p className="reveal">{hotel.address}</p>
             <dl className="info reveal">
-              <dt>Phone</dt><dd><a href={`tel:${HOTEL.phoneTel}`}>{HOTEL.phoneDisplay}</a></dd>
+              <dt>Phone</dt><dd><a href={`tel:${hotel.phoneTel}`}>{hotel.phoneDisplay}</a></dd>
               <dt>Airport</dt><dd>Manthali (Ramechhap) Airport, 500 m</dd>
               <dt>Bus park</dt><dd>Manthali Bus Park, 300 m</dd>
             </dl>
-            <Button href={HOTEL.mapsUrl} label="Open in Google Maps" variant="dark" icon={<Icon name="pin" />} className="reveal" />
+            <Button href={hotel.mapsUrl} label="Open in Google Maps" variant="dark" icon={<Icon name="pin" />} className="reveal" />
           </div>
         </div>
       </section>
@@ -112,7 +115,7 @@ export default function LocationPage() {
           <Eyebrow>Explore nearby</Eyebrow>
           <SplitHeading>Places worth <em className="accent">the drive</em></SplitHeading>
           <ul className="nearby" data-stagger="">
-            {NEARBY.map((n) => (
+            {hotel.nearby.map((n) => (
               <li className="reveal" key={n.name}>
                 <span><strong>{n.name}</strong> · {n.note}</span>
                 <span>{n.time}</span>

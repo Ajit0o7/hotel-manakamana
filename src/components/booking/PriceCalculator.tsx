@@ -3,13 +3,16 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
-import { HOTEL, formatNPR, whatsappWith } from '@/content/hotel';
+import { useSiteData } from '@/components/layout/SiteData';
+import { formatNPR } from '@/content/hotel';
 import type { Room } from '@/content/rooms';
 import { addDaysISO, formatDateLong, nightsBetween } from '@/lib/dates';
+import { whatsappLink } from '@/lib/cms/site';
 import { useToday } from '@/lib/hooks';
 
 /** Sticky booking card on a room page: dates + rooms → live total, then WhatsApp or the full enquiry form. */
 export function PriceCalculator({ room }: { room: Pick<Room, 'slug' | 'name' | 'price' | 'maxGuests'> }) {
+  const { hotel } = useSiteData();
   const today = useToday();
   const [pickedIn, setPickedIn] = useState<string | null>(null);
   const [pickedOut, setPickedOut] = useState<string | null>(null);
@@ -56,11 +59,11 @@ export function PriceCalculator({ room }: { room: Pick<Room, 'slug' | 'name' | '
         <strong>{nights ? formatNPR(total) : '—'}</strong>
       </div>
       <div className="calc__actions">
-        <Button href={whatsappWith(message)} label="Enquire on WhatsApp" variant="dark" block icon={<Icon name="wa" />} />
+        <Button href={whatsappLink(hotel, message)} label="Enquire on WhatsApp" variant="dark" block icon={<Icon name="wa" />} />
         <Button href={`/contact?${query.toString()}#enquiry`} label="Full booking form" variant="outline" block />
       </div>
       <p className="calc__note">
-        Estimate only. Prices can change, so we&apos;ll confirm your rate. Prefer to talk? <a href={`tel:${HOTEL.phoneTel}`}>{HOTEL.phoneDisplay}</a>
+        Estimate only. Prices can change, so we&apos;ll confirm your rate. Prefer to talk? <a href={`tel:${hotel.phoneTel}`}>{hotel.phoneDisplay}</a>
       </p>
     </div>
   );

@@ -2,7 +2,14 @@
 
 export type FieldType =
   | 'text' | 'textarea' | 'richtext' | 'number' | 'integer' | 'boolean' | 'date'
-  | 'datetime' | 'url' | 'email' | 'media' | 'select' | 'list';
+  | 'datetime' | 'url' | 'email' | 'media' | 'select' | 'list' | 'gallery' | 'table';
+
+export interface Column {
+  name: string;
+  label: string;
+  type?: 'text' | 'textarea' | 'url' | 'media' | 'select' | 'number';
+  options?: string[];
+}
 
 export interface Field {
   name: string;
@@ -11,6 +18,7 @@ export interface Field {
   required?: boolean;
   help?: string;
   options?: string[];
+  columns?: Column[];
 }
 
 export interface ContentType {
@@ -21,7 +29,16 @@ export interface ContentType {
   hierarchical: boolean;
   templates?: string[];
   fields?: Field[];
+  /** Extra fields for entries using a given template. */
+  template_fields?: Record<string, Field[]>;
+  /** Ordered by menu order (like hierarchical types). */
+  sortable?: boolean;
   route_prefix: string;
+}
+
+/** The fields an entry with this template has: the type's own plus the template's. */
+export function fieldsFor(ct: ContentType, template: string): Field[] {
+  return [...(ct.fields ?? []), ...(ct.template_fields?.[template] ?? [])];
 }
 
 export type Status = 'draft' | 'published' | 'archived';

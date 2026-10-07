@@ -1,3 +1,4 @@
+import type { CmsHead } from '@/lib/cms/site';
 import { IMG, type Photo } from './images';
 
 export type Room = {
@@ -14,6 +15,7 @@ export type Room = {
   description: string;
   features: string[];
   photos: Photo[]; // representative photos of our rooms
+  head?: CmsHead; // SEO settings from the CMS, when the room comes from there
 };
 
 export const ROOMS: Room[] = [

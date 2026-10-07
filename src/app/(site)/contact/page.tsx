@@ -7,22 +7,26 @@ import { Button } from '@/components/ui/Button';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Icon } from '@/components/ui/Icon';
 import { SplitHeading } from '@/components/ui/SplitHeading';
-import { FAQS, HOTEL, WHATSAPP_URL } from '@/content/hotel';
+import { HOTEL, formatNPR } from '@/content/hotel';
 import { IMG } from '@/content/images';
+import { getHotel, getPriceFrom, pageMetadata } from '@/lib/cms/site';
 
-export const metadata: Metadata = {
-  title: 'Contact & Book',
-  description: `Book your room at ${HOTEL.name}, Manthali. Call or WhatsApp ${HOTEL.phoneDisplay}. Rooms from NPR 2,000 a night.`,
-  alternates: { canonical: '/contact' },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const [hotel, priceFrom] = await Promise.all([getHotel(), getPriceFrom()]);
+  return pageMetadata('contact', '/contact', {
+    title: 'Contact & Book',
+    description: `Book your room at ${HOTEL.name}, Manthali. Call or WhatsApp ${hotel.phoneDisplay}. Rooms from ${formatNPR(priceFrom)} a night.`,
+    alternates: { canonical: '/contact' },
+  });
+}
 
-const faqLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: FAQS.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
-};
-
-export default function ContactPage() {
+export default async function ContactPage() {
+  const hotel = await getHotel();
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: hotel.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  };
   return (
     <>
       <JsonLd data={faqLd} />
@@ -42,20 +46,20 @@ export default function ContactPage() {
             <Suspense fallback={<p className="muted">Loading the form…</p>}>
               <EnquiryForm />
             </Suspense>
-            <p className="form-note">Prefer to talk? Call <a href={`tel:${HOTEL.phoneTel}`}>{HOTEL.phoneDisplay}</a>.</p>
+            <p className="form-note">Prefer to talk? Call <a href={`tel:${hotel.phoneTel}`}>{hotel.phoneDisplay}</a>.</p>
           </div>
 
           <div className="dark-card reveal">
             <Eyebrow>Reach us directly</Eyebrow>
             <SplitHeading>We&apos;re happy <em className="accent">to help</em></SplitHeading>
             <ul className="contact-list">
-              <li><div className="icon"><Icon name="phone" /></div><div><strong>Phone</strong><a href={`tel:${HOTEL.phoneTel}`}>{HOTEL.phoneDisplay}</a></div></li>
-              <li><div className="icon"><Icon name="wa" /></div><div><strong>WhatsApp</strong><a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">Chat with us</a></div></li>
-              <li><div className="icon"><Icon name="pin" /></div><div><strong>Address</strong><span>{HOTEL.address}</span></div></li>
+              <li><div className="icon"><Icon name="phone" /></div><div><strong>Phone</strong><a href={`tel:${hotel.phoneTel}`}>{hotel.phoneDisplay}</a></div></li>
+              <li><div className="icon"><Icon name="wa" /></div><div><strong>WhatsApp</strong><a href={hotel.whatsappUrl} target="_blank" rel="noopener noreferrer">Chat with us</a></div></li>
+              <li><div className="icon"><Icon name="pin" /></div><div><strong>Address</strong><span>{hotel.address}</span></div></li>
               <li><div className="icon"><Icon name="bed" /></div><div><strong>Rooms</strong><span>From NPR 2,000 a night, room only</span></div></li>
-              <li><div className="icon"><Icon name="star" /></div><div><strong>Guest rating</strong><span>{HOTEL.rating.value} / 5 from {HOTEL.rating.count} Google reviews</span></div></li>
+              <li><div className="icon"><Icon name="star" /></div><div><strong>Guest rating</strong><span>{hotel.rating.value} / 5 from {hotel.rating.count} Google reviews</span></div></li>
             </ul>
-            <Button href={HOTEL.mapsUrl} label="Get directions" variant="gold" arrow />
+            <Button href={hotel.mapsUrl} label="Get directions" variant="gold" arrow />
           </div>
         </div>
       </section>
@@ -65,7 +69,7 @@ export default function ContactPage() {
           <Eyebrow>FAQ</Eyebrow>
           <SplitHeading>Common <em className="accent">questions</em></SplitHeading>
           <div data-stagger="">
-            {FAQS.map((f) => (
+            {hotel.faqs.map((f) => (
               <details className="faq reveal" key={f.q}>
                 <summary>{f.q}</summary>
                 <p>{f.a}</p>

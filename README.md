@@ -19,16 +19,19 @@ npm run lint
 
 | What | File |
 |---|---|
-| Hotel facts, phone, address, amenities, policies, FAQs, nearby places | `src/content/hotel.ts` |
-| Rooms, prices, room photos | `src/content/rooms.ts` |
-| Gallery photos and filters | `src/content/gallery.ts` |
+| Reading content from the CMS (with the built-in content as fallback) | `src/lib/cms/site.ts` |
+| Built-in hotel facts, phone, address, amenities, policies, FAQs, nearby places | `src/content/hotel.ts` |
+| Built-in rooms, prices, room photos | `src/content/rooms.ts` |
+| Built-in gallery photos and filters | `src/content/gallery.ts` |
+| Built-in guides | `src/content/guides.ts` |
 | All photos (static imports → automatic blur placeholders) | `src/assets/images/`, `src/content/images.ts` |
 | Global styles (ported 1:1 from the static site) | `src/app/globals.css` |
 | Emblem (loading screen) and pagoda mark | `src/components/brand/` |
 | Page-transition curtain | `src/components/layout/CurtainProvider.tsx` |
 | Scroll reveals, parallax, counters, magnetic buttons, smooth scroll | `src/components/layout/Motion.tsx` |
 
-To change a price, a phone number or an amenity, edit the file in `src/content/` and every page updates.
+To change a price, a phone number, an amenity, a gallery photo or a guide, edit it in the CMS (`/admin`); the site
+shows the change within about a minute. The files in `src/content/` are only a fallback (see below).
 
 ## Features
 
@@ -62,7 +65,15 @@ To change a price, a phone number or an amenity, edit the file in `src/content/`
 - **CMS API:** `cms/` is a separate Go server (Supabase Postgres, Auth and Storage) that stores everything. See
   [`cms/README.md`](cms/README.md).
 
-The public pages do not read from the CMS yet; they still use the files in `src/content/`.
+The public pages read their content from the CMS: hotel settings (phone, WhatsApp, address, ratings, policies,
+amenities, nearby places, FAQs), rooms and prices, the gallery, guides, and each page's SEO title, description and share
+image. Page headlines and intro texts are still in the code.
+
+- Pages are pre-built and refreshed in the background at most once a minute, so visitors never wait for the CMS (which
+  sleeps when idle on Render's free plan).
+- If the CMS can't be reached during a refresh, the last good version of the page keeps being served.
+- If it can't be reached during a build, or has no entry yet, the built-in content in `src/content/` is used.
+- Photos uploaded to the CMS are served from Supabase Storage through `next/image`, with blur placeholders.
 
 The admin finds its services through these settings. The defaults point at this project, so nothing needs setting:
 

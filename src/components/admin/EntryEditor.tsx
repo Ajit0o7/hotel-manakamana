@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { api, apiList, ApiError, query } from '@/lib/cms/api';
 import { formatDate, fromLocalInput, toLocalInput } from '@/lib/cms/format';
-import { emptySeo, type ContentType, type Entry, type EntryInput, type Status } from '@/lib/cms/types';
+import { emptySeo, fieldsFor, type ContentType, type Entry, type EntryInput, type Status } from '@/lib/cms/types';
 import { cleanFields, FieldInput } from './FieldInput';
 import { MediaField } from './MediaPicker';
 import { RichTextEditor } from './RichTextEditor';
@@ -78,7 +78,12 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
 
   const entry = id && saved?.id === id ? saved.entry : null;
   const loadError = id && saved?.id === id ? saved.error : null;
-  const baseline = useMemo(() => (entry ? toInput(entry) : id ? null : BLANK), [entry, id]);
+  // New entries start with the type's first template when it has no "default" one (posts start as guides).
+  const firstTemplate = ct?.templates?.length && !ct.templates.includes('default') ? ct.templates[0] : '';
+  const baseline = useMemo(
+    () => (entry ? toInput(entry) : id ? null : { ...BLANK, template: firstTemplate }),
+    [entry, id, firstTemplate],
+  );
   const value = form ?? baseline;
   const dirty = form !== null && JSON.stringify(form) !== JSON.stringify(baseline);
 
@@ -98,12 +103,14 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
   if (!ct || !value) return <Spinner />;
 
   const update = (patch: Partial<EntryInput>) => setForm({ ...value, ...patch });
+  const fields = fieldsFor(ct, value.template);
+  const ordered = ct.hierarchical || !!ct.sortable;
   const err = (k: string) => errors[k];
 
   async function save(status: Status) {
     if (!value || !ct) return;
     setBusy(true);
-    const body: EntryInput = { ...value, status, fields: cleanFields(value.fields) };
+    const body: EntryInput = { ...value, status, fields: cleanFields(value.fields, fieldsFor(ct, value.template)) };
     try {
       const result = id
         ? await api<Entry>(`/api/v1/admin/content/${type}/${id}`, { method: 'PUT', body })
@@ -181,6 +188,7 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
               <span>Content</span>
               <RichTextEditor label="Content" value={value.content} onChange={(content) => update({ content })} />
               {err('content') && <span className="cms-error">{err('content')}</span>}
+              {ct.name === 'post' && <ShortcodeHelp />}
             </div>
             <label className="cms-label">
               Excerpt <span className="cms-muted">— a short summary for listings; also used when the meta description is empty</span>
@@ -189,10 +197,10 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
             </label>
           </section>
 
-          {ct.fields && ct.fields.length > 0 && (
+          {fields.length > 0 && (
             <section className="cms-card">
               <h2 className="cms-h2">{ct.label} details</h2>
-              {ct.fields.map((f) => (
+              {fields.map((f) => (
                 <FieldInput
                   key={f.name}
                   field={f}
@@ -251,7 +259,7 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
             </div>
           </section>
 
-          {(ct.hierarchical || (ct.templates && ct.templates.length > 0)) && (
+          {(ordered || (ct.templates && ct.templates.length > 0)) && (
             <section className="cms-card">
               <h2 className="cms-h2">{ct.label} attributes</h2>
               {ct.hierarchical && (
@@ -270,15 +278,15 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
                 <label className="cms-label">
                   Template
                   <select className="cms-input" value={value.template} onChange={(e) => update({ template: e.target.value })}>
-                    <option value="">default</option>
+                    {(ct.templates.includes('default') || value.template === '') && <option value="">default</option>}
                     {ct.templates.filter((t) => t !== 'default').map((t) => <option key={t} value={t}>{t}</option>)}
                   </select>
                   {err('template') && <span className="cms-error">{err('template')}</span>}
                 </label>
               )}
-              {ct.hierarchical && (
+              {ordered && (
                 <label className="cms-label">
-                  Menu order <span className="cms-muted">— lower numbers come first</span>
+                  {ct.hierarchical ? 'Menu order' : 'Order'} <span className="cms-muted">— lower numbers come first</span>
                   <input className="cms-input cms-input--short" type="number" value={value.menu_order} onChange={(e) => update({ menu_order: Number(e.target.value) || 0 })} />
                 </label>
               )}
@@ -293,6 +301,24 @@ export function EntryEditor({ type, id }: { type: string; id?: string }) {
         </aside>
       </div>
     </div>
+  );
+}
+
+/** Explains the special blocks the website draws in place of a line of text. */
+function ShortcodeHelp() {
+  return (
+    <details className="cms-help">
+      <summary>Special blocks you can add to an article</summary>
+      <p className="cms-muted">Type one of these on a line by itself; the website shows the block in its place.</p>
+      <ul>
+        <li><code>[airlines]</code> — the table of airlines flying to Lukla</li>
+        <li><code>[weather]</code> — live weather and time in Manthali</li>
+        <li><code>[booking Title | Text]</code> — a booking box with call and WhatsApp buttons</li>
+        <li><code>[map Title | https://maps.google.com/…&amp;output=embed]</code> — an embedded Google map</li>
+        <li><code>[compare]</code> … <code>[/compare]</code> — side-by-side boxes: put an H3 heading and a list for each box between the two lines; add “(recommended)” to a heading to highlight it</li>
+      </ul>
+      <p className="cms-muted">A quote becomes a highlighted tip box (make its first line bold for a title). An image’s title becomes its caption; a line in italics starting with “Photo:” right after it becomes the photo credit.</p>
+    </details>
   );
 }
 

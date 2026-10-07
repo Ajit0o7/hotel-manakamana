@@ -5,7 +5,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow';
 import { SplitHeading } from '@/components/ui/SplitHeading';
 import { TLink } from '@/components/ui/TLink';
 import { AIRLINES, FLIGHT_WINDOW } from '@/content/airlines';
-import { GUIDES } from '@/content/guides';
+import type { Guide } from '@/content/guides';
 import { SplitFlap } from './SplitFlap';
 
 const TIPS: { icon: IconName; title: string; text: string }[] = [
@@ -28,7 +28,7 @@ const TIPS: { icon: IconName; title: string; text: string }[] = [
 
 /* Airport departures board for Manthali (Ramechhap) → Lukla. Overlaps the bottom of the Lukla banner
    the same way the booking card overlaps the hero. */
-export function FlightBoard() {
+export function FlightBoard({ guides }: { guides: Guide[] }) {
   return (
     <section className="flights" aria-labelledby="flights-title">
       <div className="container">
@@ -104,7 +104,7 @@ export function FlightBoard() {
             <TLink href="/guides" className="link reveal">All guides →</TLink>
           </div>
           <div className="grid grid--3" data-stagger="">
-            {GUIDES.map((g) => <GuideCard key={g.slug} guide={g} />)}
+            {guides.slice(0, 3).map((g) => <GuideCard key={g.slug} guide={g} />)}
           </div>
         </div>
       </div>

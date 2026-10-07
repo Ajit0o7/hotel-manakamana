@@ -944,6 +944,8 @@ a.card__media { display: block; }
 .guide-figure figcaption { margin-top: 12px; padding-left: 14px; border-left: 2px solid var(--gold); font-size: .84rem; line-height: 1.5; color: var(--muted); }
 .guide-figure__credit { display: block; margin-top: 2px; font-size: .72rem; }
 .guide-body .guide-figure__credit a { color: var(--muted); text-decoration-color: var(--line); }
+.guide-cell-p { display: block; }
+.guide-cell-p + .guide-cell-p { margin-top: .5em; }
 .guide-cta { margin: 36px 0; padding: clamp(24px, 3vw, 34px); border-radius: var(--radius); color: #dfe8e3;
   background: radial-gradient(500px 240px at 100% 0%, rgba(231, 201, 146, .16), transparent 60%), var(--pine); }
 .guide-cta h3 { color: var(--white); font-size: 1.9rem; margin: 0 0 8px; }

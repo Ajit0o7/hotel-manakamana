@@ -1,6 +1,7 @@
 'use client';
 
 import Image from '@tiptap/extension-image';
+import { TableKit } from '@tiptap/extension-table/kit';
 import { EditorContent, useEditor, useEditorState, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useState } from 'react';
@@ -16,6 +17,7 @@ export function RichTextEditor(props: { value: string; onChange: (html: string) 
         link: { openOnClick: false, autolink: true, defaultProtocol: 'https' },
       }),
       Image,
+      TableKit.configure({ table: { resizable: false } }),
     ],
     content: props.value,
     immediatelyRender: false,
@@ -44,6 +46,7 @@ function Toolbar({ editor, minimal }: { editor: Editor; minimal?: boolean }) {
       bullet: e.isActive('bulletList'),
       ordered: e.isActive('orderedList'),
       quote: e.isActive('blockquote'),
+      table: e.isActive('table'),
       canUndo: e.can().undo(),
       canRedo: e.can().redo(),
     }),
@@ -84,6 +87,12 @@ function Toolbar({ editor, minimal }: { editor: Editor; minimal?: boolean }) {
       {btn('1.', 'Numbered list', s.ordered, () => c().toggleOrderedList().run())}
       {!minimal && btn('❝', 'Quote', s.quote, () => c().toggleBlockquote().run())}
       {!minimal && btn('🖼', 'Insert image', false, () => setPicking(true))}
+      {!minimal && !s.table && btn('▦', 'Insert table', false, () => c().insertTable({ rows: 3, cols: 2, withHeaderRow: true }).run())}
+      {s.table && btn('+row', 'Add row below', false, () => c().addRowAfter().run())}
+      {s.table && btn('−row', 'Delete row', false, () => c().deleteRow().run())}
+      {s.table && btn('+col', 'Add column', false, () => c().addColumnAfter().run())}
+      {s.table && btn('−col', 'Delete column', false, () => c().deleteColumn().run())}
+      {s.table && btn('✕▦', 'Delete table', false, () => c().deleteTable().run())}
       {btn('↶', 'Undo', false, () => c().undo().run(), !s.canUndo)}
       {btn('↷', 'Redo', false, () => c().redo().run(), !s.canRedo)}
       {picking && (

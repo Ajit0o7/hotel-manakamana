@@ -1,10 +1,17 @@
 import { PagodaMark } from '@/components/brand/PagodaMark';
 import { TLink } from '@/components/ui/TLink';
-import { HOTEL, NAV, WHATSAPP_URL } from '@/content/hotel';
-import { ROOMS } from '@/content/rooms';
+import { HOTEL, NAV } from '@/content/hotel';
+import { getGuides, getHotel, getRooms } from '@/lib/cms/site';
 import { BackToTop } from './BackToTop';
 
-export function Footer() {
+/* Hand-picked guide links, shown only while the guide exists in the CMS. */
+const FOOTER_GUIDES = [
+  { slug: 'manthali-to-lukla-flights', label: 'Lukla flight guide' },
+  { slug: 'lukla-flight-cancelled', label: 'Flight cancelled?' },
+];
+
+export async function Footer() {
+  const [hotel, rooms, guides] = await Promise.all([getHotel(), getRooms(), getGuides()]);
   return (
     <footer className="footer">
       <div className="container footer__grid">
@@ -27,27 +34,28 @@ export function Footer() {
         </div>
         <div className="footer__links">
           <h4>Stay</h4>
-          {ROOMS.map((r) => <TLink key={r.slug} href={`/rooms/${r.slug}`}>{r.name}</TLink>)}
+          {rooms.map((r) => <TLink key={r.slug} href={`/rooms/${r.slug}`}>{r.name}</TLink>)}
           <TLink href="/dining">Rooftop Restaurant</TLink>
-          <TLink href="/guides/manthali-to-lukla-flights">Lukla flight guide</TLink>
-          <TLink href="/guides/lukla-flight-cancelled">Flight cancelled?</TLink>
+          {FOOTER_GUIDES.filter((l) => guides.some((g) => g.slug === l.slug)).map((l) => (
+            <TLink key={l.slug} href={`/guides/${l.slug}`}>{l.label}</TLink>
+          ))}
         </div>
         <div>
           <h4>Contact</h4>
-          <address>{HOTEL.address}</address>
+          <address>{hotel.address}</address>
           <p style={{ marginTop: 14 }}>
-            <a href={`tel:${HOTEL.phoneTel}`}>{HOTEL.phoneDisplay}</a>
+            <a href={`tel:${hotel.phoneTel}`}>{hotel.phoneDisplay}</a>
             <br />
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">WhatsApp us</a>
+            <a href={hotel.whatsappUrl} target="_blank" rel="noopener noreferrer">WhatsApp us</a>
             <br />
-            <a href={HOTEL.mapsUrl} target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
+            <a href={hotel.mapsUrl} target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
           </p>
           <p style={{ marginTop: 14 }}>
-            <a href={HOTEL.profiles.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href={hotel.profiles.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>
             {' · '}
-            <a href={HOTEL.profiles.tripadvisor} target="_blank" rel="noopener noreferrer">Tripadvisor</a>
+            <a href={hotel.profiles.tripadvisor} target="_blank" rel="noopener noreferrer">Tripadvisor</a>
             {' · '}
-            <a href={HOTEL.profiles.google} target="_blank" rel="noopener noreferrer">Google reviews</a>
+            <a href={hotel.profiles.google} target="_blank" rel="noopener noreferrer">Google reviews</a>
           </p>
         </div>
       </div>

@@ -72,8 +72,14 @@ function TypeCard({ type }: { type: ContentType }) {
       <p className="cms-stat__num">{counts ? counts.published : '…'}</p>
       <p className="cms-muted">published{counts && counts.drafts > 0 ? ` · ${counts.drafts} draft${counts.drafts === 1 ? '' : 's'}` : ''}</p>
       <div className="cms-row">
-        <Link className="cms-btn cms-btn--primary" href={`/admin/content/${type.name}/new`}>Add {type.label.toLowerCase()}</Link>
-        <Link className="cms-btn" href={`/admin/content/${type.name}`}>View all</Link>
+        {type.name === 'settings' ? (
+          <Link className="cms-btn cms-btn--primary" href={`/admin/content/${type.name}`}>Open</Link>
+        ) : (
+          <>
+            <Link className="cms-btn cms-btn--primary" href={`/admin/content/${type.name}/new`}>Add {type.label.toLowerCase()}</Link>
+            <Link className="cms-btn" href={`/admin/content/${type.name}`}>View all</Link>
+          </>
+        )}
       </div>
     </div>
   );
