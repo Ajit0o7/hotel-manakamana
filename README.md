@@ -53,3 +53,8 @@ To change a price, a phone number or an amenity, edit the file in `src/content/`
 - That `+977 984-4228627` is on WhatsApp.
 - Permission to use the photos (some come from Google / Facebook / eBooking Nepal).
 - Address wording: Google lists "Manthali Bus Stand"; the hotel's logo says "Traffic Chowk, Manthali".
+
+## CMS backend
+
+`cms/` holds a separate Go API (Supabase Postgres, Auth and Storage) for managing pages, posts, SEO
+metadata and the media library. See [`cms/README.md`](cms/README.md). The website does not use it yet.

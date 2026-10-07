@@ -1,0 +1,18 @@
+[
+  {
+    "name": "room",
+    "label": "Room",
+    "label_plural": "Rooms",
+    "description": "Room types with prices, shown on /rooms/<slug>.",
+    "route_prefix": "/rooms",
+    "fields": [
+      { "name": "price_npr", "label": "Price per night (NPR)", "type": "number", "required": true },
+      { "name": "max_guests", "label": "Maximum guests", "type": "integer", "required": true },
+      { "name": "bed_type", "label": "Bed type", "type": "select", "options": ["double", "twin", "double + single"] },
+      { "name": "size_sqm", "label": "Size (m²)", "type": "number" },
+      { "name": "amenities", "label": "Amenities", "type": "list", "help": "One per item, e.g. \"Hot shower\"." },
+      { "name": "gallery", "label": "Gallery photos", "type": "list", "help": "Media IDs, in display order." },
+      { "name": "booking_url", "label": "External booking link", "type": "url" }
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+# The repository root ignores every .env* file; keep the template.
+.env
+!.env.example
+/server
+/migrate
