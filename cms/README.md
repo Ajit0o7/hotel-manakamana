@@ -132,6 +132,19 @@ The server is a long-running process, so deploy it to a container host
 (Fly.io, Render, Railway, Cloud Run...) rather than to Vercel functions. Point
 the Next.js site at it with an environment variable such as `CMS_API_URL`.
 
+## Admin dashboard
+
+The website includes a browser-based admin at `/admin` (`src/app/admin` and `src/components/admin` in the Next.js app).
+Editors sign in with their Supabase account (email and password), and it calls this API with their access token. It
+offers:
+
+- page and post lists with status filters, search, and SEO and readability scores;
+- an editor with a rich-text body, custom fields, parent page, template, featured image, draft, publish and
+  schedule controls, and a Yoast-style SEO panel (Google preview, length meters, live analysis);
+- a media library with drag-and-drop upload, alt text and caption editing, and links to each rendition.
+
+Allow the website's origin in `CORS_ALLOWED_ORIGINS`, or the browser will block the requests.
+
 ## API
 
 Responses are JSON: `{"data": ...}`, plus `"meta": {"page", "per_page", "total"}`
