@@ -93,32 +93,33 @@ create trigger entries_set_updated_at before update on cms.entries
 
 -- Compute "path" from the parent's path, and refuse parents of another type
 -- or parents that are descendants of the entry (which would form a cycle).
+-- (Written without a DECLARE block: the Supabase SQL editor splits scripts
+-- into statements and cuts functions that declare variables in half.)
 create or replace function cms.entries_set_path() returns trigger
 language plpgsql as $$
-declare
-  parent_path text;
-  parent_type text;
 begin
   if new.parent_id is null then
     new.path := new.slug;
     return new;
   end if;
 
-  select path, type into parent_path, parent_type from cms.entries where id = new.parent_id;
-  if not found then
+  if not exists (select 1 from cms.entries p where p.id = new.parent_id) then
     raise foreign_key_violation using message = 'parent entry does not exist',
       constraint = 'entries_parent_id_fkey';
   end if;
-  if parent_type <> new.type then
+  if exists (select 1 from cms.entries p where p.id = new.parent_id and p.type <> new.type) then
     raise check_violation using message = 'parent entry must have the same type',
       constraint = 'entries_parent_same_type';
   end if;
-  if tg_op = 'UPDATE' and (parent_path = old.path or starts_with(parent_path, old.path || '/')) then
+  if tg_op = 'UPDATE' and exists (
+    select 1 from cms.entries p
+    where p.id = new.parent_id and (p.path = old.path or starts_with(p.path, old.path || '/'))
+  ) then
     raise check_violation using message = 'an entry cannot be moved below itself',
       constraint = 'entries_parent_cycle';
   end if;
 
-  new.path := parent_path || '/' || new.slug;
+  new.path := (select p.path from cms.entries p where p.id = new.parent_id) || '/' || new.slug;
   return new;
 end $$;
 
